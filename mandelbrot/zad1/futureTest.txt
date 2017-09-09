@@ -1,0 +1,38 @@
+FixedThreadPool:
+2:
+	Mean: 1499.3
+	Variance: 89545.21
+4:
+	Mean: 1715.9
+	Variance: 89802.29000000001
+
+5:
+	Mean: 1875.2
+	Variance: 43797.36
+	
+6: 
+	Mean: 1950.8
+	Variance: 51378.16
+
+7:
+	Mean: 1881.2
+	Variance: 73166.96
+
+10:
+	Mean: 1924.8
+	Variance: 74044.56000000003
+
+20:
+	Mean: 2096.5
+	Variance: 134896.25
+
+SingleThreadPool:
+Pierwsza próba:
+	Mean: 1620.4
+	Variance: 74351.04000000001
+Druga próba:
+	Mean: 1533.2
+	Variance: 112398.36000000002
+Trzecia próba:
+	Mean: 1609.2
+	Variance: 109028.15999999999
