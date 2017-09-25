@@ -1,0 +1,15 @@
+<HelloWorldSpec-stats timestamp="1506334334440"><stats time="9" expectations="3" successes="3" examples="3"></stats></HelloWorldSpec-stats>
+<HelloWorldSpec-stats timestamp="1506334386275"><stats time="9" expectations="3" successes="3" examples="3"></stats></HelloWorldSpec-stats>
+<HelloWorldSpec-results timestamp="1506334469788"><result location="HelloWorldSpec (SpecsCheck.scala:13)" id="1763674375"><stats time="15" expectations="1" errors="1" examples="1"></stats></result>
+</HelloWorldSpec-results>
+<HelloWorldSpec-stats timestamp="1506334469796"><stats time="9" expectations="3" errors="1" successes="2" examples="3"><trend><stats time="9" errors="1" successes="-1"></stats></trend></stats></HelloWorldSpec-stats>
+<HelloWorldSpec-stats timestamp="1506334857728"><stats time="9" expectations="3" successes="3" examples="3"><trend><stats time="9" errors="-1" successes="1"></stats></trend></stats></HelloWorldSpec-stats>
+<HelloWorldSpec-stats timestamp="1506335179103"><stats time="9" expectations="3" successes="3" examples="3"></stats></HelloWorldSpec-stats>
+<HelloWorldSpec-stats timestamp="1506335858943"><stats time="9" expectations="3" successes="3" examples="3"></stats></HelloWorldSpec-stats>
+<HelloWorldSpec-stats timestamp="1506335906263"><stats time="8" expectations="3" successes="3" examples="3"></stats></HelloWorldSpec-stats>
+<HelloWorldSpec-stats timestamp="1506336291771"><stats time="9" expectations="3" successes="3" examples="3"></stats></HelloWorldSpec-stats>
+<HelloWorldSpec-stats timestamp="1506336422797"><stats time="9" expectations="3" successes="3" examples="3"></stats></HelloWorldSpec-stats>
+<HelloWorldSpec-stats timestamp="1506336531264"><stats time="10" expectations="3" successes="3" examples="3"></stats></HelloWorldSpec-stats>
+<HelloWorldSpec-stats timestamp="1506336620084"><stats time="10" expectations="3" successes="3" examples="3"></stats></HelloWorldSpec-stats>
+<HelloWorldSpec-stats timestamp="1506336681981"><stats time="10" expectations="3" successes="3" examples="3"></stats></HelloWorldSpec-stats>
+<HelloWorldSpec-stats timestamp="1506336746638"><stats time="9" expectations="3" successes="3" examples="3"></stats></HelloWorldSpec-stats>

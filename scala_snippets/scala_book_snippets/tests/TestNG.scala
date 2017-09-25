@@ -13,7 +13,7 @@ class ElementJUnit4Tests {
         assertEquals(ele.height, 3)
     }
 
-    @Test(expectedExceptions = Array(classOf[IllegalArgumentException]))def elemShouldThrowIAE() { elem('x', -2, 3) }
+    @Test(expectedExceptions = Array(classOf[IllegalArgumentException])) def elemShouldThrowIAE() { elem('x', -2, 3) }
 }
 
 

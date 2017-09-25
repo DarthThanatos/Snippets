@@ -1,12 +1,10 @@
 
-import org.specs2._
-import org.specs2.mutable.Specification
+import org.specs2.mutable._
 import element.Element.elem
 
 //specs testing framework
-class ElementSpecification extends Specification 
 
-object ElementSpecification extends Specification {
+class HelloWorldSpec extends Specification {
     "A UniformElement" should {
         "have a width equal to the passed value" in {
             val ele = elem('x', 2, 3)
@@ -21,4 +19,6 @@ object ElementSpecification extends Specification {
             throwA[IllegalArgumentException]
         }
     }
+
 }
+
