@@ -8,9 +8,9 @@ import element.Element.elem
 class ElementPropSpec extends WordSpec with Checkers {
 
     "elem result" must {
-        "have passed width" in {
-            check((w: Int) => w > 0 ==> (elem('x', w, 3).width == w))
-        }
+        // "have passed width" in {
+        //     check((w: Int) => w > 0 ==> (elem('x', w, 1).width == w))
+        // }
         "have passed height" in {
            check((h: Int) => h > 0 ==> (elem('x', 2, h).height == h))
         }
