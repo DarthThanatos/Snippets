@@ -69,3 +69,35 @@ println(words)
 println(occurs)
 println(longestWord("The quick brown fox".split(" ")))
 println(longestWordExpl("The quick brown fox".split(" ")))
+
+class Person(val firstName: String, val lastName: String) extends Ordered[Person]{
+    
+    def compare(that: Person) = {
+        val lastNameComparison = lastName.compareToIgnoreCase(that.lastName)
+        if(lastNameComparison != 0) lastNameComparison else firstName.compareToIgnoreCase(that.firstName)
+    }
+    
+    override def toString = firstName + " " + lastName
+}
+
+def maxListImplParm[T](elements: List[T])(implicit orderer: T => Ordered[T]): T = 
+    elements match {
+        case List() => throw new IllegalArgumentException("empty list") 
+        case List(x) => x 
+        case x :: rest => 
+            val maxRest = maxListImplParm(rest)(orderer)
+            if(orderer(x) > maxRest) x else maxRest
+    }
+
+println(maxListImplParm(List("one", "two", "three")))
+
+val people = 
+    List(
+        new Person ("Larry", "Wall"),
+        new Person("Walter", "White"),
+        new Person("Gus", "Fring"),
+        new Person("Jessie", "Pinkman"),
+        new Person("Alan", "Turing")
+    )
+
+println(maxListImplParm(people))
