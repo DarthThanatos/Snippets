@@ -89,8 +89,6 @@ def maxListImplParm[T](elements: List[T])(implicit orderer: T => Ordered[T]): T 
             if(orderer(x) > maxRest) x else maxRest
     }
 
-println(maxListImplParm(List("one", "two", "three")))
-
 val people = 
     List(
         new Person ("Larry", "Wall"),
@@ -101,3 +99,18 @@ val people =
     )
 
 println(maxListImplParm(people))
+println(maxListImplParm(List("one", "two", "three")))
+
+
+def maxListImplParm2[T](elements: List[T])(implicit orderer: T => Ordered[T]): T = 
+    elements match {
+        case List() => throw new IllegalArgumentException("empty list") 
+        case List(x) => x 
+        case x :: rest => 
+            val maxRest = maxListImplParm(rest)
+            if(x > maxRest) x else maxRest
+    }
+
+println(maxListImplParm2(people))
+println(maxListImplParm2(List("one", "two", "three")))
+
