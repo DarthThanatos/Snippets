@@ -114,3 +114,19 @@ def maxListImplParm2[T](elements: List[T])(implicit orderer: T => Ordered[T]): T
 println(maxListImplParm2(people))
 println(maxListImplParm2(List("one", "two", "three")))
 
+val l = List(("A", 1, 4), ("A", 2, 5), ("A", 3, 6), ("B", 1, 4), ("B", 2, 5), ("B", 3, 6))
+
+import scala.language.postfixOps
+def unzippedGroup(k : String, v: List[(String, Int, Int)]) = 
+    v map {case (k, v1, v2) => (v1, v2)} unzip
+
+val groupedL = 
+    l groupBy (_._1) map {
+        case (k, v) => (k, unzippedGroup(k,v))      
+    }
+
+println(groupedL)
+println(l groupBy (_._1))
+
+
+println(people.isDefinedAt(30))
