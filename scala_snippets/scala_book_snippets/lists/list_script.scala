@@ -130,3 +130,25 @@ println(l groupBy (_._1))
 
 
 println(people.isDefinedAt(30))
+
+import scala.reflect.ClassTag
+
+def evenElements[T: ClassTag](xs: Vector[T]): Array[T] = 
+    new Array[T]((xs.length + 1)/2).zipWithIndex.map{ case (_, index) => xs(2 * index) }
+
+def printEvenRes[T: ClassTag](xs: Vector[T]){
+    println (evenElements(xs) mkString("Array(",",",")"))
+}
+
+printEvenRes(Vector.range(1, 5))
+printEvenRes(Vector(1 to 10: _*))
+printEvenRes(Vector("this", "is", "a", "test", "run"))
+
+println((Vector(1 to 10:_*).view map(_ + 1) map(_ * 2)) force)
+
+def negate(xs: collection.mutable.Seq[Int]) = 
+    for (i <- 0 until xs.length) xs(i) = -xs(i)
+
+val arr = (0 to 9).toArray
+println(negate(arr.view.slice(3,6)))
+println(arr mkString("Array(",",",")"))

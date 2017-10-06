@@ -1,1 +1,1 @@
-scala  list_script.scala
+scala list_script.scala
