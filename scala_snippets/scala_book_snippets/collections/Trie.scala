@@ -7,7 +7,7 @@ class PrefixMap[T] extends mutable.Map[String, T] with mutable.MapLike[String, T
 
 	def get(s: String): Option[T] = 
 		if (s.isEmpty) value
-		else suffixes get (s(0)) flatMap (_.get( s substring 1))
+		else suffixes get (s(0)) flatMap (subTree => subTree.get(s substring 1))
 
 	def withPrefix(s: String): PrefixMap[T] = 
 		if (s.isEmpty) this 
