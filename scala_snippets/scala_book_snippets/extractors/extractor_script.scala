@@ -67,3 +67,14 @@ def userTwiceUpper(s: String) = s match{
 println(userTwiceUpper("DIDI@hotmail.com"))
 println(userTwiceUpper("DIDO@hotmail.com"))
 println(userTwiceUpper("didi@hotmail.com"))
+
+val decimal = """(-)?(\d+)(\.\d*)?""".r // <=> new Regex("""(-)?(\d+)(\.\d*)?""") 
+val input = "for -1.0 to 99 by 3"
+
+
+for (s <- decimal findAllIn input)
+	println(s)
+
+for (decimal(s, i, d) <- decimal findAllIn input)
+	println("sign: "+ s +", integer: "+ i +", decimal: "+ d)
+
