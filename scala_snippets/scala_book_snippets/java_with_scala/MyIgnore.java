@@ -1,5 +1,7 @@
+package tests;
+
 import java.lang.annotation.*;
 
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface  Ignore{}
+public @interface  MyIgnore{}

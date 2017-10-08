@@ -1,6 +1,8 @@
+package tests
+
 object Tests{
 	
-	@Ignore
+	@MyIgnore
 	def testData = List(0, 1, -1, 5, -5)
 
 	def test1{
@@ -12,10 +14,16 @@ object Tests{
 	}
 }
 
-for {
-	method <- Tests.getClass.getMethods
-	if method.getName.startsWith("test")
-	if method.getAnnotation(classOf[Ignore]) == null
-}{
-	println("found a test method :" + method)
+
+object MainTest {
+
+	def main(args: Array[String]){
+		for {
+			method <- Tests.getClass.getMethods
+			if method.getName.startsWith("test")
+			if method.getAnnotation(classOf[MyIgnore]) == null
+		}{
+			println("found a test method :" + method)
+		}
+	}
 }

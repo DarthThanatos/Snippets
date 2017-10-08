@@ -1,0 +1,1 @@
+call scala -deprecation actors.scala
