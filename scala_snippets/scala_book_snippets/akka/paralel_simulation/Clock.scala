@@ -68,6 +68,7 @@ class Clock extends Actor{
 				busySimulants -= sim
 			case Start => 
 				running = true
+				println("Clock got start")
 			case Stop =>
 				for (sim <- allSimulants)
 				sim ! Stop

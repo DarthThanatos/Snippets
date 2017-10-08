@@ -4,6 +4,7 @@ import simulation.circuit._
 object Demo {
 	def main(args: Array[String]) {
 		val clock = new  Clock
+		clock.start()
 		val circuit = new Circuit(clock) with Adders
 		import circuit._
 		val ain = new Wire(clock,"ain", true)
