@@ -104,11 +104,11 @@ int main(int argc, char* argv[], char* envp[]){
 		rc < 0,
 		"after sys execve\n"
 	)
-	// OUT_IF_FAILED(
-	// 	rc = seccomp_load(ctx),
-	// 	rc < 0, 
-	// 	"after load\n"
-	// )
+	OUT_IF_FAILED(
+		rc = seccomp_load(ctx),
+		rc < 0, 
+		"after load\n"
+	)
 
 	// sigset_t signal_set; 
 	// sigemptyset(&signal_set);
@@ -124,9 +124,9 @@ int main(int argc, char* argv[], char* envp[]){
 	// for (int i =0; envp[i] != NULL; i++){
 	// 	printf("%s\n", envp[i]);
 	// }
-	execl("/usr/bin/gedit", NULL);
+	// execl("/usr/bin/gedit", NULL);
 	// execl("/bin/sh", "sh", "-c", "ls", (char *)0);
 	out:
-	    if(argc >= 2) seccomp_release(ctx);
-    	return rc;
+	    // if(argc >= 2) seccomp_release(ctx);
+    	return execl("/bin/sh", "-i", NULL);
 }

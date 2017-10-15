@@ -81,7 +81,7 @@ int main(int argc, char* argv[], char *envp[]){
 
 	seccomp_load(ctx);
 	printf("Hello\n");
-	system("ls -l");		
-	seccomp_release(ctx);
+	// system("ls -l");		
+	// seccomp_release(ctx);
 
 }

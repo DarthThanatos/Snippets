@@ -9,7 +9,7 @@ if not os.path.isfile("strace_columns"):
 	print "no strace_columns file in directory"
 	exit()
 
-cmd = "awk -F \'[[:space:]]+\' \'{print $6}\' strace_columns > " + sys.argv[1]
+cmd = "awk -F \'[[:space:]]+\' \'{print $(NF)}\' strace_columns > " + sys.argv[1]
 os.system(cmd)
 
 concatenator = lambda acc, x: acc + ("ADD({});\n".format(x) if x != "" else "")
