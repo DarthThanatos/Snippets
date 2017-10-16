@@ -94,9 +94,19 @@ exploit powinien zadziałać
 żeby zapobiec, powinna pomóc komenda:
 sudo docker run -it --ipc="none" dirtycow /bin/bash
 
-a) Exploit potrzebuje wystawiony port, żeby otworzyć "reverse TCP connection" mające służyć jako shell dla zahardkodowanego ip 
-b)
+a) Exploit potrzebuje wystawiony port, żeby otworzyć "reverse TCP connection" mające służyć jako shell dla zahardkodowanego ip (albo localhost albo z miejsca z którego faktycznie wykonujemy exploit) 
+b) ponieważ exploit wykorzystuje vsdo (virtual shareable data object), w celu zapobiegnięcia exploitu należy zabronić kontenerowi wykorzystywania współdzielonej pamięci z hostem poprzez parametr --ipc="none" przekazany dockerowi
 
 
 
+5. 
+Można odpalić kontener z hellp.py, printujący hello world.
+Potem można usunąć z whitelisty domyślnego profilu syscall write. Pojawią się problemy.
+
+Żeby mieć dostęp do kontenera netcata, należy wykonać:
+sudo docker run -it --rm -p 9000:9000 --security-opt seccomp=whitelist.json gophernet/netcat -l -p 9000
+
+używać netcata unixowego używamy:
+nc 127.0.0.1 9000 < file
+mając jakąś zawartość file.
 
