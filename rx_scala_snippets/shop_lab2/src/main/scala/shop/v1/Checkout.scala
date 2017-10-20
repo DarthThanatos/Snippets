@@ -1,34 +1,71 @@
 package shop
 package v1
 
-import akka.actor.{Actor, Timers}
-import scala.concurrent.duration._
+import akka.actor.{Actor, ActorRef, Timers}
 
-class Checkout extends Actor with Timers{
+import scala.concurrent.duration._
+import TimerValues.{CheckoutTimerKey, PaymentTimerKey, checkoutTimer, paymentTimer}
+
+class Checkout(val cart: ActorRef) extends Actor with Timers{
+
+  println("Created: " + self.path.toSerializationFormat)
+  timers.startSingleTimer(CheckoutTimerKey, CheckoutTimerExpired, checkoutTimer seconds)
   override def receive: Receive = SelectingDelivery
-  private val checkoutTimer = 3
-  private case object CheckoutTimerKey
-  private case object CheckoutTimerTick
 
   def SelectingDelivery: Receive = {
-    case CheckoutStarted() =>
-      timers.startSingleTimer(CheckoutTimerKey, CheckoutTimerTick, checkoutTimer seconds)
-    case DeliverySelected(deliveryMethod : String ) =>
-      println("Chose delivery method: " + deliveryMethod)
+    case DeliverySelected(deliveryMethod: String) =>
+      println("Chosen delivery method: " + deliveryMethod)
+      context become SelectingPaymentMethod
     case CheckoutCancelled() =>
-    case CheckoutTimerTick =>
-
+      println("Selecting delivery: Checkout Cancelled")
+      Cancelled()
+    case CheckoutTimerExpired =>
+      println("Checkout expired")
+      Cancelled()
+    case GetState() => println("Checkout-SelectingDelivery")
+//    case wtf => println("[Checkout-SelectingDelivery] Not a valid message: " + wtf)
   }
 
-  def SelectingPayment: Receive = {
+  def SelectingPaymentMethod: Receive = {
     case PaymentSelected(paymentMethod: String) =>
+      println("Payment method: " + paymentMethod)
+      timers.startSingleTimer(PaymentTimerKey, PaymentTimerExpired, paymentTimer seconds)
+      context become ProcessingPayment
     case CheckoutCancelled() =>
-    case CheckoutTimerTick =>
+      println("Selecting payment: Checkout Cancelled")
+      Cancelled()
+    case CheckoutTimerExpired =>
+      println("selecting payment Checkout expired")
+      Cancelled()
+    case GetState() => println("Checkout-SelectingPaymentMethod")
+//    case wtf => println("[Checkout-SelectingPaymentMethod] Not a valid message: " + wtf)
   }
 
-  def Canelled: Receive = {
+
+  def ProcessingPayment: Receive = {
+    case PaymentReceived(payment: String) =>
+      println("Got payment: " + payment)
+      Closed()
     case CheckoutCancelled() =>
-    case CheckoutTimerTick =>
+      println("Processing payment: Checkout Cancelled")
+      Cancelled()
+    case PaymentTimerExpired =>
+      println("processing payment Checkout expired")
+      Cancelled()
+    case GetState() => println("Checkout-ProcessingPayment")
+//    case wtf => println("[Checkout-ProcessingPayment] Not a valid message: " + wtf)
   }
 
+  def Closed(): Unit ={
+    println("Closing checkout")
+    cart ! CheckoutClosed()
+    context.stop(self)
+  }
+
+  def Cancelled(): Unit ={
+    println("Cancelling checkout")
+    cart ! CheckoutCancelled()
+    context.stop(self)
+  }
 }
+
