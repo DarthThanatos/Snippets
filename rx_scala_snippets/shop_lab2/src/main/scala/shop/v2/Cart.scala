@@ -3,7 +3,7 @@ package v2
 
 import akka.actor.{Actor, FSM, Props, Timers}
 import shop.TimerValues.{CartTimerKey, cartTimer}
-import shop.v1.Main.system
+import shop.v2.Main.system
 
 import scala.concurrent.duration._
 import scala.language.postfixOps
@@ -43,11 +43,16 @@ class Cart extends Actor with FSM[CartState, CartMessage] with Timers{
       stay
 
     case Event(CheckoutStarted(), _) =>
+      println("Creating checkout")
       system.actorOf(Props(new Checkout(self)), "checkout")
       goto(InCheckout)
 
     case Event(CartTimerExpired(), _) =>
       emptyCart("v2: Cart Timer expired")
+      goto(Empty)
+
+    case Event(GetState(), _) =>
+      emptyCart("v2: [Cart-NonEmpty]")
       goto(Empty)
   }
 
@@ -61,6 +66,11 @@ class Cart extends Actor with FSM[CartState, CartMessage] with Timers{
       goto(Empty)
     case Event(GetState(), _) =>
       println("v2: Cart-InCheckout")
+      stay
+  }
+
+  whenUnhandled{
+    case Event(e, s) =>
       stay
   }
 

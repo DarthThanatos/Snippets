@@ -60,6 +60,11 @@ class Checkout(val cart: ActorRef) extends Actor with FSM[CheckoutState, Checkou
       stay
   }
 
+  whenUnhandled{
+    case Event(e, s) =>
+      stay
+  }
+
   def Closed(): Unit ={
     println("Closing checkout")
     cart ! CheckoutClosed()
