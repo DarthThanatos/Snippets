@@ -4,7 +4,7 @@
 		module="shop_lab2-build"
 		revision="0.1-SNAPSHOT"
 		status="integration"
-		publication="20171018162037"
+		publication="20171020215707"
 		e:sbtVersion="1.0" e:scalaVersion="2.12"
 	>
 		<description>
