@@ -25,7 +25,8 @@ case class DeliverySelected(deliveryMethod: String) extends CheckoutMessage
 sealed trait CustomerMessage
 case object CartEmpty extends CustomerMessage
 case object PaymentConfirmed extends CustomerMessage
-case class CheckoutStarted(actorRef : ActorRef) extends CustomerMessage
+case class CheckoutStarted(checkout : ActorRef) extends CustomerMessage
+case class PaymentServiceStarted(paymentService: ActorRef) extends CustomerMessage
 
 sealed trait PaymentServiceMessage
 case object DoPayment extends PaymentServiceMessage

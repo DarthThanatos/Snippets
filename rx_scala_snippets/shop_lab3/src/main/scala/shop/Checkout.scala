@@ -1,6 +1,6 @@
 package shop
 
-import akka.actor.{Actor, ActorRef, FSM}
+import akka.actor.{Actor, ActorRef, FSM, Props}
 import shop.TimerValues.{checkoutTimer, paymentTimer}
 
 import scala.concurrent.duration._
@@ -41,13 +41,12 @@ class Checkout(val cart: ActorRef) extends Actor with FSM[CheckoutState, Checkou
     case SelectingDelivery -> SelectingPaymentMethod =>
          nextStateData match {
           case DeliverySelected(deliveryMethod: String) => println("Chosen delivery method: " + deliveryMethod)
-          case sd => println("On transition: got sd: " + sd)
         }
   }
 
   when(SelectingPaymentMethod, stateTimeout = checkoutTimer seconds){
     case Event(ps @ PaymentSelected(paymentMethod: String), _) =>
-      goto(ProcessingPayment)
+      goto(ProcessingPayment) using ps
 
     case Event(StateTimeout, _) =>
       performReasonedOp("Payment method selection timeout", Cancelled)
@@ -64,6 +63,8 @@ class Checkout(val cart: ActorRef) extends Actor with FSM[CheckoutState, Checkou
       nextStateData match {
         case PaymentSelected(paymentMethod: String) =>
           println("Payment method: " + paymentMethod)
+          val paymentService = context actorOf(Props[PaymentService], "paymentService")
+          context.actorSelection("/user/customer") ! PaymentServiceStarted(paymentService)
         case _ =>
       }
   }
@@ -84,12 +85,14 @@ class Checkout(val cart: ActorRef) extends Actor with FSM[CheckoutState, Checkou
 
   whenUnhandled{
     case Event(e, s) =>
+      println ("State: " + s + " event: " + e)
       stay
   }
 
   private def finishingOp(desc: String, msg : Any): Unit ={
     println(desc)
     cart ! msg
+    context.actorSelection("/user/customer") ! msg
     context.stop(self)
 
   }

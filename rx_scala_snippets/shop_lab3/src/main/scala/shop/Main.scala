@@ -116,9 +116,13 @@ object Main {
   }
 
 
-  def main(args: Array[String]): Unit ={
+  private def interactiveMain(): Unit ={
     val cart = system.actorOf(Props[Cart], "cart")
     interact(cart)
+  }
+
+  def main(args: Array[String]): Unit ={
+    system.actorOf(Props[Customer], "customer")
   }
 }
 

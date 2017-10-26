@@ -44,9 +44,11 @@ class Cart extends Actor with FSM[CartState, CartMessage]{
   onTransition{
     case NonEmpty -> NonEmpty =>
       println("refreshed timer")
+
     case NonEmpty -> InCheckout =>
       println("Creating checkout")
-      system.actorOf(Props(new Checkout(self)), "checkout")
+      val checkout = system.actorOf(Props(new Checkout(self)), "checkout")
+      context.parent ! CheckoutStarted(checkout)
   }
 
   private def fetchState(state: String) ={
@@ -56,6 +58,7 @@ class Cart extends Actor with FSM[CartState, CartMessage]{
 
   when(InCheckout){
     case Event(CheckoutClosed(), _) =>
+      context.parent ! CartEmpty
       emptyCart("v2: InCheckout: Checkout closed")
 
     case Event(CheckoutCancelled(), _) =>
