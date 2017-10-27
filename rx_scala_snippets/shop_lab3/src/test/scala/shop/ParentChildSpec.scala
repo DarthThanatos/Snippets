@@ -69,7 +69,6 @@ class ParentChildSpec extends TestKit(ActorSystem("CartSpec"))
       checkout ! CheckoutCancelled()
       checkout ! GetState()
       expectNoMessage(1 second)
-
     }
 
     "cancel after timeout in selecting delivery state" in {
@@ -93,6 +92,61 @@ class ParentChildSpec extends TestKit(ActorSystem("CartSpec"))
       probe.expectMsg((TimerValues.paymentTimer + 1) seconds ,CheckoutCancelled())
     }
 
+    "not change its state to processing payment being in selecting delivery state" in {
+      val probe = TestProbe()
+      val checkout = system.actorOf(Props(classOf[Checkout], probe.ref))
+      checkout ! PaymentSelected("zl")
+      checkout ! GetState()
+      expectMsg(SelectingDelivery)
+    }
+
+    "not change its state back to selecting delivery being in selecting payment state" in {
+      val probe = TestProbe()
+      val checkout = system.actorOf(Props(classOf[Checkout], probe.ref))
+      checkout ! DeliverySelected("dpd")
+      checkout ! StartCheckout()
+      checkout ! GetState()
+      expectMsg(SelectingPaymentMethod)
+    }
+
+    "not change its state back to selecting delivery being in processing payment state" in {
+      val probe = TestProbe()
+      val checkout = system.actorOf(Props(classOf[Checkout], probe.ref))
+      checkout ! DeliverySelected("dpd")
+      checkout ! PaymentSelected("zl")
+      checkout ! StartCheckout()
+      checkout ! GetState()
+      expectMsg(ProcessingPayment)
+    }
+
+    "not change its state back to selecting payment when in processing payment state" in {
+      val probe = TestProbe()
+      val checkout = system.actorOf(Props(classOf[Checkout], probe.ref))
+      checkout ! DeliverySelected("dpd")
+      checkout ! PaymentSelected("zl")
+      checkout ! DeliverySelected("dpd")
+      checkout ! GetState()
+      expectMsg(ProcessingPayment)
+    }
+
+    "not change its state to closed in selecting delivery state" in {
+      val probe = TestProbe()
+      val checkout = system.actorOf(Props(classOf[Checkout], probe.ref))
+      checkout ! CheckoutClosed()
+      checkout ! GetState()
+      expectMsg(SelectingDelivery)
+
+    }
+
+    "not change its state to closed in selecting payment method state" in {
+      val probe = TestProbe()
+      val checkout = system.actorOf(Props(classOf[Checkout], probe.ref))
+      checkout ! DeliverySelected("dpd")
+      checkout ! CheckoutClosed()
+      checkout ! GetState()
+      expectMsg(SelectingPaymentMethod)
+
+    }
   }
 
 }
