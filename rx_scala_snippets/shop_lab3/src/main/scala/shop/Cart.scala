@@ -16,10 +16,6 @@ class Cart extends Actor with FSM[CartState, CartMessage]{
   when(Empty){
     case Event(ItemAdded(), UnitializedCart) =>
       addItemGoingTo(NonEmpty, "v2: An item was added to a cart in the empty state, items count " + itemsCount)
-
-    case Event(GetState(), UnitializedCart) =>
-      sender ! "Cart-Empty"
-      fetchState("Cart-Empty")
   }
 
   when(NonEmpty, stateTimeout = cartTimer seconds){
@@ -37,10 +33,6 @@ class Cart extends Actor with FSM[CartState, CartMessage]{
 
     case Event(StateTimeout, _) =>
       emptyCart("v2: Cart Timer expired")
-
-    case Event(GetState(), _) =>
-      sender ! stateName
-      fetchState("Cart-NonEmpty")
   }
 
   onTransition{
@@ -65,9 +57,6 @@ class Cart extends Actor with FSM[CartState, CartMessage]{
 
     case Event(CheckoutCancelled(), _) =>
       goto(NonEmpty)
-
-    case Event(GetState(), _) =>
-      fetchState("v2: Cart-InCheckout")
   }
 
   onTransition{
@@ -76,6 +65,13 @@ class Cart extends Actor with FSM[CartState, CartMessage]{
   }
 
   whenUnhandled{
+    case Event(GetState(), _) =>
+      println(stateName)
+      sender ! stateName
+      stay
+    case Event("items",_) =>
+      sender ! itemsCount
+      stay
     case Event(e, s) =>
       stay
   }

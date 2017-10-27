@@ -26,3 +26,8 @@ class ParentChildSpec extends TestKit(ActorSystem("CartSpec"))
   }
 
 }
+
+// todo
+// test of diagram
+// tests of different permutations of DeliverySelected, PaymentReceived, PaymentSelected
+// tests of timers

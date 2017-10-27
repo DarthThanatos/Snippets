@@ -20,21 +20,12 @@ class Checkout(val cart: ActorRef) extends Actor with FSM[CheckoutState, Checkou
     case Event(CheckoutCancelled(), _) =>
       performReasonedOp("Selecting delivery: Checkout Cancelled", Cancelled)
 
-
-    case Event(GetState(), _) =>
-      fetchState("Checkout-SelectingDelivery")
-
-    case ev => println (ev); stay
   }
 
   private def performReasonedOp(reason: String, op: () => Unit) ={
     println(reason)
     op()
     stay
-  }
-
-  private def fetchState(state: String) ={
-    println(state); stay
   }
 
   onTransition{
@@ -54,8 +45,6 @@ class Checkout(val cart: ActorRef) extends Actor with FSM[CheckoutState, Checkou
     case Event(CheckoutCancelled(), _) =>
       performReasonedOp("Selecting payment: Checkout Cancelled", Cancelled)
 
-    case Event(GetState(), _) =>
-      fetchState("Checkout-SelectingPaymentMethod")
   }
 
   onTransition{
@@ -78,12 +67,13 @@ class Checkout(val cart: ActorRef) extends Actor with FSM[CheckoutState, Checkou
 
     case Event(StateTimeout, _) =>
       performReasonedOp("processing payment Checkout expired", Cancelled)
-
-    case Event(GetState(), _) =>
-      fetchState("Checkout-ProcessingPayment")
   }
 
   whenUnhandled{
+    case Event(GetState(), _) =>
+      println(stateName)
+      sender ! stateName
+      stay
     case Event(e, s) =>
       println ("State: " + s + " event: " + e)
       stay
