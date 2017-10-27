@@ -3,7 +3,7 @@ package shop
 import akka.actor.{ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestKit, TestProbe}
 import org.scalatest.{BeforeAndAfterAll, WordSpecLike}
-
+import scala.concurrent.duration._
 
 class ParentChildSpec extends TestKit(ActorSystem("CartSpec"))
   with WordSpecLike with BeforeAndAfterAll with ImplicitSender  {
@@ -14,6 +14,7 @@ class ParentChildSpec extends TestKit(ActorSystem("CartSpec"))
   }
 
   "A Probe Cart" must {
+
     "get checkout closed msg" in {
       val probe = TestProbe()
       val checkout = system.actorOf(Props(classOf[Checkout], probe.ref))
@@ -21,6 +22,75 @@ class ParentChildSpec extends TestKit(ActorSystem("CartSpec"))
       checkout ! PaymentSelected("zl")
       checkout ! PaymentReceived("19")
       probe.expectMsg(CheckoutClosed())
+    }
+  }
+
+  "Checkout" must {
+
+    "starts in Selecting Delivery state" in {
+      val probe = TestProbe()
+      val checkout = system.actorOf(Props(classOf[Checkout], probe.ref))
+      checkout ! GetState()
+      expectMsg(SelectingDelivery)
+    }
+
+
+    "after getting DeliverySelected in SelectingDelivery msg, change its state to SelectingPayment" in{
+      val probe = TestProbe()
+      val checkout = system.actorOf(Props(classOf[Checkout], probe.ref))
+      checkout ! DeliverySelected("dpd")
+      checkout ! GetState()
+      expectMsg(SelectingPaymentMethod)
+    }
+
+    "after getting PaymentSelected in SelectingPayment, change its state to Processing Payment" in {
+      val probe = TestProbe()
+      val checkout = system.actorOf(Props(classOf[Checkout], probe.ref))
+      checkout ! DeliverySelected("dpd")
+      checkout ! PaymentSelected("zl")
+      checkout ! GetState()
+      expectMsg(ProcessingPayment)
+    }
+
+    "cancel at any state after having received Cancelled msg" in {
+      val probe = TestProbe()
+      var checkout = system.actorOf(Props(classOf[Checkout], probe.ref))
+      checkout ! CheckoutCancelled()
+      checkout ! GetState()
+      expectNoMessage(1 second)
+      checkout = system.actorOf(Props(classOf[Checkout], probe.ref))
+      checkout ! DeliverySelected("dpd")
+      checkout ! CheckoutCancelled()
+      checkout ! GetState()
+      expectNoMessage(1 second)
+      checkout = system.actorOf(Props(classOf[Checkout], probe.ref))
+      checkout ! DeliverySelected("dpd")
+      checkout ! PaymentSelected("zl")
+      checkout ! CheckoutCancelled()
+      checkout ! GetState()
+      expectNoMessage(1 second)
+
+    }
+
+    "cancel after timeout in selecting delivery state" in {
+      val probe = TestProbe()
+      val checkout = system.actorOf(Props(classOf[Checkout], probe.ref))
+      probe.expectMsg((TimerValues.checkoutTimer + 1) seconds ,CheckoutCancelled())
+    }
+
+    "cancel after timeout in selecting payment state" in {
+      val probe = TestProbe()
+      val checkout = system.actorOf(Props(classOf[Checkout], probe.ref))
+      checkout ! DeliverySelected("dpd")
+      probe.expectMsg((TimerValues.checkoutTimer + 1) seconds ,CheckoutCancelled())
+    }
+
+    "cancel after timeout in processing payment state" in {
+      val probe = TestProbe()
+      val checkout = system.actorOf(Props(classOf[Checkout], probe.ref))
+      checkout ! DeliverySelected("dpd")
+      checkout ! PaymentSelected("zl")
+      probe.expectMsg((TimerValues.paymentTimer + 1) seconds ,CheckoutCancelled())
     }
 
   }
