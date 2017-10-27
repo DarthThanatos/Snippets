@@ -10,7 +10,7 @@ import Main.system
 class Cart extends Actor with FSM[CartState, CartMessage]{
 
   println("v2 Created: " + self.path.name)
-  private var itemsCount = 0
+  var itemsCount = 0
   startWith(Empty, UnitializedCart)
 
   when(Empty){
@@ -18,7 +18,8 @@ class Cart extends Actor with FSM[CartState, CartMessage]{
       addItemGoingTo(NonEmpty, "v2: An item was added to a cart in the empty state, items count " + itemsCount)
 
     case Event(GetState(), UnitializedCart) =>
-      fetchState("v2: Cart-Empty")
+      sender ! "Cart-Empty"
+      fetchState("Cart-Empty")
   }
 
   when(NonEmpty, stateTimeout = cartTimer seconds){
@@ -38,7 +39,8 @@ class Cart extends Actor with FSM[CartState, CartMessage]{
       emptyCart("v2: Cart Timer expired")
 
     case Event(GetState(), _) =>
-      fetchState("v2: [Cart-NonEmpty]")
+      sender ! stateName
+      fetchState("Cart-NonEmpty")
   }
 
   onTransition{
