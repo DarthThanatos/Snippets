@@ -22,8 +22,6 @@ class Cart extends Actor with Timers{
       println("An item was added to a cart in the empty state, items count " + itemsCount)
       context become NonEmpty
     case GetState() => println("Cart-Empty")
-//    case wtf => println("[Cart-Empty] Not a valid message: " + wtf)
-
   }
 
   def NonEmpty: Receive = {
@@ -44,7 +42,6 @@ class Cart extends Actor with Timers{
     case CartTimerExpired =>
       emptyCart("Cart Timer expired")
     case GetState() => println("Cart-NonEmpty")
-//    case wtf => println("[Cart-NonEmpty] Not a valid message: " + wtf)
   }
 
   def InCheckout: Receive = {
@@ -53,7 +50,6 @@ class Cart extends Actor with Timers{
     case CheckoutCancelled() =>
       emptyCart("InCheckout: Checkout cancelled")
     case GetState() => println("Cart-InCheckout")
-//    case wtf => println("[Cart-InCheckout] Not a valid message: " + wtf)
 
   }
 
