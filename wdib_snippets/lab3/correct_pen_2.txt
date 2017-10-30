@@ -1,3 +1,5 @@
+
+hasełko: 9724e90f1f17
 ================================================================
 Używając modułu auxiliary/scanner/discovery/arp_sweep przeprowadź wykrywanie hostów w sieci lokalnej.
  
