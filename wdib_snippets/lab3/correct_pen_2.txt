@@ -10,6 +10,8 @@ set SMAC my_ip
 set RHOSTS sieć_pom_wirtualkami
 run 
 
+Mechanizm przeprowadza metodę analogiczną do nmap -sn (odpytuje hosty o adres mac, jeśli host jest "up", odpowie na pytanie who is ... tell...)
+rhost(s) to skrót od remote host(s) - cel mechanizmu(host lub hosty w sieci którą skanujemy)
 ================================================================
 Skanowanie portów
 Przeprowadź skanowanie portów za pomocą modułu auxiliary/scanner/portscan/tcp:
@@ -19,6 +21,9 @@ set ports 1-100
 set threads 10
 run
 
+Mechanizm działa poprzez próby nawiązania połączeń na określonym przedziale portów 
+TCP celu, jeśli cel odpowie na próbę nawiązania połączenia, to oznacza że jest aktywny
+================================================================
 Prosty atak DoS
 3.  Sprawdź podatność Windows 7 na błąd MS12-020 (ms12_020_check).
 nmap -sV --script=rdp-vuln-ms12-020 -p 3389 ip_win7 -> VULNERABLE
@@ -99,12 +104,18 @@ komendy (np. zobaczyć różne informacje widoczne wewnątrz win7, ifconfig poka
 Musimy do niego przejść komendą:
 sessions -i id_sesji
 
+Efektem exploitu jest otwarcie zwrotnego połączenia tcp, którym 
+atakujący wysyła komendy do maszyny celu.
+
 Zapoznaj się z opisem i sposobem działania podatności:
 exploit wykorzystuje podatność na spoofing nazw pliku w Winrar.
 W momencie kiedy otwieramy zainfekowane pliki zip, wykorzystujemy 
 nieścisłość w nazwach - pliki w .zip pochodzą z zapakowanego archiwum,
 ale nazwy plików użyte to rozpakowania archiwum pochodzą z "Local file header".
 pozwala to wykonać dowolny kod przy rozpakowywaniu pliku.
+
+lhost to skrót od local host - oznacza maszynę do której ma otworzyć się 
+zwrotne połączenie TCP dające shell do exploitowanego windowsa :(
 ===========================================================
 Post-exploit
 Przemigruj shell do innego procesu (np. explorer.exe): w otwartym metarpreterze: run post/windows/manage/migrate, 
