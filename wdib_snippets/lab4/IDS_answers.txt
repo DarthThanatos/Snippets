@@ -1,0 +1,194 @@
+Hasełko: 9724e90f1f17
+====================================================================================
+Network IDS – Snort
+Instalacja
+
+1. Zainstaluj Snorta z użyciem RPM-ów dla Centosa podanych na stronie: https://www.snort.org/#get_started:
+
+sudo yum install https://www.snort.org/downloads/snort/daq-2.0.6-1.centos7.x86_64.rpm
+sudo yum install https://www.snort.org/downloads/snort/snort-2.9.11-1.centos7.x86_64.rpm
+sudo ln -s libdnet.so.1.0.1 libdnet.1
+
+2. Pobierz dodatkowe reguły (normalnie dostępne po rejestracji): https://lab.iisg.agh.edu.pl/wdib/snortrules-snapshot-29110.tar.gz
+3. Rozpakuj dodatkowe reguły i nadpisz domyślną konfigurację w /etc/snort zawartością katalogu etc w archiwum. Pozostałe pliki i katalogi z archiwum rozpakuj do /etc/snort:
+
+mkdir /root/rules-tmp
+tar -xvf <PLIK> -C /root/rules-tmp
+mv /etc/snort /etc/snort.bak
+mv /root/rules-tmp/etc /etc/snort
+mv /root/rules-tmp/* /etc/snort
+
+4. Zmodyfikuj konfigurację ścieżek w pliku /etc/snort/snort.conf w zmiennych:
+
+RULE_PATH – rules: var RULE_PATH /etc/snort/rules 
+SO_RULE_PATH – so_rules: var SO_RULE_PATH /etc/snort/so_rules
+PREPROC_RULE_PATH – preproc_rules: var PREPROC_RULE_PATH /etc/snort/preproc_rules
+WHITE_LIST_PATH – rules: var WHITE_LIST_PATH /etc/snort/rules
+BLACK_LIST_PATH – rules: var BLACK_LIST_PATH /etc/snort/rules
+
+5. Stwórz puste pliki rules/white_list.rules i rules/black_list.rules:
+sudo touch /etc/snort/rules/white_list.rules
+sudo touch /etc/snort/rules/black_list.rules
+
+6. Zmień konfigurację ścieżek dla bibliotek ładowanych dynamicznie:
+dynamicpreprocessor directory /usr/lib64/snort-2.9.11_dynamicpreprocessor/
+dynamicengine /usr/lib64/snort-2.9.11_dynamicengine/libsf_engine.so
+dynamicdetection directory /usr/lib64/snort_dynamicrules
+
+6a. Stwórz odpowiedni katalog: 
+mkdir /usr/lib64/snort_dynamicrules.
+
+7. Zweryfikuj, że konfiguracja jest poprawna: 
+snort -T -c /etc/snort/snort.conf [-i 1]
+
+Zaprezentuj poprawne wykonanie ostatniej komendy.
+====================================================================================
+Logowanie pakietów
+
+1. Wprowadź poprawki do konfiguracji sieci Snort. Powinno wystarczyć ustawienie HOME_NET na poprawny adres sieci z maską (użyj sieci pomiędzy maszynami wirtualnymi) oraz ustawienie EXTERNAL_NET na !$HOME_NET:
+
+HOME_NET 192.168.200.0/24
+EXTERNAL_NET na !$HOME_NET
+
+2. Przetestuj, że działa logowanie pakietów na konsolę i do plików. Spróbuj zalogować pakiety do pliku w formie ASCII i w formie pcap (-K). Pliki pcap możesz obejrzeć np. w Wireshark.
+a) na konsolę: sudo snort -i ens33 -[de]v [-k none]
+b) do plików: sudo snort -i ens33 -l log -[dev] [-k none]  
+c) w formie ascii i pcap:  sudo snort -i ens33 -[de]v -K [pcap|ascii] -l log [-k none]
+d) Wczytujemy albo wiresharkiem, albo snortem: sudo snort -r snort.log.xxx
+
+3. Odpowiedz na pytanie: co określają zmienne HOME_NET i EXTERNAL_NET?
+HOME_NET - tu specyfikujemy adresy IP systemu, który chcemy ochraniać
+EXTERNAL_NET - zewnętrzna sieć w stosunku do chronionych w HOME_NET hostów, najczęściej dopełnienie przestrzeni HOME_NET, ale może być czymkolwiek
+
+Zaprezentuj odpowiedni fragment konfiguracji i fragment logów w formie ASCII.
+====================================================================================
+Tryb IDS
+
+1. Dodaj do pliku local.rules regułę generującą alerty dla każdego pakietu ICMP: 
+alert icmp any any -> $HOME_NET any (msg:"ICMP test"; sid:10000001; rev:001;).
+
+2. Uruchom Snort w trybie IDS (wystarczy podać ścieżkę do pliku konfiguracyjnego) z logowaniem alertów na konsolę (-A console). Uruchamianie może zająć kilkadziesiąt sekund i kończy się komunikatem Initialization Complete.
+sudo snort -A console -c /etc/snort/snort.conf
+
+3. Sprawdź, czy ping wysyłany z innej maszyny generuje alerty na konsoli.
+4. Ponownie uruchom Snort w trybie IDS, ale z logowaniem alertów do pliku (-A full albo -A fast). Sprawdź, czy logowanie działa poprawnie.
+sudo snort -A [fast|full] -c /etc/snort/snort.conf
+tail -f /var/log/snort/alert
+
+5. Sprawdź też działanie opcji -d, -e i -v z przypadkiem z poprzedniego punktu.
+sudo snort -A [fast|full] -c /etc/snort/snort.conf -dev
+tail -f /var/log/snort/alert
+
+6. Po wykonaniu testów usuń regułę.
+Odpowiedz na pytanie: co oznaczają poszczególne elementy reguły?
+- akcja dla ruchu który pasuje do reguły
+- protokół pakietu który nadszedł(TCP, UDP, ICMP)
+- port pakietu 
+- host przeznaczenia pakietu 
+- port przeznaczenia pakietu 
+- wiadomość do zaraportowania gdy podniesie się alarm
+- sid zasady > 10000000
+- numer wersji zasady
+
+Zaprezentuj działanie dodanej reguły i odpowiedź na pytanie.
+====================================================================================
+Moduł sfportscan
+
+1. Włącz moduł sfportscan, ustaw mu poziom sensytywności na medium a plik logowania na /var/log/snort/portscan.log.
+ W pliku /etc/snort/snort.conf odkomentowujemy i modyfikujemy odpowiednią linijkę: 
+ preprocessor sfportscan: proto  { all } memcap { 10000000 } sense_level { medium } logfile { /var/log/snort/portscan.log } detect_ack_scans
+ 
+
+2. Spróbuj przeprowadzić proste skanowanie portów i sprawdź, czy jest ono wykrywane (informacje są w podanym pliku z logami).
+nmap -sn -PA1-1000 IP/maska, gdzie 
+IP/maska = 192.168.200.0/24, gdy chcemy skanować sieć lokalną
+lub 192.168.200.xxx/32, gdy checmy skanować konkretnego hosta.
+
+Zaprezentuj komendy lub sytuacje, które wywołują alerty oraz wygenerowane alerty.
+====================================================================================
+Wykrywanie incydentów
+
+1. Włącz Snort w trybie IDS z wypisywaniem alertów do pliku albo na konsolę.
+sudo snort -A console -c /etc/snort/config 
+
+2. Wykonaj dig openssh.info. Zaobserwuj, czy wystąpił (i jaki) alert.
+3. Odkomentuj reguły zawierające ciągi znaków server-info i server-status w pliku server-webapp.rules. Zrestartuj Snorta.
+Dodatkowo można w tych regułach zamienić EXTERNAL_NET na any dla uproszczenia testowania 
+
+4. Zainstaluj i uruchom Apache. Z innej maszyny wykonaj odpowiednie polecenia trigerujące alerty.
+yum install -y httpd
+systemctl start httpd
+sudo service firewalld stop
+curl -v http://IP/server-info
+curl -v http://IP/server-status
+
+5. Doprowadź do wywołania dowolnego innego alertu.
+alert TCP any any -> $HOME_NET 22 (msg:"scp test"; sid:10000002; rev:001;).
+próbujemy przesłać coś przez scp na maszynę, leci alert 
+
+Zaprezentuj komendy lub sytuacje, które wywołują alerty oraz wygenerowane alerty.
+====================================================================================
+Host IDS – OSSEC
+Instalacja
+
+1. Zainstaluj OSSEC serwer zgodnie z instrukcją: https://ossec.github.io/docs/manual/installation/installation-package.html#rpm-installation.
+wget -q -O - https://updates.atomicorp.com/installers/atomic |sh
+yum install ossec-hids ossec-hids-server
+
+Otwórz potrzebne porty:
+sudo service firewall start 
+firewall-cmd --add-port=1514/udp
+firewall-cmd --add-port=1515/tcp
+To wyżej albo zostawiamy ubitą zaporę.
+
+2. Uruchom OSSEC serwer.
+ Może być wymagane podanie poprawnego serwera smtp, podajemy jeden z wyników komendy: host -t mx gmail.com
+ /var/ossec/bin/ossec-control start
+
+4. Na innej maszynie wirtualnej:
+
+Zainstaluj agenta OSSEC z RPM zgodnie z instrukcją: https://ossec.github.io/docs/manual/installation/installation-package.html#rpm-installation
+wget -q -O - https://updates.atomicorp.com/installers/atomic |sh
+yum install ossec-hids ossec-hids-agent
+
+Otwórz na agencie port 1514 UDP.
+firewall-cmd --add-port=1514/udp
+
+Spróbuj wystartować agenta: 
+systemctl start ossec-hids. Fail bo nie zaimportowaliśmy danych wygenerowanych z serwera.
+
+5. Na serwerze wykonaj: 
+/var/ossec/bin/manage_agents. 
+
+Wybierając odpowiednie opcje, dodaj agenta a następnie wyekstrahuj jego klucz.
+
+Na maszynie z agentem wykonaj:
+ /var/ossec/bin/manage_agents. 
+ 
+Wybierając odpowiednie opcje, zaimportuj klucz agenta. Następnie zrestartuj agenta i serwer.
+
+7. Zweryfikuj, że serwer z agentem się widzą wykorzystując komendę:
+ /var/ossec/bin/list_agents -c 
+ Przed tym zmieniamy w /var/ossec/etc/ossec.conf w odpowiednim tagu ip serwera na agencie.
+
+Zaprezentuj działanie serwera i agenta.
+ Można restartować agenta wykonując w serwerze:
+ /var/ossec/bin/agent_control -R 001
+
+ Zaprezentuj wyniki komendy /var/ossec/bin/list_agents -c 
+
+====================================================================================
+Generowanie alertów
+Obejrzyj aktualne alerty na serwerze w pliku logów:
+tail -f /var/ossec/logs/alerts/alerts.log
+
+Wygeneruj nowe alerty próbując np. zalogować się przez SSH używając nieprawidłowej nazwy użytkownika lub hasła.
+ssh user@ip
+
+Doprowadź do wywołania dowolnego innego alertu.
+-> Odpalamy snorta, dostajemy info że oprogramowanie weszło w try promiscous
+-> Próbujemy przełączyć się na innego użytkownika, ale psujemy autentykację
+-> Możemy też zmodyfikować odpowiednio system_check tak by leciały alerty przy dodawaniu/modyfikowaniu/usuwaniu plików 
+w monitorowanych katalogach.
+
+Zaprezentuj komendy lub sytuacje, które wywołują alerty oraz wygenerowane alerty.

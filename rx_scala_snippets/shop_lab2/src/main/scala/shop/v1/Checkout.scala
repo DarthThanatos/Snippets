@@ -23,7 +23,6 @@ class Checkout(val cart: ActorRef) extends Actor with Timers{
       println("Checkout expired")
       Cancelled()
     case GetState() => println("Checkout-SelectingDelivery")
-//    case wtf => println("[Checkout-SelectingDelivery] Not a valid message: " + wtf)
   }
 
   def SelectingPaymentMethod: Receive = {
@@ -38,7 +37,6 @@ class Checkout(val cart: ActorRef) extends Actor with Timers{
       println("selecting payment Checkout expired")
       Cancelled()
     case GetState() => println("Checkout-SelectingPaymentMethod")
-//    case wtf => println("[Checkout-SelectingPaymentMethod] Not a valid message: " + wtf)
   }
 
 
@@ -53,7 +51,6 @@ class Checkout(val cart: ActorRef) extends Actor with Timers{
       println("processing payment Checkout expired")
       Cancelled()
     case GetState() => println("Checkout-ProcessingPayment")
-//    case wtf => println("[Checkout-ProcessingPayment] Not a valid message: " + wtf)
   }
 
   def Closed(): Unit ={
