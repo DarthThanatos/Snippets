@@ -109,23 +109,39 @@ class CartManagerAsynchSpec extends TestKit(ActorSystem("CartSpec",ConfigFactory
         expect(cart, 0, Empty)
       system.stop(cart)
     }
+    "in the nonempty state terminate with the system, and then, after recreating, have an appropriate number of items" in {
+      //      system.terminate()
+      //      Await.ready(system.whenTerminated, Duration(1, TimeUnit.MINUTES))
+      var timerSystem = ActorSystem("TimerSystem",ConfigFactory.load().getConfig("secondSystem"))
+      var cart = timerSystem.actorOf(Props(new CartManager("7")))
+      cart ! AddItem(Item(new URI("food/1"), "cheese", 213, 6))
+      expectInProbe(cart, 1, NonEmpty)
+      timerSystem.terminate()
+      Await.ready(timerSystem.whenTerminated, Duration(1, TimeUnit.MINUTES))
+      timerSystem = ActorSystem("TimerSystem",ConfigFactory.load().getConfig("secondSystem"))
+      cart = timerSystem.actorOf(Props(new CartManager("7")))
+      expectInProbe(cart, 1, NonEmpty)
+    }
 
     "in the nonempty state terminate with the system, and then, after recreating, have an appropriate timeout set" in {
 //      system.terminate()
 //      Await.ready(system.whenTerminated, Duration(1, TimeUnit.MINUTES))
       var timerSystem = ActorSystem("TimerSystem",ConfigFactory.load().getConfig("secondSystem"))
-      var cart = timerSystem.actorOf(Props(new CartManager("7")))
+      var cart = timerSystem.actorOf(Props(new CartManager("8")))
       cart ! AddItem(Item(new URI("food/1"), "cheese", 213, 6))
       expectInProbe(cart, 1, NonEmpty)
       expectNoMessage((TimerValues.cartTimer / 2) .seconds)
       timerSystem.terminate()
       Await.ready(timerSystem.whenTerminated, Duration(1, TimeUnit.MINUTES))
       timerSystem = ActorSystem("TimerSystem",ConfigFactory.load().getConfig("secondSystem"))
-      cart = timerSystem.actorOf(Props(new CartManager("7")))
+      cart = timerSystem.actorOf(Props(new CartManager("8")))
 //      expectInProbe(cart, 1, NonEmpty)
       expectNoMessage( ( TimerValues.cartTimer/2 + 3).seconds)
       expectInProbe(cart,0,Empty)
+      timerSystem.terminate()
+      Await.ready(timerSystem.whenTerminated, Duration(1, TimeUnit.MINUTES))
     }
+
   }
 
 }

@@ -37,7 +37,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="CartManager.scala" pinned="false" current-in-tab="true">
+      <file leaf-file-name="CartManager.scala" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/scala/shop/CartManager.scala">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="239">
@@ -45,16 +45,6 @@
               <folding>
                 <element signature="e#14#33#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="000006.log" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/target/journal2/000006.log">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-122">
-              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -79,11 +69,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="CartManagerAsynchSpec.scala" pinned="false" current-in-tab="false">
+      <file leaf-file-name="CartManagerAsynchSpec.scala" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/test/scala/shop/CartManagerAsynchSpec.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="518">
-              <caret line="125" column="52" lean-forward="false" selection-start-line="125" selection-start-column="52" selection-end-line="125" selection-end-column="52" />
+            <state relative-caret-position="331">
+              <caret line="122" column="38" lean-forward="false" selection-start-line="122" selection-start-column="38" selection-end-line="122" selection-end-column="38" />
               <folding>
                 <element signature="e#14#62#0" expanded="true" />
               </folding>
@@ -94,8 +84,8 @@
       <file leaf-file-name="PersistentFSMBase.scala" pinned="false" current-in-tab="false">
         <entry file="jar://$USER_HOME$/.ivy2/cache/com.typesafe.akka/akka-persistence_2.12/srcs/akka-persistence_2.12-2.5.4-sources.jar!/akka/persistence/fsm/PersistentFSMBase.scala">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-2159">
-              <caret line="368" column="17" lean-forward="true" selection-start-line="368" selection-start-column="17" selection-end-line="368" selection-end-column="17" />
+            <state relative-caret-position="-1326">
+              <caret line="522" column="42" lean-forward="true" selection-start-line="522" selection-start-column="42" selection-end-line="522" selection-end-column="42" />
               <folding />
             </state>
           </provider>
@@ -156,8 +146,8 @@
       <find>setTimer</find>
       <find>snap</find>
       <find>sett</find>
-      <find>receive</find>
       <find>statetim</find>
+      <find>receive</find>
     </findStrings>
   </component>
   <component name="GradleLocalSettings">
@@ -179,8 +169,8 @@
         <option value="$PROJECT_DIR$/src/main/scala/shop/Checkout.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/shop/States.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/shop/TimerValues.scala" />
-        <option value="$PROJECT_DIR$/src/test/scala/shop/CartManagerAsynchSpec.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/shop/CartManager.scala" />
+        <option value="$PROJECT_DIR$/src/test/scala/shop/CartManagerAsynchSpec.scala" />
       </list>
     </option>
   </component>
@@ -271,12 +261,6 @@
               <item name="shop_lab4" type="b2602c69:ProjectViewProjectNode" />
               <item name="shop_lab4" type="462c0819:PsiDirectoryNode" />
               <item name="target" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="shop_lab4" type="b2602c69:ProjectViewProjectNode" />
-              <item name="shop_lab4" type="462c0819:PsiDirectoryNode" />
-              <item name="target" type="462c0819:PsiDirectoryNode" />
-              <item name="journal2" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -500,9 +484,6 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="CartManagerAsynchSpec - 2017.11.10 at 19h 30m 58s.xml">
-      <configuration name="CartManagerAsynchSpec" configurationId="ScalaTestRunConfiguration" />
-    </history-entry>
     <history-entry file="CartManagerAsynchSpec - 2017.11.10 at 19h 35m 06s.xml">
       <configuration name="CartManagerAsynchSpec" configurationId="ScalaTestRunConfiguration" />
     </history-entry>
@@ -530,10 +511,12 @@
     <history-entry file="CartManagerAsynchSpec - 2017.11.10 at 20h 18m 12s.xml">
       <configuration name="CartManagerAsynchSpec" configurationId="ScalaTestRunConfiguration" />
     </history-entry>
+    <history-entry file="CartManagerAsynchSpec - 2017.11.10 at 21h 22m 07s.xml">
+      <configuration name="CartManagerAsynchSpec" configurationId="ScalaTestRunConfiguration" />
+    </history-entry>
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -544,7 +527,7 @@
       <window_info id="Capture Analysis" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32980973" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3266385" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3266385" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="false" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3266385" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -856,29 +839,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="jar://$USER_HOME$/.ivy2/cache/com.typesafe.akka/akka-persistence_2.12/srcs/akka-persistence_2.12-2.5.4-sources.jar!/akka/persistence/fsm/PersistentFSMBase.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-2159">
-          <caret line="368" column="17" lean-forward="true" selection-start-line="368" selection-start-column="17" selection-end-line="368" selection-end-column="17" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/shop/TimerValues.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="136">
           <caret line="8" column="31" lean-forward="false" selection-start-line="8" selection-start-column="31" selection-end-line="8" selection-end-column="31" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/scala/shop/CartManagerAsynchSpec.scala">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="518">
-          <caret line="125" column="52" lean-forward="false" selection-start-line="125" selection-start-column="52" selection-end-line="125" selection-end-column="52" />
-          <folding>
-            <element signature="e#14#62#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -896,6 +861,24 @@
           <caret line="59" column="53" lean-forward="false" selection-start-line="59" selection-start-column="53" selection-end-line="59" selection-end-column="53" />
           <folding>
             <element signature="e#14#33#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.ivy2/cache/com.typesafe.akka/akka-persistence_2.12/srcs/akka-persistence_2.12-2.5.4-sources.jar!/akka/persistence/fsm/PersistentFSMBase.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1326">
+          <caret line="522" column="42" lean-forward="true" selection-start-line="522" selection-start-column="42" selection-end-line="522" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/scala/shop/CartManagerAsynchSpec.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="331">
+          <caret line="122" column="38" lean-forward="false" selection-start-line="122" selection-start-column="38" selection-end-line="122" selection-end-column="38" />
+          <folding>
+            <element signature="e#14#62#0" expanded="true" />
           </folding>
         </state>
       </provider>
