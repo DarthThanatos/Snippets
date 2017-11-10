@@ -16,10 +16,10 @@ case class StartCheckout() extends CheckoutMessage
 case class CheckoutClosed() extends CheckoutMessage
 case class CheckoutCancelled() extends CheckoutMessage
 case class CheckoutTimerExpired() extends CheckoutMessage
-case class PaymentSelected(paymentMethod: String) extends CheckoutMessage
+case class SelectPayment(paymentMethod: String) extends CheckoutMessage
 case class PaymentTimerExpired() extends CheckoutMessage
-case class PaymentReceived(payment: String) extends CheckoutMessage
-case class DeliverySelected(deliveryMethod: String) extends CheckoutMessage
+case class ReceivePayment(payment: String) extends CheckoutMessage
+case class SelectDelivery(deliveryMethod: String) extends CheckoutMessage
 
 
 sealed trait CustomerMessage

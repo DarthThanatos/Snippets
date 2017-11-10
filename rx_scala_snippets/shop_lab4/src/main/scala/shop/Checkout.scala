@@ -1,18 +1,22 @@
 package shop
 
-import akka.actor.{Actor, ActorRef, FSM, Props}
+import akka.actor.{Actor, ActorRef}
+import akka.persistence.fsm.PersistentFSM
 import shop.TimerValues.{checkoutTimer, paymentTimer}
 
 import scala.concurrent.duration._
+import scala.reflect.{ClassTag, classTag}
 
-class Checkout(val cart: ActorRef) extends Actor with FSM[CheckoutState, CheckoutMessage]{
+case class CheckoutData(data: List[String])
 
-  startWith(SelectingDelivery, UnitializedCheckout)
+class Checkout(val cart: ActorRef, val id: String) extends Actor with PersistentFSM[CheckoutState, CheckoutData, CheckoutEvent]{
+
+  startWith(SelectingDelivery, CheckoutData(List()))
 
   when (SelectingDelivery, stateTimeout = checkoutTimer seconds){
 
-    case Event(ds @ DeliverySelected(deliveryMethod: String), _) =>
-      goto(SelectingPaymentMethod) using ds
+    case Event(SelectDelivery(deliveryMethod: String), _) =>
+      goto(SelectingPaymentMethod) applying DeliverySelected(deliveryMethod)
 
     case Event(StateTimeout, _) =>
       performReasonedOp("Checkout expired", Cancelled)
@@ -28,16 +32,19 @@ class Checkout(val cart: ActorRef) extends Actor with FSM[CheckoutState, Checkou
     stay
   }
 
-  onTransition{
-    case SelectingDelivery -> SelectingPaymentMethod =>
-         nextStateData match {
-          case DeliverySelected(deliveryMethod: String) => println("Chosen delivery method: " + deliveryMethod)
-        }
+  override def applyEvent(event: CheckoutEvent, checkoutDataBeforeEvent: CheckoutData): CheckoutData = event match{
+    case DeliverySelected(deliveryMethod: String)=>
+      checkoutDataBeforeEvent.copy(data = deliveryMethod :: checkoutDataBeforeEvent.data)
+    case PaymentSelected(paymentMethod: String) =>
+      checkoutDataBeforeEvent.copy(data = paymentMethod :: checkoutDataBeforeEvent.data)
+    case PaymentReceived(amount: String) =>
+      checkoutDataBeforeEvent.copy(data = amount :: checkoutDataBeforeEvent.data)
   }
 
+
   when(SelectingPaymentMethod, stateTimeout = checkoutTimer seconds){
-    case Event(ps @ PaymentSelected(paymentMethod: String), _) =>
-      goto(ProcessingPayment) using ps
+    case Event(ps @ SelectPayment(paymentMethod: String), _) =>
+      goto(ProcessingPayment) applying PaymentSelected(paymentMethod)
 
     case Event(StateTimeout, _) =>
       performReasonedOp("Payment method selection timeout", Cancelled)
@@ -47,19 +54,10 @@ class Checkout(val cart: ActorRef) extends Actor with FSM[CheckoutState, Checkou
 
   }
 
-  onTransition{
-    case SelectingPaymentMethod -> ProcessingPayment =>
-      nextStateData match {
-        case PaymentSelected(paymentMethod: String) =>
-          println("Payment method: " + paymentMethod)
-          val paymentService = context actorOf(Props[PaymentService], "paymentService")
-          context.actorSelection("/user/customer") ! PaymentServiceStarted(paymentService)
-        case _ =>
-      }
-  }
 
   when(ProcessingPayment, stateTimeout = paymentTimer seconds){
-    case Event(PaymentReceived(payment: String), _) =>
+    case Event(ReceivePayment(payment: String), _) =>
+      applyEvent(PaymentReceived(payment), stateData)
       performReasonedOp("Got payment: " + payment, Closed)
 
     case Event(CheckoutCancelled(), _) =>
@@ -95,6 +93,8 @@ class Checkout(val cart: ActorRef) extends Actor with FSM[CheckoutState, Checkou
     finishingOp("Cancelling checkout", CheckoutCancelled())
   }
 
-  initialize()
+  override implicit def domainEventClassTag: ClassTag[CheckoutEvent] = classTag[CheckoutEvent]
+
+  override def persistenceId: String = "persistent-checkout-fsm-id-" + id
 }
 

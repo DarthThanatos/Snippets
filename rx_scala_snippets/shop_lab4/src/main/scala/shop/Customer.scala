@@ -13,8 +13,8 @@ class Customer extends Actor{
 
   override def receive: Receive = {
     case CheckoutStarted(checkout: ActorRef) =>
-      checkout ! DeliverySelected("dpd")
-      checkout ! PaymentSelected("zl")
+      checkout ! SelectDelivery("dpd")
+      checkout ! SelectPayment("zl")
 
     case PaymentServiceStarted(paymentService: ActorRef) =>
       paymentService ! DoPayment

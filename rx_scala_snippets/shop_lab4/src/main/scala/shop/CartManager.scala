@@ -2,8 +2,8 @@ package shop
 
 import java.net.URI
 
-import akka.actor.{Actor, Props}
-import shop.TimerValues.cartTimer
+import akka.actor.{Actor, Props, Timers}
+import shop.TimerValues.{CartHeartBeatKey, CartHeartBeatTime, CartTimerKey}
 
 import scala.language.postfixOps
 import scala.concurrent.duration._
@@ -25,7 +25,7 @@ case class Cart(items: Map[URI, Item]) {
   }
 
   def removeItem(it: Item): Cart = {
-    //contract - currentCount = 0 => no item of this type in a cart
+    //contract - currentCount == -1 => no item of this type in a cart
     val currentCount = if (items contains it.id) items(it.id).count else -1
     println("removing " + it.count + " from current count: " + currentCount)
     if(currentCount == -1)
@@ -52,26 +52,37 @@ object Cart {
   val empty = Cart(Map.empty)
 }
 
-class CartManager(id: String) extends Actor with PersistentFSM[CartState, Cart, CartEvent]{
+class CartManager(id: String) extends Actor with PersistentFSM[CartState, Cart, CartEvent] with Timers{
 
   override def persistenceId: String = "persistent-cart-fsm-id-" + id
   override def domainEventClassTag: ClassTag[CartEvent] = classTag[CartEvent]
 
+  private var nonEmptyTimeout = TimerValues.cartTimer
 
   override def applyEvent(event: CartEvent, cartBeforeEvent: Cart): Cart = event match{
-    case ItemRemoved(item) => cartBeforeEvent.removeItem(item)
-    case ItemAdded(item) => cartBeforeEvent.addItem(item)
+    case ctc @ CartTimeoutChanged(persistedTimePassed: Some[FiniteDuration]) =>
+      println("applying " +  ctc)
+      timers.startSingleTimer(CartTimerKey, CartTimerExpired, persistedTimePassed.get)
+      cartBeforeEvent
+    case ItemRemoved(item) =>
+      cartBeforeEvent.removeItem(item)
+    case ItemAdded(item) =>
+      println("applying adding")
+      cartBeforeEvent.addItem(item)
     case CartEmptied() => Cart.empty
   }
 
   startWith(Empty, Cart.empty)
+  println("Actor CartManager started")
 
   when(Empty){
     case Event(AddItem(item), cart) =>
       addItemGoingTo(item, NonEmpty, "v2: An item was added to a cart in the empty state, items count " + (cart.items.get(item.id) match {case Some(Item(_, _, _, count)) => count; case None => -1}))
   }
 
-  when(NonEmpty, stateTimeout = cartTimer seconds){
+
+  when(NonEmpty){
+
     case Event(AddItem(item), cart) =>
       addItemGoingTo(item, NonEmpty,"v2: An item was added to a cart in the non-empty state, items count " + (cart.items.get(item.id) match {case Some(Item(_, _, _, count)) => count; case None => -1}))
 
@@ -84,17 +95,29 @@ class CartManager(id: String) extends Actor with PersistentFSM[CartState, Cart, 
     case Event(StartCheckout(), cart) =>
       goto(InCheckout)
 
-    case Event(StateTimeout, cart) =>
+    case Event(CartHeartBeatTime, _) =>
+      val ctc = CartTimeoutChanged(Some(FiniteDuration(deadline.timeLeft.toSeconds,SECONDS)))
+      stay applying ctc
+
+    case Event(StateTimeout, _) =>
       emptyCart("v2: Cart Timer expired")
+
+    case Event(CartTimerExpired, _ ) =>
+      emptyCart("v2: Cart Timer expired")
+
   }
 
-  onTransition{
-    case NonEmpty -> NonEmpty =>
-      println("refreshed timer")
+  var deadline : Deadline = _
 
+  onTransition{
+    case Empty -> NonEmpty =>
+        deadline = TimerValues.cartTimer.seconds.fromNow
+        timers.startPeriodicTimer(CartHeartBeatKey, CartHeartBeatTime, 1 seconds)
+    case NonEmpty -> NonEmpty =>
+        deadline = TimerValues.cartTimer.seconds.fromNow
+        timers.startPeriodicTimer(CartHeartBeatKey, CartHeartBeatTime, 1 seconds)
     case NonEmpty -> InCheckout =>
-      println("Creating checkout")
-      val checkout = system.actorOf(Props(new Checkout(self)), "checkout")
+      val checkout = system.actorOf(Props(new Checkout(self, id)), "checkout")
       context.parent ! CheckoutStarted(checkout)
   }
 
@@ -115,6 +138,9 @@ class CartManager(id: String) extends Actor with PersistentFSM[CartState, Cart, 
   onTransition{
     case InCheckout -> NonEmpty =>
       println("v2: InCheckout: Checkout cancelled")
+
+    case NonEmpty -> CartStopped =>
+      println("Transition from NonEmpty to CartStopped")
   }
 
   whenUnhandled{
@@ -132,13 +158,20 @@ class CartManager(id: String) extends Actor with PersistentFSM[CartState, Cart, 
       stay
   }
 
+
+
+  override def aroundPostStop(): Unit = {
+    println("Actor CartManager terminated")
+    super.postStop()
+  }
+
   private def addItemGoingTo(item: Item, state: CartState,  msg: => String = "") ={
     if(msg != "") println(msg)
     goto(state) applying ItemAdded(item)
 
   }
 
-  private def removeItemGoingTo(item: Item, state: CartState, msg : => String = "") ={
+  private def removeItemGoingTo(item: Item, state: CartState, msg : => String = "") = {
     if(msg != "") println(msg)
     goto(state) applying ItemRemoved(item)
   }

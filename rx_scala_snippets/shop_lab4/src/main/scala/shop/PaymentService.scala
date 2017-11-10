@@ -8,7 +8,7 @@ class PaymentService extends Actor{
     case DoPayment =>
       println("Payment service got dopayment order")
       context.actorSelection("/user/customer") ! PaymentConfirmed
-      context.parent ! PaymentReceived("11")
+      context.parent ! ReceivePayment("11")
       context stop self
   }
 
