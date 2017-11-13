@@ -1,0 +1,38 @@
+[0m[[0m[0minfo[0m] [0m[0m[32mCartAsynchSpec:[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mA Cart[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- must be empty at start[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- must increase the number of items inside it by one and become non empty[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- must increase the number of items inside it by one and become non empty, decrease, become empty again[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- must increase the number of items inside it by one, become non empty, increase again, and stay non empty[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- must increase by two, become nonempty, decrease by one, stay nonempty[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- must increase by two, become nonempty, decrease by one, stay nonempty, decrease by one, become empty again[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- must in the nonempty state, become empty after the carttimer expired[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- must in the nonempty state, refresh timer just before  the carttimer expiring, and stay nonempty after an immediate check[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- must in the empty state, ignore startcheckout msg[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m- must in the checkout state, after checkouttimer expired, become nonempty (checkout cancelled) with the same amount of items as before checkout *** FAILED ***[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  java.lang.AssertionError: assertion failed: expected 1, found 0[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at scala.Predef$.assert(Predef.scala:219)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at akka.testkit.TestKitBase.expectMsg_internal(TestKit.scala:402)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at akka.testkit.TestKitBase.expectMsg(TestKit.scala:378)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at akka.testkit.TestKitBase.expectMsg$(TestKit.scala:378)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at akka.testkit.TestKit.expectMsg(TestKit.scala:881)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at shop.CartAsynchSpec.expect$1(CartAsynchSpec.scala:32)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at shop.CartAsynchSpec.$anonfun$new$11(CartAsynchSpec.scala:100)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at shop.CartAsynchSpec$$Lambda$3916/1952303.apply$mcV$sp(Unknown Source)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:12)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at org.scalatest.OutcomeOf.outcomeOf(OutcomeOf.scala:85)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  ...[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- must in the checkout state, after checkouttimer + carttimer expired, become empty[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m- must in the nonempty state, become InCheckout after appropriate msg  *** FAILED ***[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  java.lang.AssertionError: assertion failed: expected 1, found 0[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at scala.Predef$.assert(Predef.scala:219)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at akka.testkit.TestKitBase.expectMsg_internal(TestKit.scala:402)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at akka.testkit.TestKitBase.expectMsg(TestKit.scala:378)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at akka.testkit.TestKitBase.expectMsg$(TestKit.scala:378)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at akka.testkit.TestKit.expectMsg(TestKit.scala:881)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at shop.CartAsynchSpec.expect$1(CartAsynchSpec.scala:32)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at shop.CartAsynchSpec.$anonfun$new$13(CartAsynchSpec.scala:117)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at shop.CartAsynchSpec$$Lambda$3920/6777130.apply$mcV$sp(Unknown Source)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at scala.runtime.java8.JFunction0$mcV$sp.apply(JFunction0$mcV$sp.java:12)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  at org.scalatest.OutcomeOf.outcomeOf(OutcomeOf.scala:85)[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[31m  ...[0m[0m

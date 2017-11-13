@@ -1,0 +1,17 @@
+[0m[[0m[0minfo[0m] [0m[0m[32mParentChildSpec:[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mA Probe Cart[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- must get checkout closed msg[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32mCheckout[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- must starts in Selecting Delivery state[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- must after getting DeliverySelected in SelectingDelivery msg, change its state to SelectingPayment[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- must after getting PaymentSelected in SelectingPayment, change its state to Processing Payment[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- must cancel at any state after having received Cancelled msg[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- must cancel after timeout in selecting delivery state[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- must cancel after timeout in selecting payment state[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- must cancel after timeout in processing payment state[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- must not change its state to processing payment being in selecting delivery state[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- must not change its state back to selecting delivery being in selecting payment state[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- must not change its state back to selecting delivery being in processing payment state[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- must not change its state back to selecting payment when in processing payment state[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- must not change its state to closed in selecting delivery state[0m[0m
+[0m[[0m[0minfo[0m] [0m[0m[32m- must not change its state to closed in selecting payment method state[0m[0m

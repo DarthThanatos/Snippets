@@ -1,0 +1,7 @@
+[0m[[0m[33mwarn[0m] [0m[0mC:\Users\Robert\Desktop\Robert\Snippets\rx_scala_snippets\shop_lab3\src\main\scala\shop\Checkout.scala:33:10: match may not be exhaustive.[0m
+[0m[[0m[33mwarn[0m] [0m[0mIt would fail on the following inputs: CheckoutCancelled(), CheckoutClosed(), CheckoutTimerExpired(), PaymentReceived(_), PaymentSelected(_), PaymentTimerExpired(), StartCheckout(), UnitializedCheckout[0m
+[0m[[0m[33mwarn[0m] [0m[0m         nextStateData match {[0m
+[0m[[0m[33mwarn[0m] [0m[0m         ^[0m
+[0m[[0m[33mwarn[0m] [0m[0mthere were 7 deprecation warnings (since 2.12.0); re-run with -deprecation for details[0m
+[0m[[0m[33mwarn[0m] [0m[0mthere were three feature warnings; re-run with -feature for details[0m
+[0m[[0m[33mwarn[0m] [0m[0mthree warnings found[0m

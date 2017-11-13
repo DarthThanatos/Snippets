@@ -16,22 +16,29 @@ class CartAsynchSpec extends TestKit(ActorSystem("CartSpec"))
 
   "A Cart" must {
 
+    def expect( cart: ActorRef, items: Int, cartState: CartState){
+      cart ! "items"
+      expectMsg(items)
+      cart ! GetState()
+      expectMsg(cartState)
+    }
+
     "be empty at start" in{
       val cart = system.actorOf(Props[Cart])
       expect(cart, 0, Empty)
+    }
+
+    "still be empty after the ItemRemoved message in Empty state"{
+      val cart = system.actorOf(Props[Cart])
+      cart ! ItemRemoved()
+      expect(cart, 0, Empty)
+
     }
 
     "increase the number of items inside it by one and become non empty" in {
       val cart = system.actorOf(Props[Cart])
       cart ! ItemAdded()
       expect(cart, 1, NonEmpty)
-    }
-
-    def expect( cart: ActorRef, items: Int, cartState: CartState){
-      cart ! "items"
-      expectMsg(items)
-      cart ! GetState()
-      expectMsg(cartState)
     }
 
     "increase the number of items inside it by one and become non empty, decrease, become empty again" in {
