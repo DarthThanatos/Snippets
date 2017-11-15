@@ -3,7 +3,6 @@ package shop
 import java.net.URI
 
 import akka.actor.{Actor, Props, Timers}
-import shop.TimerValues.{CartHeartBeatKey, CartHeartBeatTime, CartTimerKey}
 
 import scala.language.postfixOps
 import scala.concurrent.duration._
@@ -60,14 +59,9 @@ class CartManager(id: String) extends Actor with PersistentFSM[CartState, Cart, 
   private var nonEmptyTimeout = TimerValues.cartTimer
 
   override def applyEvent(event: CartEvent, cartBeforeEvent: Cart): Cart = event match{
-    case ctc @ CartTimeoutChanged(persistedTimePassed: Some[FiniteDuration]) =>
-      println("applying " +  ctc)
-      timers.startSingleTimer(CartTimerKey, CartTimerExpired, persistedTimePassed.get)
-      cartBeforeEvent
     case ItemRemoved(item) =>
       cartBeforeEvent.removeItem(item)
     case ItemAdded(item) =>
-      println("applying adding")
       cartBeforeEvent.addItem(item)
     case CartEmptied() => Cart.empty
   }
@@ -81,7 +75,7 @@ class CartManager(id: String) extends Actor with PersistentFSM[CartState, Cart, 
   }
 
 
-  when(NonEmpty){
+  when(NonEmpty, stateTimeout = TimerValues.cartTimer seconds){
 
     case Event(AddItem(item), cart) =>
       addItemGoingTo(item, NonEmpty,"v2: An item was added to a cart in the non-empty state, items count " + (cart.items.get(item.id) match {case Some(Item(_, _, _, count)) => count; case None => -1}))
@@ -95,27 +89,15 @@ class CartManager(id: String) extends Actor with PersistentFSM[CartState, Cart, 
     case Event(StartCheckout(), cart) =>
       goto(InCheckout)
 
-    case Event(CartHeartBeatTime, _) =>
-      val ctc = CartTimeoutChanged(Some(FiniteDuration(deadline.timeLeft.toSeconds,SECONDS)))
-      stay applying ctc
-
     case Event(StateTimeout, _) =>
-      emptyCart("v2: Cart Timer expired")
-
-    case Event(CartTimerExpired, _ ) =>
       emptyCart("v2: Cart Timer expired")
 
   }
 
-  var deadline : Deadline = _
 
   onTransition{
     case Empty -> NonEmpty =>
-        deadline = TimerValues.cartTimer.seconds.fromNow
-        timers.startPeriodicTimer(CartHeartBeatKey, CartHeartBeatTime, 1 seconds)
     case NonEmpty -> NonEmpty =>
-        deadline = TimerValues.cartTimer.seconds.fromNow
-        timers.startPeriodicTimer(CartHeartBeatKey, CartHeartBeatTime, 1 seconds)
     case NonEmpty -> InCheckout =>
       val checkout = system.actorOf(Props(new Checkout(self, id)), "checkout")
       context.parent ! CheckoutStarted(checkout)

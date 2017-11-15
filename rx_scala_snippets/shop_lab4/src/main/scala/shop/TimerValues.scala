@@ -5,8 +5,6 @@ object TimerValues{
   val tickerDelay = 1
 
   val cartTimer = 8
-  case object CartHeartBeatKey
-  case object CartHeartBeatTime
   case object CartTimerKey
   case object CartTimerExpired
 
