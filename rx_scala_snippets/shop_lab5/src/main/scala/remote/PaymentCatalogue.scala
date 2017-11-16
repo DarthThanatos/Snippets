@@ -14,11 +14,14 @@ class DB(pathToDB : String){
   private val MAX_PRICE = 1000
   private val MAX_COUNT = 150
 
+  private case class ItemProducedBy(item: Item, company: String)
+
   private val reader = CSVReader.open(new File(pathToDB))
   private val csvStorage = reader.all()
-  private val storage =
-    for (List(uri, name, _*) <- csvStorage) yield{
-      Item(new URI(uri), name, math.abs(new Random().nextInt()) % MAX_PRICE , math.abs(new Random().nextInt())% MAX_COUNT)
+  private val storage : List[ItemProducedBy] =
+    for (List(uri, name, company) <- csvStorage) yield{
+      val item = Item(new URI(uri), name, math.abs(new Random().nextInt()) % MAX_PRICE , math.abs(new Random().nextInt())% MAX_COUNT)
+      ItemProducedBy(item, company)
     }
 
   def search(query: String): List[Item] = ???
