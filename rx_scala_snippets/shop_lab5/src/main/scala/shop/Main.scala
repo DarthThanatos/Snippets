@@ -5,6 +5,8 @@ import java.util.concurrent.TimeUnit
 
 import akka.actor.{ActorRef, ActorSystem, Props}
 import akka.util.Timeout
+import communication.Item
+import remote.DB
 
 import scala.concurrent.duration.FiniteDuration
 import scala.util.control.Breaks._
@@ -51,7 +53,7 @@ object Main {
       "[Checkout-ProcessingPayment] Please type payment amount you want to pay us or cancel to quit:",
       checkout,
       checkoutDone,
-      (msg: String) => ReceivePayment(msg)
+      (msg: String) => ReceivePayment(msg.toFloat)
     )
   }
 
@@ -122,8 +124,17 @@ object Main {
     interact(cart)
   }
 
-  def main(args: Array[String]): Unit ={
+  def testDB(): Unit ={
+    val db = new DB("..\\..\\..\\..\\db\\db")
+    db.printDB()
+  }
+
+  def testCustomer(): Unit ={
     system.actorOf(Props[Customer], "customer")
+  }
+
+  def main(args: Array[String]): Unit ={
+    testDB()
   }
 }
 

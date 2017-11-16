@@ -1,6 +1,7 @@
 package shop
 
 import akka.actor.ActorRef
+import communication.Item
 
 case class GetState()
 
@@ -18,7 +19,7 @@ case class CheckoutCancelled() extends CheckoutMessage
 case class CheckoutTimerExpired() extends CheckoutMessage
 case class SelectPayment(paymentMethod: String) extends CheckoutMessage
 case class PaymentTimerExpired() extends CheckoutMessage
-case class ReceivePayment(payment: String) extends CheckoutMessage
+case class ReceivePayment(payment: Float) extends CheckoutMessage
 case class SelectDelivery(deliveryMethod: String) extends CheckoutMessage
 
 

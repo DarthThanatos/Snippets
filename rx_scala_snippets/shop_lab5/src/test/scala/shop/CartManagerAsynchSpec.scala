@@ -6,6 +6,7 @@ import java.util.concurrent.TimeUnit
 import akka.actor.{ActorRef, ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestKit, TestProbe}
 import com.typesafe.config.ConfigFactory
+import communication.Item
 import org.scalatest.{BeforeAndAfterAll, WordSpecLike}
 
 import scala.concurrent.Await

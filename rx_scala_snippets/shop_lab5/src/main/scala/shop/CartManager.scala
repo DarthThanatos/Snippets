@@ -5,15 +5,12 @@ import java.net.URI
 import akka.actor.{Actor, Props, Timers}
 import akka.persistence.fsm.PersistentFSM
 import Main.system
+import communication.Item
 
 import scala.concurrent.duration._
 import scala.language.postfixOps
 import scala.reflect.{ClassTag, classTag}
 
-/**
-  * @param id: unique item identifier (java.net.URI)
-  */
-case class Item(id: URI, name: String, price: BigDecimal, count: Int)
 
 case class Cart(items: Map[URI, Item]) {
   def addItem(it: Item): Cart = {
@@ -44,6 +41,8 @@ case class Cart(items: Map[URI, Item]) {
       case Some(Item(_,_,_,count)) => count <= item.count
       case None => false
     })
+
+  def listOfItems : List[Item] =  items.values.toList
 }
 
 object Cart {
@@ -58,9 +57,9 @@ class CartManager(id: String) extends Actor with PersistentFSM[CartState, Cart, 
   private var nonEmptyTimeout = TimerValues.cartTimer
 
   override def applyEvent(event: CartEvent, cartBeforeEvent: Cart): Cart = event match{
-    case ItemRemoved(item) =>
+    case ItemRemoved(item :Item) =>
       cartBeforeEvent.removeItem(item)
-    case ItemAdded(item) =>
+    case ItemAdded(item: Item) =>
       cartBeforeEvent.addItem(item)
     case CartEmptied() => Cart.empty
   }
@@ -69,20 +68,20 @@ class CartManager(id: String) extends Actor with PersistentFSM[CartState, Cart, 
   println("Actor CartManager started")
 
   when(Empty){
-    case Event(AddItem(item), cart) =>
+    case Event(AddItem(item:Item), cart) =>
       addItemGoingTo(item, NonEmpty, "v2: An item was added to a cart in the empty state, items count " + (cart.items.get(item.id) match {case Some(Item(_, _, _, count)) => count; case None => -1}))
   }
 
 
   when(NonEmpty, stateTimeout = TimerValues.cartTimer seconds){
 
-    case Event(AddItem(item), cart) =>
+    case Event(AddItem(item: Item), cart) =>
       addItemGoingTo(item, NonEmpty,"v2: An item was added to a cart in the non-empty state, items count " + (cart.items.get(item.id) match {case Some(Item(_, _, _, count)) => count; case None => -1}))
 
-    case Event(RemoveItem(item), cart) if !cart.itemsAboutToBeEmpty(item) =>
+    case Event(RemoveItem(item: Item), cart) if !cart.itemsAboutToBeEmpty(item) =>
       removeItemGoingTo(item, NonEmpty, "v2: An item was removed from a cart in the non-empty state, still in the non-empty state, items count " + (cart.items.get(item.id) match {case Some(Item(_, _, _, count)) => count; case None => -1}))
 
-    case Event(RemoveItem(item), cart) =>
+    case Event(RemoveItem(item: Item), cart) =>
       emptyCart("v2: An item was removed from a cart in the non-empty state, now in the empty state, items count " + (cart.items.get(item.id) match {case Some(Item(_, _, _, count)) => count; case None => -1}))
 
     case Event(StartCheckout(), cart) =>
@@ -97,8 +96,9 @@ class CartManager(id: String) extends Actor with PersistentFSM[CartState, Cart, 
   onTransition{
     case Empty -> NonEmpty =>
     case NonEmpty -> NonEmpty =>
+
     case NonEmpty -> InCheckout =>
-      val checkout = system.actorOf(Props(new Checkout(self, id)), "checkout")
+      val checkout = system.actorOf(Props(new Checkout(self, id, stateData.listOfItems)))
       context.parent ! CheckoutStarted(checkout)
   }
 

@@ -21,7 +21,7 @@ class ParentChildSpec extends TestKit(ActorSystem("CartSpec"))
       val checkout = system.actorOf(Props(classOf[Checkout], probe.ref))
       checkout ! SelectDelivery("dpd")
       checkout ! SelectPayment("zl")
-      checkout ! ReceivePayment("19")
+      checkout ! ReceivePayment(19)
       probe.expectMsg(CheckoutClosed())
     }
   }
