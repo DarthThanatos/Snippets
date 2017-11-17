@@ -20,11 +20,34 @@ class DB(pathToDB : String){
   private val csvStorage = reader.all()
   private val storage : List[ItemProducedBy] =
     for (List(uri, name, company) <- csvStorage) yield{
-      val item = Item(new URI(uri), name, math.abs(new Random().nextInt()) % MAX_PRICE , math.abs(new Random().nextInt())% MAX_COUNT)
+      val item = Item(new URI(uri), name, math.abs(new Random().nextInt()) % MAX_PRICE, math.abs(new Random().nextInt())% MAX_COUNT)
       ItemProducedBy(item, company)
     }
 
-  def search(query: String): List[Item] = ???
+  private def calcScore(wordsInQuery: List[String], stringMatchedAgainst: String): Int ={
+    var res : Int = 0
+    val wordsInMatchedString = stringMatchedAgainst.split(" ")
+    for(wordInQuery <- wordsInQuery){
+      res += (if(wordsInMatchedString contains wordInQuery) 1 else 0)
+    }
+    res
+  }
+
+  private def appendScoreToSorted(target: List[(Int, Item)], item: Item, itemScore: Int): List[(Int, Item)] ={
+    val biggerVals: List[(Int,Item)] = target.filter( _._1 >= itemScore)
+    val smallerVals = target.filter( _._1 < itemScore)
+    (biggerVals ++ ((itemScore, item) :: smallerVals)).take(DEFAULT_RESULT_SIZE)
+  }
+
+  def search(query: String): List[Item] = {
+    val wordsInQuery = query.split(" ").toList
+    var scores = List[(Int, Item)]()
+    for(ItemProducedBy(item @ Item(_, name, _, _), company) <- storage){
+      val score = calcScore(wordsInQuery, name) + calcScore(wordsInQuery, company)
+      scores = appendScoreToSorted(scores, item, score)
+    }
+    scores.map { case (score, item) => item}
+  }
 
 
   def printDB(): Unit = {

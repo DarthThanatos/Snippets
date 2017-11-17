@@ -1,4 +1,4 @@
-[info] Updating {file:/C:/Users/Admin/Desktop/Robert/Snippets/rx_scala_snippets/shop_lab4/}shop_lab4...
+[info] Updating {file:/C:/Users/Robert/Desktop/Robert/Snippets/rx_scala_snippets/shop_lab4/}shop_lab4...
 [debug] :: resolving dependencies :: default#shop_lab4_2.12;0.1
 [debug] 	confs: [compile, runtime, test, provided, optional, compile-internal, runtime-internal, test-internal, plugin, pom, scala-tool]
 [debug] 	validate = true
@@ -122,8 +122,20 @@
 [debug] dependency descriptor has been mediated: dependency: org.scala-lang#scala-compiler;2.12.3 {scala-tool=[default, optional(default)]} => dependency: org.scala-lang#scala-compiler;2.12.3 {scala-tool=[default, optional(default)]}
 [debug] dependency descriptor has been mediated: MergedDescriptors(dependency: org.scala-lang#scala-library;2.12.3 {scala-tool=[default, optional(default)]},dependency: org.scala-lang#scala-library;2.12.3 {compile=[default(compile)]}) => dependency: org.scala-lang#scala-library;2.12.3 {scala-tool=[default, optional(default)], compile=[default(compile)]}
 [debug] sbt-chain: Checking cache for: dependency: com.typesafe.akka#akka-persistence_2.12;2.5.4 {compile=[default(compile)]}
-[debug] sbt-chain: module revision found in cache: com.typesafe.akka#akka-persistence_2.12;2.5.4
-[debug] 	found com.typesafe.akka#akka-persistence_2.12;2.5.4 in sbt-chain
+[debug] sbt-chain-delegate: Checking cache for: dependency: com.typesafe.akka#akka-persistence_2.12;2.5.4 {compile=[default(compile)]}
+[debug] 		tried C:\Users\Robert\.ivy2\local\com.typesafe.akka\akka-persistence_2.12\2.5.4\ivys\ivy.xml
+[debug] 	local: no ivy file found for com.typesafe.akka#akka-persistence_2.12;2.5.4
+[debug] 		tried https://repo1.maven.org/maven2/com/typesafe/akka/akka-persistence_2.12/2.5.4/akka-persistence_2.12-2.5.4.pom
+[debug] 	public: found md file for com.typesafe.akka#akka-persistence_2.12;2.5.4
+[debug] 		=> https://repo1.maven.org/maven2/com/typesafe/akka/akka-persistence_2.12/2.5.4/akka-persistence_2.12-2.5.4.pom (2.5.4)
+[debug] downloading https://repo1.maven.org/maven2/com/typesafe/akka/akka-persistence_2.12/2.5.4/akka-persistence_2.12-2.5.4.pom ...
+[debug] 	public: downloading https://repo1.maven.org/maven2/com/typesafe/akka/akka-persistence_2.12/2.5.4/akka-persistence_2.12-2.5.4.pom
+[debug] 	public: downloading https://repo1.maven.org/maven2/com/typesafe/akka/akka-persistence_2.12/2.5.4/akka-persistence_2.12-2.5.4.pom.sha1
+[debug] sha1 OK for https://repo1.maven.org/maven2/com/typesafe/akka/akka-persistence_2.12/2.5.4/akka-persistence_2.12-2.5.4.pom
+[debug] 	[SUCCESSFUL ] com.typesafe.akka#akka-persistence_2.12;2.5.4!akka-persistence_2.12.pom(pom.original) (350ms)
+[debug] 		tried C:\Users\Robert\.ivy2\local\com.typesafe.akka\akka-persistence_2.12\2.5.4\jars\akka-persistence_2.12.jar
+[debug] 		tried https://repo1.maven.org/maven2/com/typesafe/akka/akka-persistence_2.12/2.5.4/akka-persistence_2.12-2.5.4.jar
+[debug] 	found com.typesafe.akka#akka-persistence_2.12;2.5.4 in public
 [debug] == resolving dependencies default#shop_lab4_2.12;0.1->com.typesafe.akka#akka-persistence_2.12;2.5.4 [compile->runtime]
 [debug] == resolving dependencies default#shop_lab4_2.12;0.1->com.typesafe.akka#akka-persistence_2.12;2.5.4 [compile->compile]
 [debug] dependency descriptor has been mediated: dependency: org.scala-lang#scala-library;2.12.2 {compile=[compile(*), master(compile)], runtime=[runtime(*)]} => dependency: org.scala-lang#scala-library;2.12.3 {compile=[compile(*), master(compile)], runtime=[runtime(*)]}
@@ -152,8 +164,20 @@
 [debug] dependency descriptor has been mediated: dependency: org.scala-lang#scala-compiler;2.12.3 {scala-tool=[default, optional(default)]} => dependency: org.scala-lang#scala-compiler;2.12.3 {scala-tool=[default, optional(default)]}
 [debug] dependency descriptor has been mediated: MergedDescriptors(dependency: org.scala-lang#scala-library;2.12.3 {scala-tool=[default, optional(default)]},dependency: org.scala-lang#scala-library;2.12.3 {compile=[default(compile)]}) => dependency: org.scala-lang#scala-library;2.12.3 {scala-tool=[default, optional(default)], compile=[default(compile)]}
 [debug] sbt-chain: Checking cache for: dependency: com.typesafe.akka#akka-protobuf_2.12;2.5.4 {compile=[compile(*), master(compile)], runtime=[runtime(*)]}
-[debug] sbt-chain: module revision found in cache: com.typesafe.akka#akka-protobuf_2.12;2.5.4
-[debug] 	found com.typesafe.akka#akka-protobuf_2.12;2.5.4 in sbt-chain
+[debug] sbt-chain-delegate: Checking cache for: dependency: com.typesafe.akka#akka-protobuf_2.12;2.5.4 {compile=[compile(*), master(compile)], runtime=[runtime(*)]}
+[debug] 		tried C:\Users\Robert\.ivy2\local\com.typesafe.akka\akka-protobuf_2.12\2.5.4\ivys\ivy.xml
+[debug] 	local: no ivy file found for com.typesafe.akka#akka-protobuf_2.12;2.5.4
+[debug] 		tried https://repo1.maven.org/maven2/com/typesafe/akka/akka-protobuf_2.12/2.5.4/akka-protobuf_2.12-2.5.4.pom
+[debug] 	public: found md file for com.typesafe.akka#akka-protobuf_2.12;2.5.4
+[debug] 		=> https://repo1.maven.org/maven2/com/typesafe/akka/akka-protobuf_2.12/2.5.4/akka-protobuf_2.12-2.5.4.pom (2.5.4)
+[debug] downloading https://repo1.maven.org/maven2/com/typesafe/akka/akka-protobuf_2.12/2.5.4/akka-protobuf_2.12-2.5.4.pom ...
+[debug] 	public: downloading https://repo1.maven.org/maven2/com/typesafe/akka/akka-protobuf_2.12/2.5.4/akka-protobuf_2.12-2.5.4.pom
+[debug] 	public: downloading https://repo1.maven.org/maven2/com/typesafe/akka/akka-protobuf_2.12/2.5.4/akka-protobuf_2.12-2.5.4.pom.sha1
+[debug] sha1 OK for https://repo1.maven.org/maven2/com/typesafe/akka/akka-protobuf_2.12/2.5.4/akka-protobuf_2.12-2.5.4.pom
+[debug] 	[SUCCESSFUL ] com.typesafe.akka#akka-protobuf_2.12;2.5.4!akka-protobuf_2.12.pom(pom.original) (200ms)
+[debug] 		tried C:\Users\Robert\.ivy2\local\com.typesafe.akka\akka-protobuf_2.12\2.5.4\jars\akka-protobuf_2.12.jar
+[debug] 		tried https://repo1.maven.org/maven2/com/typesafe/akka/akka-protobuf_2.12/2.5.4/akka-protobuf_2.12-2.5.4.jar
+[debug] 	found com.typesafe.akka#akka-protobuf_2.12;2.5.4 in public
 [debug] dependency descriptor has been mediated: dependency: org.scala-lang#scala-library;2.12.2 {compile=[compile(*), master(compile)], runtime=[runtime(*)]} => dependency: org.scala-lang#scala-library;2.12.3 {compile=[compile(*), master(compile)], runtime=[runtime(*)]}
 [debug] == resolving dependencies com.typesafe.akka#akka-persistence_2.12;2.5.4->com.typesafe.akka#akka-protobuf_2.12;2.5.4 [compile->compile(*)]
 [debug] dependency descriptor has been mediated: dependency: org.scala-lang#scala-library;2.12.2 {compile=[compile(*), master(compile)], runtime=[runtime(*)]} => dependency: org.scala-lang#scala-library;2.12.3 {compile=[compile(*), master(compile)], runtime=[runtime(*)]}
@@ -184,16 +208,78 @@
 [debug] dependency descriptor has been mediated: dependency: org.scala-lang#scala-compiler;2.12.3 {scala-tool=[default, optional(default)]} => dependency: org.scala-lang#scala-compiler;2.12.3 {scala-tool=[default, optional(default)]}
 [debug] dependency descriptor has been mediated: MergedDescriptors(dependency: org.scala-lang#scala-library;2.12.3 {scala-tool=[default, optional(default)]},dependency: org.scala-lang#scala-library;2.12.3 {compile=[default(compile)]}) => dependency: org.scala-lang#scala-library;2.12.3 {scala-tool=[default, optional(default)], compile=[default(compile)]}
 [debug] sbt-chain: Checking cache for: dependency: org.iq80.leveldb#leveldb;0.9 {compile=[default(compile)]}
-[debug] sbt-chain: module revision found in cache: org.iq80.leveldb#leveldb;0.9
-[debug] 	found org.iq80.leveldb#leveldb;0.9 in sbt-chain
+[debug] sbt-chain-delegate: Checking cache for: dependency: org.iq80.leveldb#leveldb;0.9 {compile=[default(compile)]}
+[debug] 		tried C:\Users\Robert\.ivy2\local\org.iq80.leveldb\leveldb\0.9\ivys\ivy.xml
+[debug] 	local: no ivy file found for org.iq80.leveldb#leveldb;0.9
+[debug] 		tried https://repo1.maven.org/maven2/org/iq80/leveldb/leveldb/0.9/leveldb-0.9.pom
+[debug] 	public: found md file for org.iq80.leveldb#leveldb;0.9
+[debug] 		=> https://repo1.maven.org/maven2/org/iq80/leveldb/leveldb/0.9/leveldb-0.9.pom (0.9)
+[debug] downloading https://repo1.maven.org/maven2/org/iq80/leveldb/leveldb/0.9/leveldb-0.9.pom ...
+[debug] 	public: downloading https://repo1.maven.org/maven2/org/iq80/leveldb/leveldb/0.9/leveldb-0.9.pom
+[debug] 	public: downloading https://repo1.maven.org/maven2/org/iq80/leveldb/leveldb/0.9/leveldb-0.9.pom.sha1
+[debug] sha1 OK for https://repo1.maven.org/maven2/org/iq80/leveldb/leveldb/0.9/leveldb-0.9.pom
+[debug] 	[SUCCESSFUL ] org.iq80.leveldb#leveldb;0.9!leveldb.pom(pom.original) (260ms)
+[debug] sbt-chain: Checking cache for: dependency: org.iq80.leveldb#leveldb-project;0.9 {}
+[debug] sbt-chain-delegate: Checking cache for: dependency: org.iq80.leveldb#leveldb-project;0.9 {}
+[debug] 		tried C:\Users\Robert\.ivy2\local\org.iq80.leveldb\leveldb-project\0.9\ivys\ivy.xml
+[debug] 	local: no ivy file found for org.iq80.leveldb#leveldb-project;0.9
+[debug] 		tried https://repo1.maven.org/maven2/org/iq80/leveldb/leveldb-project/0.9/leveldb-project-0.9.pom
+[debug] 	public: found md file for org.iq80.leveldb#leveldb-project;0.9
+[debug] 		=> https://repo1.maven.org/maven2/org/iq80/leveldb/leveldb-project/0.9/leveldb-project-0.9.pom (0.9)
+[debug] downloading https://repo1.maven.org/maven2/org/iq80/leveldb/leveldb-project/0.9/leveldb-project-0.9.pom ...
+[debug] 	public: downloading https://repo1.maven.org/maven2/org/iq80/leveldb/leveldb-project/0.9/leveldb-project-0.9.pom
+[debug] 	public: downloading https://repo1.maven.org/maven2/org/iq80/leveldb/leveldb-project/0.9/leveldb-project-0.9.pom.sha1
+[debug] sha1 OK for https://repo1.maven.org/maven2/org/iq80/leveldb/leveldb-project/0.9/leveldb-project-0.9.pom
+[debug] 	[SUCCESSFUL ] org.iq80.leveldb#leveldb-project;0.9!leveldb-project.pom(pom.original) (220ms)
+[debug] sbt-chain: Checking cache for: dependency: io.airlift#airbase;28 {}
+[debug] sbt-chain-delegate: Checking cache for: dependency: io.airlift#airbase;28 {}
+[debug] 		tried C:\Users\Robert\.ivy2\local\io.airlift\airbase\28\ivys\ivy.xml
+[debug] 	local: no ivy file found for io.airlift#airbase;28
+[debug] 		tried https://repo1.maven.org/maven2/io/airlift/airbase/28/airbase-28.pom
+[debug] 	public: found md file for io.airlift#airbase;28
+[debug] 		=> https://repo1.maven.org/maven2/io/airlift/airbase/28/airbase-28.pom (28)
+[debug] downloading https://repo1.maven.org/maven2/io/airlift/airbase/28/airbase-28.pom ...
+[debug] 	public: downloading https://repo1.maven.org/maven2/io/airlift/airbase/28/airbase-28.pom
+[debug] 	public: downloading https://repo1.maven.org/maven2/io/airlift/airbase/28/airbase-28.pom.sha1
+[debug] sha1 OK for https://repo1.maven.org/maven2/io/airlift/airbase/28/airbase-28.pom
+[debug] 	[SUCCESSFUL ] io.airlift#airbase;28!airbase.pom(pom.original) (390ms)
+[debug] sbt-chain: Checking cache for: dependency: org.sonatype.oss#oss-parent;9 {}
+[debug] sbt-chain: module revision found in cache: org.sonatype.oss#oss-parent;9
+[debug] 		tried C:\Users\Robert\.ivy2\local\io.airlift\airbase\28\jars\airbase.jar
+[debug] 		tried https://repo1.maven.org/maven2/io/airlift/airbase/28/airbase-28.jar
+[debug] CLIENT ERROR: Not Found url=https://repo1.maven.org/maven2/io/airlift/airbase/28/airbase-28.jar
+[debug] 		tried C:\Users\Robert\.sbt\preloaded\io.airlift\airbase\28\jars\airbase.jar
+[debug] 		tried file:/C:/Users/Robert/.sbt/preloaded/io/airlift/airbase/28/airbase-28.jar
+[debug] 		tried C:\Users\Robert\.ivy2\local\org.iq80.leveldb\leveldb-project\0.9\jars\leveldb-project.jar
+[debug] 		tried https://repo1.maven.org/maven2/org/iq80/leveldb/leveldb-project/0.9/leveldb-project-0.9.jar
+[debug] CLIENT ERROR: Not Found url=https://repo1.maven.org/maven2/org/iq80/leveldb/leveldb-project/0.9/leveldb-project-0.9.jar
+[debug] 		tried C:\Users\Robert\.sbt\preloaded\org.iq80.leveldb\leveldb-project\0.9\jars\leveldb-project.jar
+[debug] 		tried file:/C:/Users/Robert/.sbt/preloaded/org/iq80/leveldb/leveldb-project/0.9/leveldb-project-0.9.jar
+[debug] 		tried C:\Users\Robert\.ivy2\local\org.iq80.leveldb\leveldb\0.9\jars\leveldb.jar
+[debug] 		tried https://repo1.maven.org/maven2/org/iq80/leveldb/leveldb/0.9/leveldb-0.9.jar
+[debug] 	found org.iq80.leveldb#leveldb;0.9 in public
 [debug] == resolving dependencies default#shop_lab4_2.12;0.1->org.iq80.leveldb#leveldb;0.9 [compile->runtime]
 [debug] == resolving dependencies default#shop_lab4_2.12;0.1->org.iq80.leveldb#leveldb;0.9 [compile->compile]
 [debug] == resolving dependencies org.iq80.leveldb#leveldb;0.9->org.iq80.leveldb#leveldb-api;0.9 [compile->master(compile)]
 [debug] dependency descriptor has been mediated: dependency: org.scala-lang#scala-compiler;2.12.3 {scala-tool=[default, optional(default)]} => dependency: org.scala-lang#scala-compiler;2.12.3 {scala-tool=[default, optional(default)]}
 [debug] dependency descriptor has been mediated: MergedDescriptors(dependency: org.scala-lang#scala-library;2.12.3 {scala-tool=[default, optional(default)]},dependency: org.scala-lang#scala-library;2.12.3 {compile=[default(compile)]}) => dependency: org.scala-lang#scala-library;2.12.3 {scala-tool=[default, optional(default)], compile=[default(compile)]}
 [debug] sbt-chain: Checking cache for: dependency: org.iq80.leveldb#leveldb-api;0.9 {compile=[compile(*), master(compile)], runtime=[runtime(*)]}
-[debug] sbt-chain: module revision found in cache: org.iq80.leveldb#leveldb-api;0.9
-[debug] 	found org.iq80.leveldb#leveldb-api;0.9 in sbt-chain
+[debug] sbt-chain-delegate: Checking cache for: dependency: org.iq80.leveldb#leveldb-api;0.9 {compile=[compile(*), master(compile)], runtime=[runtime(*)]}
+[debug] 		tried C:\Users\Robert\.ivy2\local\org.iq80.leveldb\leveldb-api\0.9\ivys\ivy.xml
+[debug] 	local: no ivy file found for org.iq80.leveldb#leveldb-api;0.9
+[debug] 		tried https://repo1.maven.org/maven2/org/iq80/leveldb/leveldb-api/0.9/leveldb-api-0.9.pom
+[debug] 	public: found md file for org.iq80.leveldb#leveldb-api;0.9
+[debug] 		=> https://repo1.maven.org/maven2/org/iq80/leveldb/leveldb-api/0.9/leveldb-api-0.9.pom (0.9)
+[debug] downloading https://repo1.maven.org/maven2/org/iq80/leveldb/leveldb-api/0.9/leveldb-api-0.9.pom ...
+[debug] 	public: downloading https://repo1.maven.org/maven2/org/iq80/leveldb/leveldb-api/0.9/leveldb-api-0.9.pom
+[debug] 	public: downloading https://repo1.maven.org/maven2/org/iq80/leveldb/leveldb-api/0.9/leveldb-api-0.9.pom.sha1
+[debug] sha1 OK for https://repo1.maven.org/maven2/org/iq80/leveldb/leveldb-api/0.9/leveldb-api-0.9.pom
+[debug] 	[SUCCESSFUL ] org.iq80.leveldb#leveldb-api;0.9!leveldb-api.pom(pom.original) (280ms)
+[debug] sbt-chain: Checking cache for: dependency: org.iq80.leveldb#leveldb-project;0.9 {}
+[debug] sbt-chain: module revision found in cache: org.iq80.leveldb#leveldb-project;0.9
+[debug] 		tried C:\Users\Robert\.ivy2\local\org.iq80.leveldb\leveldb-api\0.9\jars\leveldb-api.jar
+[debug] 		tried https://repo1.maven.org/maven2/org/iq80/leveldb/leveldb-api/0.9/leveldb-api-0.9.jar
+[debug] 	found org.iq80.leveldb#leveldb-api;0.9 in public
 [debug] == resolving dependencies org.iq80.leveldb#leveldb;0.9->org.iq80.leveldb#leveldb-api;0.9 [compile->compile(*)]
 [debug] == resolving dependencies org.iq80.leveldb#leveldb;0.9->org.iq80.leveldb#leveldb-api;0.9 [compile->runtime(*)]
 [debug] == resolving dependencies org.iq80.leveldb#leveldb;0.9->org.iq80.leveldb#leveldb-api;0.9 [compile->compile]
@@ -201,8 +287,39 @@
 [debug] dependency descriptor has been mediated: dependency: org.scala-lang#scala-compiler;2.12.3 {scala-tool=[default, optional(default)]} => dependency: org.scala-lang#scala-compiler;2.12.3 {scala-tool=[default, optional(default)]}
 [debug] dependency descriptor has been mediated: MergedDescriptors(dependency: org.scala-lang#scala-library;2.12.3 {scala-tool=[default, optional(default)]},dependency: org.scala-lang#scala-library;2.12.3 {compile=[default(compile)]}) => dependency: org.scala-lang#scala-library;2.12.3 {scala-tool=[default, optional(default)], compile=[default(compile)]}
 [debug] sbt-chain: Checking cache for: dependency: com.google.guava#guava;18.0 {compile=[compile(*), master(compile)], runtime=[runtime(*)]}
-[debug] sbt-chain: module revision found in cache: com.google.guava#guava;18.0
-[debug] 	found com.google.guava#guava;18.0 in sbt-chain
+[debug] sbt-chain-delegate: Checking cache for: dependency: com.google.guava#guava;18.0 {compile=[compile(*), master(compile)], runtime=[runtime(*)]}
+[debug] 		tried C:\Users\Robert\.ivy2\local\com.google.guava\guava\18.0\ivys\ivy.xml
+[debug] 	local: no ivy file found for com.google.guava#guava;18.0
+[debug] 		tried https://repo1.maven.org/maven2/com/google/guava/guava/18.0/guava-18.0.pom
+[debug] 	public: found md file for com.google.guava#guava;18.0
+[debug] 		=> https://repo1.maven.org/maven2/com/google/guava/guava/18.0/guava-18.0.pom (18.0)
+[debug] downloading https://repo1.maven.org/maven2/com/google/guava/guava/18.0/guava-18.0.pom ...
+[debug] 	public: downloading https://repo1.maven.org/maven2/com/google/guava/guava/18.0/guava-18.0.pom
+[debug] 	public: downloading https://repo1.maven.org/maven2/com/google/guava/guava/18.0/guava-18.0.pom.sha1
+[debug] sha1 OK for https://repo1.maven.org/maven2/com/google/guava/guava/18.0/guava-18.0.pom
+[debug] 	[SUCCESSFUL ] com.google.guava#guava;18.0!guava.pom(pom.original) (190ms)
+[debug] sbt-chain: Checking cache for: dependency: com.google.guava#guava-parent;18.0 {}
+[debug] sbt-chain-delegate: Checking cache for: dependency: com.google.guava#guava-parent;18.0 {}
+[debug] 		tried C:\Users\Robert\.ivy2\local\com.google.guava\guava-parent\18.0\ivys\ivy.xml
+[debug] 	local: no ivy file found for com.google.guava#guava-parent;18.0
+[debug] 		tried https://repo1.maven.org/maven2/com/google/guava/guava-parent/18.0/guava-parent-18.0.pom
+[debug] 	public: found md file for com.google.guava#guava-parent;18.0
+[debug] 		=> https://repo1.maven.org/maven2/com/google/guava/guava-parent/18.0/guava-parent-18.0.pom (18.0)
+[debug] downloading https://repo1.maven.org/maven2/com/google/guava/guava-parent/18.0/guava-parent-18.0.pom ...
+[debug] 	public: downloading https://repo1.maven.org/maven2/com/google/guava/guava-parent/18.0/guava-parent-18.0.pom
+[debug] 	public: downloading https://repo1.maven.org/maven2/com/google/guava/guava-parent/18.0/guava-parent-18.0.pom.sha1
+[debug] sha1 OK for https://repo1.maven.org/maven2/com/google/guava/guava-parent/18.0/guava-parent-18.0.pom
+[debug] 	[SUCCESSFUL ] com.google.guava#guava-parent;18.0!guava-parent.pom(pom.original) (230ms)
+[debug] sbt-chain: Checking cache for: dependency: org.sonatype.oss#oss-parent;7 {}
+[debug] sbt-chain: module revision found in cache: org.sonatype.oss#oss-parent;7
+[debug] 		tried C:\Users\Robert\.ivy2\local\com.google.guava\guava-parent\18.0\jars\guava-parent.jar
+[debug] 		tried https://repo1.maven.org/maven2/com/google/guava/guava-parent/18.0/guava-parent-18.0.jar
+[debug] CLIENT ERROR: Not Found url=https://repo1.maven.org/maven2/com/google/guava/guava-parent/18.0/guava-parent-18.0.jar
+[debug] 		tried C:\Users\Robert\.sbt\preloaded\com.google.guava\guava-parent\18.0\jars\guava-parent.jar
+[debug] 		tried file:/C:/Users/Robert/.sbt/preloaded/com/google/guava/guava-parent/18.0/guava-parent-18.0.jar
+[debug] 		tried C:\Users\Robert\.ivy2\local\com.google.guava\guava\18.0\bundles\guava.jar
+[debug] 		tried https://repo1.maven.org/maven2/com/google/guava/guava/18.0/guava-18.0.jar
+[debug] 	found com.google.guava#guava;18.0 in public
 [debug] == resolving dependencies org.iq80.leveldb#leveldb;0.9->com.google.guava#guava;18.0 [compile->compile(*)]
 [debug] == resolving dependencies org.iq80.leveldb#leveldb;0.9->com.google.guava#guava;18.0 [compile->runtime(*)]
 [debug] == resolving dependencies org.iq80.leveldb#leveldb;0.9->com.google.guava#guava;18.0 [compile->compile]
@@ -215,8 +332,54 @@
 [debug] dependency descriptor has been mediated: dependency: org.scala-lang#scala-compiler;2.12.3 {scala-tool=[default, optional(default)]} => dependency: org.scala-lang#scala-compiler;2.12.3 {scala-tool=[default, optional(default)]}
 [debug] dependency descriptor has been mediated: MergedDescriptors(dependency: org.scala-lang#scala-library;2.12.3 {scala-tool=[default, optional(default)]},dependency: org.scala-lang#scala-library;2.12.3 {compile=[default(compile)]}) => dependency: org.scala-lang#scala-library;2.12.3 {scala-tool=[default, optional(default)], compile=[default(compile)]}
 [debug] sbt-chain: Checking cache for: dependency: org.fusesource.leveldbjni#leveldbjni-all;1.8 {compile=[default(compile)]}
-[debug] sbt-chain: module revision found in cache: org.fusesource.leveldbjni#leveldbjni-all;1.8
-[debug] 	found org.fusesource.leveldbjni#leveldbjni-all;1.8 in sbt-chain
+[debug] sbt-chain-delegate: Checking cache for: dependency: org.fusesource.leveldbjni#leveldbjni-all;1.8 {compile=[default(compile)]}
+[debug] 		tried C:\Users\Robert\.ivy2\local\org.fusesource.leveldbjni\leveldbjni-all\1.8\ivys\ivy.xml
+[debug] 	local: no ivy file found for org.fusesource.leveldbjni#leveldbjni-all;1.8
+[debug] 		tried https://repo1.maven.org/maven2/org/fusesource/leveldbjni/leveldbjni-all/1.8/leveldbjni-all-1.8.pom
+[debug] 	public: found md file for org.fusesource.leveldbjni#leveldbjni-all;1.8
+[debug] 		=> https://repo1.maven.org/maven2/org/fusesource/leveldbjni/leveldbjni-all/1.8/leveldbjni-all-1.8.pom (1.8)
+[debug] downloading https://repo1.maven.org/maven2/org/fusesource/leveldbjni/leveldbjni-all/1.8/leveldbjni-all-1.8.pom ...
+[debug] 	public: downloading https://repo1.maven.org/maven2/org/fusesource/leveldbjni/leveldbjni-all/1.8/leveldbjni-all-1.8.pom
+[debug] 	public: downloading https://repo1.maven.org/maven2/org/fusesource/leveldbjni/leveldbjni-all/1.8/leveldbjni-all-1.8.pom.sha1
+[debug] sha1 OK for https://repo1.maven.org/maven2/org/fusesource/leveldbjni/leveldbjni-all/1.8/leveldbjni-all-1.8.pom
+[debug] 	[SUCCESSFUL ] org.fusesource.leveldbjni#leveldbjni-all;1.8!leveldbjni-all.pom(pom.original) (200ms)
+[debug] sbt-chain: Checking cache for: dependency: org.fusesource.leveldbjni#leveldbjni-project;1.8 {}
+[debug] sbt-chain-delegate: Checking cache for: dependency: org.fusesource.leveldbjni#leveldbjni-project;1.8 {}
+[debug] 		tried C:\Users\Robert\.ivy2\local\org.fusesource.leveldbjni\leveldbjni-project\1.8\ivys\ivy.xml
+[debug] 	local: no ivy file found for org.fusesource.leveldbjni#leveldbjni-project;1.8
+[debug] 		tried https://repo1.maven.org/maven2/org/fusesource/leveldbjni/leveldbjni-project/1.8/leveldbjni-project-1.8.pom
+[debug] 	public: found md file for org.fusesource.leveldbjni#leveldbjni-project;1.8
+[debug] 		=> https://repo1.maven.org/maven2/org/fusesource/leveldbjni/leveldbjni-project/1.8/leveldbjni-project-1.8.pom (1.8)
+[debug] downloading https://repo1.maven.org/maven2/org/fusesource/leveldbjni/leveldbjni-project/1.8/leveldbjni-project-1.8.pom ...
+[debug] 	public: downloading https://repo1.maven.org/maven2/org/fusesource/leveldbjni/leveldbjni-project/1.8/leveldbjni-project-1.8.pom
+[debug] 	public: downloading https://repo1.maven.org/maven2/org/fusesource/leveldbjni/leveldbjni-project/1.8/leveldbjni-project-1.8.pom.sha1
+[debug] sha1 OK for https://repo1.maven.org/maven2/org/fusesource/leveldbjni/leveldbjni-project/1.8/leveldbjni-project-1.8.pom
+[debug] 	[SUCCESSFUL ] org.fusesource.leveldbjni#leveldbjni-project;1.8!leveldbjni-project.pom(pom.original) (240ms)
+[debug] sbt-chain: Checking cache for: dependency: org.fusesource#fusesource-pom;1.9 {}
+[debug] sbt-chain-delegate: Checking cache for: dependency: org.fusesource#fusesource-pom;1.9 {}
+[debug] 		tried C:\Users\Robert\.ivy2\local\org.fusesource\fusesource-pom\1.9\ivys\ivy.xml
+[debug] 	local: no ivy file found for org.fusesource#fusesource-pom;1.9
+[debug] 		tried https://repo1.maven.org/maven2/org/fusesource/fusesource-pom/1.9/fusesource-pom-1.9.pom
+[debug] 	public: found md file for org.fusesource#fusesource-pom;1.9
+[debug] 		=> https://repo1.maven.org/maven2/org/fusesource/fusesource-pom/1.9/fusesource-pom-1.9.pom (1.9)
+[debug] downloading https://repo1.maven.org/maven2/org/fusesource/fusesource-pom/1.9/fusesource-pom-1.9.pom ...
+[debug] 	public: downloading https://repo1.maven.org/maven2/org/fusesource/fusesource-pom/1.9/fusesource-pom-1.9.pom
+[debug] 	public: downloading https://repo1.maven.org/maven2/org/fusesource/fusesource-pom/1.9/fusesource-pom-1.9.pom.sha1
+[debug] sha1 OK for https://repo1.maven.org/maven2/org/fusesource/fusesource-pom/1.9/fusesource-pom-1.9.pom
+[debug] 	[SUCCESSFUL ] org.fusesource#fusesource-pom;1.9!fusesource-pom.pom(pom.original) (270ms)
+[debug] 		tried C:\Users\Robert\.ivy2\local\org.fusesource\fusesource-pom\1.9\jars\fusesource-pom.jar
+[debug] 		tried https://repo1.maven.org/maven2/org/fusesource/fusesource-pom/1.9/fusesource-pom-1.9.jar
+[debug] CLIENT ERROR: Not Found url=https://repo1.maven.org/maven2/org/fusesource/fusesource-pom/1.9/fusesource-pom-1.9.jar
+[debug] 		tried C:\Users\Robert\.sbt\preloaded\org.fusesource\fusesource-pom\1.9\jars\fusesource-pom.jar
+[debug] 		tried file:/C:/Users/Robert/.sbt/preloaded/org/fusesource/fusesource-pom/1.9/fusesource-pom-1.9.jar
+[debug] 		tried C:\Users\Robert\.ivy2\local\org.fusesource.leveldbjni\leveldbjni-project\1.8\jars\leveldbjni-project.jar
+[debug] 		tried https://repo1.maven.org/maven2/org/fusesource/leveldbjni/leveldbjni-project/1.8/leveldbjni-project-1.8.jar
+[debug] CLIENT ERROR: Not Found url=https://repo1.maven.org/maven2/org/fusesource/leveldbjni/leveldbjni-project/1.8/leveldbjni-project-1.8.jar
+[debug] 		tried C:\Users\Robert\.sbt\preloaded\org.fusesource.leveldbjni\leveldbjni-project\1.8\jars\leveldbjni-project.jar
+[debug] 		tried file:/C:/Users/Robert/.sbt/preloaded/org/fusesource/leveldbjni/leveldbjni-project/1.8/leveldbjni-project-1.8.jar
+[debug] 		tried C:\Users\Robert\.ivy2\local\org.fusesource.leveldbjni\leveldbjni-all\1.8\bundles\leveldbjni-all.jar
+[debug] 		tried https://repo1.maven.org/maven2/org/fusesource/leveldbjni/leveldbjni-all/1.8/leveldbjni-all-1.8.jar
+[debug] 	found org.fusesource.leveldbjni#leveldbjni-all;1.8 in public
 [debug] == resolving dependencies default#shop_lab4_2.12;0.1->org.fusesource.leveldbjni#leveldbjni-all;1.8 [compile->runtime]
 [debug] == resolving dependencies default#shop_lab4_2.12;0.1->org.fusesource.leveldbjni#leveldbjni-all;1.8 [compile->compile]
 [debug] == resolving dependencies default#shop_lab4_2.12;0.1->org.fusesource.leveldbjni#leveldbjni-all;1.8 [compile->master]
@@ -2042,99 +2205,21 @@
 [debug] ignoring unhandled DependencyDescriptorMediator: class sbt.internal.librarymanagement.IvyScalaUtil$OverrideScalaMediator
 [debug] 	resolved ivy file produced in cache
 [debug] :: downloading artifacts ::
-[debug] 	[NOT REQUIRED] org.iq80.leveldb#leveldb-api;0.9!leveldb-api.jar
-[debug] 	[NOT REQUIRED] com.typesafe.akka#akka-testkit_2.12;2.5.6!akka-testkit_2.12.jar
-[debug] 	[NOT REQUIRED] com.typesafe.akka#akka-actor_2.12;2.5.6!akka-actor_2.12.jar
+[debug] 		tried https://repo1.maven.org/maven2/org/iq80/leveldb/leveldb-api/0.9/leveldb-api-0.9.jar
+[info] downloading https://repo1.maven.org/maven2/org/iq80/leveldb/leveldb-api/0.9/leveldb-api-0.9.jar ...
+[debug] 	public: downloading https://repo1.maven.org/maven2/org/iq80/leveldb/leveldb-api/0.9/leveldb-api-0.9.jar
 [debug] 	[NOT REQUIRED] org.scala-lang#scala-library;2.12.3!scala-library.jar
-[debug] 	[NOT REQUIRED] org.scala-lang#scala-compiler;2.12.3!scala-compiler.jar
-[debug] 	[NOT REQUIRED] org.fusesource.leveldbjni#leveldbjni-all;1.8!leveldbjni-all.jar(bundle)
-[debug] 	[NOT REQUIRED] org.scala-lang.modules#scala-java8-compat_2.12;0.8.0!scala-java8-compat_2.12.jar(bundle)
-[debug] 	[NOT REQUIRED] org.scala-lang.modules#scala-xml_2.12;1.0.5!scala-xml_2.12.jar(bundle)
-[debug] no default ivy user dir defined: set to C:\Users\Admin\.ivy2
-[debug] no default ivy user dir defined: set to C:\Users\Admin\.ivy2
-[debug] no default ivy user dir defined: set to C:\Users\Admin\.ivy2
-[debug] no default ivy user dir defined: set to C:\Users\Admin\.ivy2
-[debug] no default ivy user dir defined: set to C:\Users\Admin\.ivy2
-[debug] no default ivy user dir defined: set to C:\Users\Admin\.ivy2
-[debug] no default ivy user dir defined: set to C:\Users\Admin\.ivy2
-[debug] no default ivy user dir defined: set to C:\Users\Admin\.ivy2
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-public.xml
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-public.xml
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-public.xml
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-public.xml
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-public.xml
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-public.xml
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-public.xml
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-public.xml
-[debug] no default cache defined: set to C:\Users\Admin\.ivy2\cache
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-shared.xml
-[debug] no default cache defined: set to C:\Users\Admin\.ivy2\cache
-[debug] no default cache defined: set to C:\Users\Admin\.ivy2\cache
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-shared.xml
-[debug] no default cache defined: set to C:\Users\Admin\.ivy2\cache
-[debug] no default cache defined: set to C:\Users\Admin\.ivy2\cache
-[debug] no default cache defined: set to C:\Users\Admin\.ivy2\cache
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-shared.xml
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-shared.xml
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-shared.xml
-[debug] no default cache defined: set to C:\Users\Admin\.ivy2\cache
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-shared.xml
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-shared.xml
-[debug] no default cache defined: set to C:\Users\Admin\.ivy2\cache
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-shared.xml
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-local.xml
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-local.xml
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-local.xml
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-local.xml
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-local.xml
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-local.xml
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-local.xml
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-local.xml
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-main-chain.xml
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-main-chain.xml
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-main-chain.xml
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-main-chain.xml
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-main-chain.xml
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-main-chain.xml
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-main-chain.xml
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-default-chain.xml
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-main-chain.xml
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-default-chain.xml
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-default-chain.xml
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-default-chain.xml
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-default-chain.xml
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-default-chain.xml
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-default-chain.xml
-[debug] settings loaded (63ms)
-[debug] 	default cache: C:\Users\Admin\.ivy2\cache
-[debug] 	default resolver: default
-[debug] 	-- 5 resolvers:
-[debug] 	shared [file]
-[debug] settings loaded (63ms)
-[debug] 	default [chain] [local, main]
-[debug] 	default cache: C:\Users\Admin\.ivy2\cache
-[debug] 	public [ibiblio]
-[debug] 	default resolver: default
-[debug] 	-- 5 resolvers:
-[debug] 	main [chain] [shared, public]
-[debug] 	local [file]
-[debug] 	shared [file]
-[debug] 	default [chain] [local, main]
-[debug] 	public [ibiblio]
-[debug] 	main [chain] [shared, public]
-[debug] 	local [file]
-[debug] settings loaded (64ms)
-[debug] 	default cache: C:\Users\Admin\.ivy2\cache
-[debug] 	default resolver: default
-[debug] 	-- 5 resolvers:
-[debug] including url: jar:file:/C:/Users/Admin/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-default-chain.xml
-[debug] 	shared [file]
-[debug] 	default [chain] [local, main]
-[debug] 	public [ibiblio]
-[debug] 	main [chain] [shared, public]
-[debug] 	local [file]
-[debug] settings loaded (67ms)
-[debug] 	default cache: C:\Users\Admin\.ivy2\cache
+[debug] no default ivy user dir defined: set to C:\Users\Robert\.ivy2
+[debug] including url: jar:file:/C:/Users/Robert/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-public.xml
+[debug] no default ivy user dir defined: set to C:\Users\Robert\.ivy2
+[debug] including url: jar:file:/C:/Users/Robert/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-public.xml
+[debug] no default cache defined: set to C:\Users\Robert\.ivy2\cache
+[debug] including url: jar:file:/C:/Users/Robert/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-shared.xml
+[debug] including url: jar:file:/C:/Users/Robert/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-local.xml
+[debug] including url: jar:file:/C:/Users/Robert/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-main-chain.xml
+[debug] including url: jar:file:/C:/Users/Robert/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-default-chain.xml
+[debug] settings loaded (440ms)
+[debug] 	default cache: C:\Users\Robert\.ivy2\cache
 [debug] 	default resolver: default
 [debug] 	-- 5 resolvers:
 [debug] 	shared [file]
@@ -2142,64 +2227,76 @@
 [debug] 	public [ibiblio]
 [debug] 	main [chain] [shared, public]
 [debug] 	local [file]
-[debug] settings loaded (69ms)
-[debug] 	default cache: C:\Users\Admin\.ivy2\cache
+[debug] no default cache defined: set to C:\Users\Robert\.ivy2\cache
+[debug] including url: jar:file:/C:/Users/Robert/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-shared.xml
+[debug] including url: jar:file:/C:/Users/Robert/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-local.xml
+[debug] including url: jar:file:/C:/Users/Robert/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-main-chain.xml
+[debug] including url: jar:file:/C:/Users/Robert/.sbt/boot/scala-2.12.4/org.scala-sbt/sbt/1.0.3/ivy-2.3.0-sbt-1b57d3bbc08ecf671169fd548918da18c91f77be.jar!/org/apache/ivy/core/settings/ivysettings-default-chain.xml
+[debug] settings loaded (480ms)
+[debug] 	default cache: C:\Users\Robert\.ivy2\cache
 [debug] 	default resolver: default
 [debug] 	-- 5 resolvers:
 [debug] 	shared [file]
 [debug] 	default [chain] [local, main]
 [debug] 	public [ibiblio]
-[debug] settings loaded (67ms)
-[debug] 	[NOT REQUIRED] com.google.guava#guava;18.0!guava.jar(bundle)
-[debug] 	main [chain] [shared, public]
-[debug] 	default cache: C:\Users\Admin\.ivy2\cache
-[debug] 	local [file]
-[debug] 	default resolver: default
-[debug] 	-- 5 resolvers:
-[debug] settings loaded (69ms)
-[debug] 	shared [file]
-[debug] 	default cache: C:\Users\Admin\.ivy2\cache
-[debug] 	[NOT REQUIRED] com.typesafe.akka#akka-persistence_2.12;2.5.4!akka-persistence_2.12.jar
-[debug] 	default [chain] [local, main]
-[debug] 	public [ibiblio]
 [debug] 	main [chain] [shared, public]
 [debug] 	local [file]
-[debug] 	[NOT REQUIRED] org.scalatest#scalatest_2.12;3.0.4!scalatest_2.12.jar(bundle)
-[debug] 	[NOT REQUIRED] com.typesafe.akka#akka-protobuf_2.12;2.5.4!akka-protobuf_2.12.jar
-[debug] 	[NOT REQUIRED] org.scala-lang.modules#scala-xml_2.12;1.0.6!scala-xml_2.12.jar(bundle)
-[debug] settings loaded (69ms)
-[debug] 	default cache: C:\Users\Admin\.ivy2\cache
-[debug] 	default resolver: default
-[debug] 	-- 5 resolvers:
-[debug] 	shared [file]
-[debug] 	[NOT REQUIRED] org.scalactic#scalactic_2.12;3.0.4!scalactic_2.12.jar(bundle)
-[debug] 	default [chain] [local, main]
-[debug] 	public [ibiblio]
-[debug] 	main [chain] [shared, public]
-[debug] 	default resolver: default
-[debug] 	local [file]
-[debug] 	-- 5 resolvers:
-[debug] 	[NOT REQUIRED] jline#jline;2.14.4!jline.jar
-[debug] 	shared [file]
-[debug] 	default [chain] [local, main]
-[debug] 	public [ibiblio]
-[debug] 	main [chain] [shared, public]
-[debug] 	local [file]
-[debug] 	[NOT REQUIRED] org.iq80.leveldb#leveldb;0.9!leveldb.jar
-[debug] 	[NOT REQUIRED] org.scala-lang.modules#scala-parser-combinators_2.12;1.0.4!scala-parser-combinators_2.12.jar(bundle)
+[debug] 	[NOT REQUIRED] com.typesafe.akka#akka-actor_2.12;2.5.6!akka-actor_2.12.jar
+[debug] 	[NOT REQUIRED] com.typesafe.akka#akka-testkit_2.12;2.5.6!akka-testkit_2.12.jar
+[debug] 		tried https://repo1.maven.org/maven2/com/typesafe/akka/akka-persistence_2.12/2.5.4/akka-persistence_2.12-2.5.4.jar
+[info] downloading https://repo1.maven.org/maven2/com/typesafe/akka/akka-persistence_2.12/2.5.4/akka-persistence_2.12-2.5.4.jar ...
+[debug] 	public: downloading https://repo1.maven.org/maven2/com/typesafe/akka/akka-persistence_2.12/2.5.4/akka-persistence_2.12-2.5.4.jar
+[debug] 	public: downloading https://repo1.maven.org/maven2/org/iq80/leveldb/leveldb-api/0.9/leveldb-api-0.9.jar.sha1
+[debug] sha1 OK for https://repo1.maven.org/maven2/org/iq80/leveldb/leveldb-api/0.9/leveldb-api-0.9.jar
+[info] 	[SUCCESSFUL ] org.iq80.leveldb#leveldb-api;0.9!leveldb-api.jar (1070ms)
+[debug] 		tried https://repo1.maven.org/maven2/com/google/guava/guava/18.0/guava-18.0.jar
+[info] downloading https://repo1.maven.org/maven2/com/google/guava/guava/18.0/guava-18.0.jar ...
+[debug] 	public: downloading https://repo1.maven.org/maven2/com/google/guava/guava/18.0/guava-18.0.jar
+[debug] 	public: downloading https://repo1.maven.org/maven2/com/typesafe/akka/akka-persistence_2.12/2.5.4/akka-persistence_2.12-2.5.4.jar.sha1
+[debug] sha1 OK for https://repo1.maven.org/maven2/com/typesafe/akka/akka-persistence_2.12/2.5.4/akka-persistence_2.12-2.5.4.jar
+[info] 	[SUCCESSFUL ] com.typesafe.akka#akka-persistence_2.12;2.5.4!akka-persistence_2.12.jar (3000ms)
+[debug] 		tried https://repo1.maven.org/maven2/org/iq80/leveldb/leveldb/0.9/leveldb-0.9.jar
+[info] downloading https://repo1.maven.org/maven2/org/iq80/leveldb/leveldb/0.9/leveldb-0.9.jar ...
+[debug] 	public: downloading https://repo1.maven.org/maven2/org/iq80/leveldb/leveldb/0.9/leveldb-0.9.jar
+[debug] 	public: downloading https://repo1.maven.org/maven2/org/iq80/leveldb/leveldb/0.9/leveldb-0.9.jar.sha1
+[debug] sha1 OK for https://repo1.maven.org/maven2/org/iq80/leveldb/leveldb/0.9/leveldb-0.9.jar
+[info] 	[SUCCESSFUL ] org.iq80.leveldb#leveldb;0.9!leveldb.jar (1150ms)
+[debug] 		tried https://repo1.maven.org/maven2/org/fusesource/leveldbjni/leveldbjni-all/1.8/leveldbjni-all-1.8.jar
+[info] downloading https://repo1.maven.org/maven2/org/fusesource/leveldbjni/leveldbjni-all/1.8/leveldbjni-all-1.8.jar ...
+[debug] 	public: downloading https://repo1.maven.org/maven2/org/fusesource/leveldbjni/leveldbjni-all/1.8/leveldbjni-all-1.8.jar
+[debug] 	public: downloading https://repo1.maven.org/maven2/com/google/guava/guava/18.0/guava-18.0.jar.sha1
+[debug] 	public: downloading https://repo1.maven.org/maven2/org/fusesource/leveldbjni/leveldbjni-all/1.8/leveldbjni-all-1.8.jar.sha1
+[debug] sha1 OK for https://repo1.maven.org/maven2/org/fusesource/leveldbjni/leveldbjni-all/1.8/leveldbjni-all-1.8.jar
+[info] 	[SUCCESSFUL ] org.fusesource.leveldbjni#leveldbjni-all;1.8!leveldbjni-all.jar(bundle) (4371ms)
+[debug] sha1 OK for https://repo1.maven.org/maven2/com/google/guava/guava/18.0/guava-18.0.jar
 [debug] 	[NOT REQUIRED] com.typesafe#config;1.3.1!config.jar(bundle)
+[debug] 	[NOT REQUIRED] org.scala-lang.modules#scala-java8-compat_2.12;0.8.0!scala-java8-compat_2.12.jar(bundle)
+[debug] 		tried https://repo1.maven.org/maven2/com/typesafe/akka/akka-protobuf_2.12/2.5.4/akka-protobuf_2.12-2.5.4.jar
+[info] downloading https://repo1.maven.org/maven2/com/typesafe/akka/akka-protobuf_2.12/2.5.4/akka-protobuf_2.12-2.5.4.jar ...
+[debug] 	public: downloading https://repo1.maven.org/maven2/com/typesafe/akka/akka-protobuf_2.12/2.5.4/akka-protobuf_2.12-2.5.4.jar
+[info] 	[SUCCESSFUL ] com.google.guava#guava;18.0!guava.jar(bundle) (8461ms)
+[debug] 	[NOT REQUIRED] org.scalatest#scalatest_2.12;3.0.4!scalatest_2.12.jar(bundle)
+[debug] 	[NOT REQUIRED] org.scalactic#scalactic_2.12;3.0.4!scalactic_2.12.jar(bundle)
 [debug] 	[NOT REQUIRED] org.scala-lang#scala-reflect;2.12.3!scala-reflect.jar
-[debug] :: resolution report :: resolve 834ms :: artifacts dl 139ms
-[debug] 	report for default#shop_lab4_2.12;0.1 compile produced in C:\Users\Admin\Desktop\Robert\Snippets\rx_scala_snippets\shop_lab4\target\scala-2.12\resolution-cache\reports\default-shop_lab4_2.12-compile.xml
-[debug] 	report for default#shop_lab4_2.12;0.1 runtime produced in C:\Users\Admin\Desktop\Robert\Snippets\rx_scala_snippets\shop_lab4\target\scala-2.12\resolution-cache\reports\default-shop_lab4_2.12-runtime.xml
-[debug] 	report for default#shop_lab4_2.12;0.1 test produced in C:\Users\Admin\Desktop\Robert\Snippets\rx_scala_snippets\shop_lab4\target\scala-2.12\resolution-cache\reports\default-shop_lab4_2.12-test.xml
-[debug] 	report for default#shop_lab4_2.12;0.1 provided produced in C:\Users\Admin\Desktop\Robert\Snippets\rx_scala_snippets\shop_lab4\target\scala-2.12\resolution-cache\reports\default-shop_lab4_2.12-provided.xml
-[debug] 	report for default#shop_lab4_2.12;0.1 optional produced in C:\Users\Admin\Desktop\Robert\Snippets\rx_scala_snippets\shop_lab4\target\scala-2.12\resolution-cache\reports\default-shop_lab4_2.12-optional.xml
-[debug] 	report for default#shop_lab4_2.12;0.1 compile-internal produced in C:\Users\Admin\Desktop\Robert\Snippets\rx_scala_snippets\shop_lab4\target\scala-2.12\resolution-cache\reports\default-shop_lab4_2.12-compile-internal.xml
-[debug] 	report for default#shop_lab4_2.12;0.1 runtime-internal produced in C:\Users\Admin\Desktop\Robert\Snippets\rx_scala_snippets\shop_lab4\target\scala-2.12\resolution-cache\reports\default-shop_lab4_2.12-runtime-internal.xml
-[debug] 	report for default#shop_lab4_2.12;0.1 test-internal produced in C:\Users\Admin\Desktop\Robert\Snippets\rx_scala_snippets\shop_lab4\target\scala-2.12\resolution-cache\reports\default-shop_lab4_2.12-test-internal.xml
-[debug] 	report for default#shop_lab4_2.12;0.1 plugin produced in C:\Users\Admin\Desktop\Robert\Snippets\rx_scala_snippets\shop_lab4\target\scala-2.12\resolution-cache\reports\default-shop_lab4_2.12-plugin.xml
-[debug] 	report for default#shop_lab4_2.12;0.1 pom produced in C:\Users\Admin\Desktop\Robert\Snippets\rx_scala_snippets\shop_lab4\target\scala-2.12\resolution-cache\reports\default-shop_lab4_2.12-pom.xml
-[debug] 	report for default#shop_lab4_2.12;0.1 scala-tool produced in C:\Users\Admin\Desktop\Robert\Snippets\rx_scala_snippets\shop_lab4\target\scala-2.12\resolution-cache\reports\default-shop_lab4_2.12-scala-tool.xml
-[debug] 	resolve done (834ms resolve - 139ms download)
+[debug] 	[NOT REQUIRED] org.scala-lang.modules#scala-xml_2.12;1.0.5!scala-xml_2.12.jar(bundle)
+[debug] 	[NOT REQUIRED] org.scala-lang.modules#scala-parser-combinators_2.12;1.0.4!scala-parser-combinators_2.12.jar(bundle)
+[debug] 	[NOT REQUIRED] org.scala-lang#scala-compiler;2.12.3!scala-compiler.jar
+[debug] 	[NOT REQUIRED] org.scala-lang.modules#scala-xml_2.12;1.0.6!scala-xml_2.12.jar(bundle)
+[debug] 	[NOT REQUIRED] jline#jline;2.14.4!jline.jar
+[debug] 	public: downloading https://repo1.maven.org/maven2/com/typesafe/akka/akka-protobuf_2.12/2.5.4/akka-protobuf_2.12-2.5.4.jar.sha1
+[debug] sha1 OK for https://repo1.maven.org/maven2/com/typesafe/akka/akka-protobuf_2.12/2.5.4/akka-protobuf_2.12-2.5.4.jar
+[info] 	[SUCCESSFUL ] com.typesafe.akka#akka-protobuf_2.12;2.5.4!akka-protobuf_2.12.jar (2570ms)
+[debug] :: resolution report :: resolve 98333ms :: artifacts dl 13234ms
+[debug] 	report for default#shop_lab4_2.12;0.1 compile produced in C:\Users\Robert\Desktop\Robert\Snippets\rx_scala_snippets\shop_lab4\target\scala-2.12\resolution-cache\reports\default-shop_lab4_2.12-compile.xml
+[debug] 	report for default#shop_lab4_2.12;0.1 runtime produced in C:\Users\Robert\Desktop\Robert\Snippets\rx_scala_snippets\shop_lab4\target\scala-2.12\resolution-cache\reports\default-shop_lab4_2.12-runtime.xml
+[debug] 	report for default#shop_lab4_2.12;0.1 test produced in C:\Users\Robert\Desktop\Robert\Snippets\rx_scala_snippets\shop_lab4\target\scala-2.12\resolution-cache\reports\default-shop_lab4_2.12-test.xml
+[debug] 	report for default#shop_lab4_2.12;0.1 provided produced in C:\Users\Robert\Desktop\Robert\Snippets\rx_scala_snippets\shop_lab4\target\scala-2.12\resolution-cache\reports\default-shop_lab4_2.12-provided.xml
+[debug] 	report for default#shop_lab4_2.12;0.1 optional produced in C:\Users\Robert\Desktop\Robert\Snippets\rx_scala_snippets\shop_lab4\target\scala-2.12\resolution-cache\reports\default-shop_lab4_2.12-optional.xml
+[debug] 	report for default#shop_lab4_2.12;0.1 compile-internal produced in C:\Users\Robert\Desktop\Robert\Snippets\rx_scala_snippets\shop_lab4\target\scala-2.12\resolution-cache\reports\default-shop_lab4_2.12-compile-internal.xml
+[debug] 	report for default#shop_lab4_2.12;0.1 runtime-internal produced in C:\Users\Robert\Desktop\Robert\Snippets\rx_scala_snippets\shop_lab4\target\scala-2.12\resolution-cache\reports\default-shop_lab4_2.12-runtime-internal.xml
+[debug] 	report for default#shop_lab4_2.12;0.1 test-internal produced in C:\Users\Robert\Desktop\Robert\Snippets\rx_scala_snippets\shop_lab4\target\scala-2.12\resolution-cache\reports\default-shop_lab4_2.12-test-internal.xml
+[debug] 	report for default#shop_lab4_2.12;0.1 plugin produced in C:\Users\Robert\Desktop\Robert\Snippets\rx_scala_snippets\shop_lab4\target\scala-2.12\resolution-cache\reports\default-shop_lab4_2.12-plugin.xml
+[debug] 	report for default#shop_lab4_2.12;0.1 pom produced in C:\Users\Robert\Desktop\Robert\Snippets\rx_scala_snippets\shop_lab4\target\scala-2.12\resolution-cache\reports\default-shop_lab4_2.12-pom.xml
+[debug] 	report for default#shop_lab4_2.12;0.1 scala-tool produced in C:\Users\Robert\Desktop\Robert\Snippets\rx_scala_snippets\shop_lab4\target\scala-2.12\resolution-cache\reports\default-shop_lab4_2.12-scala-tool.xml
+[debug] 	resolve done (98333ms resolve - 13234ms download)
 [info] Done updating.
