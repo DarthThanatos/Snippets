@@ -1,12 +1,14 @@
 package shop
 
-import akka.actor.{Actor, ActorLogging}
+import akka.actor.{Actor, ActorLogging, OneForOneStrategy}
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model._
-import communication.{Item}
+import communication.Item
 import akka.stream.{ActorMaterializer, ActorMaterializerSettings}
 import akka.pattern.pipe
 import akka.util.ByteString
+import scala.concurrent.duration._
+import akka.actor.SupervisorStrategy._
 
 class PaymentService(items: List[Item]) extends Actor with ActorLogging{
 
@@ -43,4 +45,11 @@ class PaymentService(items: List[Item]) extends Actor with ActorLogging{
 
   }
 
+  override val supervisorStrategy: OneForOneStrategy =
+    OneForOneStrategy(maxNrOfRetries = 10, withinTimeRange = 1 minute) {
+      case _: ArithmeticException => Resume
+      case _: NullPointerException => Restart
+      case _: IllegalArgumentException => Stop
+      case _: Exception => Escalate
+    }
 }
