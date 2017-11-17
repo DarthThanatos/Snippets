@@ -4,7 +4,7 @@
 		module="shop_lab5$sources"
 		revision="0.1"
 		status="integration"
-		publication="20171116180603"
+		publication="20171117102847"
 	/>
 	<configurations>
 		<conf name="compile" visibility="public" description=""/>
