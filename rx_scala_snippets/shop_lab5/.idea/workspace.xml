@@ -52,8 +52,23 @@
       <file leaf-file-name="ParentChildSpec.scala" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/test/scala/shop/ParentChildSpec.scala">
           <provider selected="true" editor-type-id="text-editor">
+<<<<<<< HEAD
             <state relative-caret-position="1139">
               <caret line="71" column="25" lean-forward="false" selection-start-line="71" selection-start-column="25" selection-end-line="71" selection-end-column="25" />
+=======
+            <state relative-caret-position="202">
+              <caret line="23" column="32" lean-forward="false" selection-start-line="23" selection-start-column="32" selection-end-line="23" selection-end-column="32" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="Main.scala" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/shop/Main.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="124">
+              <caret line="128" column="16" lean-forward="true" selection-start-line="128" selection-start-column="16" selection-end-line="128" selection-end-column="16" />
+>>>>>>> cac0c3937b959193a2d862a13f71fec155e95c5d
               <folding>
                 <element signature="e#14#52#0" expanded="true" />
               </folding>
@@ -83,11 +98,19 @@
           </provider>
         </entry>
       </file>
+<<<<<<< HEAD
       <file leaf-file-name="PayPal.scala" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/scala/paymentServer/PayPal.scala">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="278">
               <caret line="26" column="1" lean-forward="true" selection-start-line="26" selection-start-column="1" selection-end-line="26" selection-end-column="1" />
+=======
+      <file leaf-file-name="PaymentCatalogue.scala" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/main/scala/remote/PaymentCatalogue.scala">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="328">
+              <caret line="41" column="28" lean-forward="true" selection-start-line="41" selection-start-column="28" selection-end-line="41" selection-end-column="28" />
+>>>>>>> cac0c3937b959193a2d862a13f71fec155e95c5d
               <folding>
                 <element signature="e#22#63#0" expanded="true" />
               </folding>
@@ -166,10 +189,17 @@
         <option value="$PROJECT_DIR$/src/main/scala/PaymentService.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/shop/Checkout.scala" />
         <option value="$PROJECT_DIR$/src/test/scala/shop/CartManagerAsynchSpec.scala" />
+<<<<<<< HEAD
         <option value="$PROJECT_DIR$/src/main/scala/shop/PaymentCatalogue.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/shop/CartManager.scala" />
         <option value="$PROJECT_DIR$/src/main/scala/paymentServer/PayPal.scala" />
         <option value="$PROJECT_DIR$/build.sbt" />
+=======
+        <option value="$PROJECT_DIR$/src/test/scala/shop/ParentChildSpec.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/communication/Protocol.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/remote/PaymentCatalogue.scala" />
+        <option value="$PROJECT_DIR$/src/main/scala/shop/Main.scala" />
+>>>>>>> cac0c3937b959193a2d862a13f71fec155e95c5d
       </list>
     </option>
   </component>
@@ -497,7 +527,11 @@
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Capture Tool" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+<<<<<<< HEAD
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16398244" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+=======
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1515625" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+>>>>>>> cac0c3937b959193a2d862a13f71fec155e95c5d
       <window_info id="sbt-shell-toolwindow" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="11" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -768,6 +802,7 @@
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/src/main/scala/shop/PaymentCatalogue.scala" />
     <entry file="file://$PROJECT_DIR$/src/test/scala/shop/CartManagerAsynchSpec.scala">
       <provider selected="true" editor-type-id="text-editor">
@@ -780,6 +815,9 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/scala/shop/ParentChildSpec.scala">
+=======
+    <entry file="file://$PROJECT_DIR$/processDB.py">
+>>>>>>> cac0c3937b959193a2d862a13f71fec155e95c5d
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="1139">
           <caret line="71" column="25" lean-forward="false" selection-start-line="71" selection-start-column="25" selection-end-line="71" selection-end-column="25" />
@@ -789,16 +827,24 @@
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/src/main/scala/shop/CartManager.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2652">
           <caret line="165" column="0" lean-forward="false" selection-start-line="165" selection-start-column="0" selection-end-line="165" selection-end-column="0" />
+=======
+    <entry file="file://$PROJECT_DIR$/src/main/scala/shop/Customer.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="289">
+          <caret line="17" column="31" lean-forward="true" selection-start-line="17" selection-start-column="31" selection-end-line="17" selection-end-column="31" />
+>>>>>>> cac0c3937b959193a2d862a13f71fec155e95c5d
           <folding>
             <element signature="e#14#33#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/src/main/scala/shop/Main.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="408">
@@ -808,6 +854,9 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/scala/shop/Checkout.scala">
+=======
+    <entry file="file://$PROJECT_DIR$/src/main/scala/shop/CartManager.scala">
+>>>>>>> cac0c3937b959193a2d862a13f71fec155e95c5d
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
           <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
@@ -835,12 +884,47 @@
         </state>
       </provider>
     </entry>
+<<<<<<< HEAD
     <entry file="file://$PROJECT_DIR$/src/main/scala/paymentServer/PayPal.scala">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="278">
           <caret line="26" column="1" lean-forward="true" selection-start-line="26" selection-start-column="1" selection-end-line="26" selection-end-column="1" />
+=======
+    <entry file="file://$PROJECT_DIR$/src/test/scala/shop/CartManagerAsynchSpec.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="202">
+          <caret line="32" column="21" lean-forward="false" selection-start-line="32" selection-start-column="21" selection-end-line="32" selection-end-column="21" />
+          <folding>
+            <element signature="e#14#33#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/test/scala/shop/ParentChildSpec.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="202">
+          <caret line="23" column="32" lean-forward="false" selection-start-line="23" selection-start-column="32" selection-end-line="23" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/remote/PaymentCatalogue.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="328">
+          <caret line="41" column="28" lean-forward="true" selection-start-line="41" selection-start-column="28" selection-end-line="41" selection-end-column="28" />
+>>>>>>> cac0c3937b959193a2d862a13f71fec155e95c5d
           <folding>
             <element signature="e#22#63#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/scala/shop/Main.scala">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="124">
+          <caret line="128" column="16" lean-forward="true" selection-start-line="128" selection-start-column="16" selection-end-line="128" selection-end-column="16" />
+          <folding>
+            <element signature="e#14#33#0" expanded="true" />
           </folding>
         </state>
       </provider>
