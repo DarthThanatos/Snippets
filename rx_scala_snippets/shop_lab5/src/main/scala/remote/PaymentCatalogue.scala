@@ -2,12 +2,14 @@ package remote
 
 import java.io.File
 
-import akka.actor.{Actor, ActorRef, Props}
+import akka.actor.{Actor, ActorRef, ActorSystem, Props}
 import com.github.tototoshi.csv._
 import communication.{Answer, Item, Query}
 
 import scala.util.Random
 import java.net.URI
+
+import com.typesafe.config.ConfigFactory
 
 class DB(pathToDB : String){
   private val DEFAULT_RESULT_SIZE = 10
@@ -72,7 +74,7 @@ case class SearchDone(items : List[Item], customer: ActorRef)
 
 class PaymentCatalogue(pathToDB : String) extends  Actor{
   private val db: DB = new DB(pathToDB)
-
+  println("Started " + self.path.address + self.path.toSerializationFormat)
   override def receive :Receive ={
     case  Query(query: String) =>
       val searcher = context.actorOf(Props[DBSearcher])
@@ -80,5 +82,13 @@ class PaymentCatalogue(pathToDB : String) extends  Actor{
 
     case SearchDone(items, customer) =>
       customer ! Answer(items)
+  }
+}
+
+object Main{
+  def main(args: Array[String]): Unit ={
+    val config = ConfigFactory.load()
+    val system = ActorSystem("RemoteSystem", config.getConfig("serverapp").withFallback(config))
+    val paymentCatalogue = system.actorOf(Props(new PaymentCatalogue("..\\..\\..\\..\\db\\db")), "PaymentCatalogue")
   }
 }

@@ -1,18 +1,15 @@
 package shop
 
 import java.net.URI
-import java.util.concurrent.TimeUnit
 
 import akka.actor.{ActorRef, ActorSystem, Props}
 import akka.testkit.{ImplicitSender, TestKit, TestProbe}
-import com.typesafe.config.ConfigFactory
 import communication.Item
 import org.scalatest.{BeforeAndAfterAll, WordSpecLike}
 
-import scala.concurrent.Await
-import scala.concurrent.duration._
 
-class CartManagerAsynchSpec extends TestKit(ActorSystem("CartSpec",ConfigFactory.load().getConfig("firstSystem")))
+
+class CartManagerAsynchSpec extends TestKit(ActorSystem("CartSpec"))
   with WordSpecLike with BeforeAndAfterAll with ImplicitSender  {
 
 
@@ -24,6 +21,8 @@ class CartManagerAsynchSpec extends TestKit(ActorSystem("CartSpec",ConfigFactory
 
     "be empty at start" in{
       val cart = system.actorOf(Props(new CartManager("0")))
+//      println(system.settings.config.getValue("firstSystem.akka.persistence.journal.leveldb.dir"))
+      println(system.settings.config.getValue("akka.persistence.journal.plugin"))
       expect(cart, 0, Empty)
       system.stop(cart)
     }
@@ -108,35 +107,6 @@ class CartManagerAsynchSpec extends TestKit(ActorSystem("CartSpec",ConfigFactory
         cart ! StartCheckout()
         expect(cart, 0, Empty)
       system.stop(cart)
-    }
-    "in the nonempty state terminate with the system, and then, after recreating, have an appropriate number of items" in {
-      var timerSystem = ActorSystem("TimerSystem",ConfigFactory.load().getConfig("secondSystem"))
-      var cart = timerSystem.actorOf(Props(new CartManager("7")))
-      cart ! AddItem(Item(new URI("food/1"), "cheese", 213, 6))
-      expectInProbe(cart, 1, NonEmpty)
-      timerSystem.terminate()
-      Await.ready(timerSystem.whenTerminated, Duration(1, TimeUnit.MINUTES))
-      timerSystem = ActorSystem("TimerSystem",ConfigFactory.load().getConfig("secondSystem"))
-      cart = timerSystem.actorOf(Props(new CartManager("7")))
-      expectInProbe(cart, 1, NonEmpty)
-      timerSystem.terminate()
-      Await.ready(timerSystem.whenTerminated, Duration(1, TimeUnit.MINUTES))
-    }
-
-    "in the nonempty state terminate with the system, and then, after recreating, have an appropriate timeout set" in {
-      var timerSystem = ActorSystem("TimerSystem",ConfigFactory.load().getConfig("secondSystem"))
-      var cart = timerSystem.actorOf(Props(new CartManager("8")))
-      cart ! AddItem(Item(new URI("food/1"), "cheese", 213, 6))
-      expectInProbe(cart, 1, NonEmpty)
-      timerSystem.terminate()
-      Await.ready(timerSystem.whenTerminated, Duration(1, TimeUnit.MINUTES))
-      timerSystem = ActorSystem("TimerSystem",ConfigFactory.load().getConfig("secondSystem"))
-      cart = timerSystem.actorOf(Props(new CartManager("8")))
-      expectInProbe(cart, 1, NonEmpty)
-      expectNoMessage( ( TimerValues.cartTimer + 1).seconds)
-      expectInProbe(cart,0,Empty)
-      timerSystem.terminate()
-      Await.ready(timerSystem.whenTerminated, Duration(1, TimeUnit.MINUTES))
     }
 
   }

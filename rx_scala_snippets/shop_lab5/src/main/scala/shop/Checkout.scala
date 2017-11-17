@@ -10,8 +10,8 @@ import scala.reflect.{ClassTag, classTag}
 
 case class CheckoutData(data: List[String])
 
-class Checkout(val cart: ActorRef, val id: String, items: List[Item]) extends Actor with PersistentFSM[CheckoutState, CheckoutData, CheckoutEvent]{
-
+class Checkout(val cart: ActorRef, val id: String, items: List[Item])(implicit val domainEventClassTag: ClassTag[CheckoutEvent]) extends Actor with PersistentFSM[CheckoutState, CheckoutData, CheckoutEvent]{
+  println("Checkout started")
   startWith(SelectingDelivery, CheckoutData(List()))
 
   when (SelectingDelivery, stateTimeout = checkoutTimer seconds){
@@ -99,7 +99,7 @@ class Checkout(val cart: ActorRef, val id: String, items: List[Item]) extends Ac
     finishingOp("Cancelling checkout", CheckoutCancelled())
   }
 
-  override implicit def domainEventClassTag: ClassTag[CheckoutEvent] = classTag[CheckoutEvent]
+//  override implicit def domainEventClassTag: ClassTag[CheckoutEvent] = classTag[CheckoutEvent]
 
   override def persistenceId: String = "persistent-checkout-fsm-id-" + id
 

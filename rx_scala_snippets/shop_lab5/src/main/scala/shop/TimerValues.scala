@@ -8,11 +8,11 @@ object TimerValues{
   case object CartTimerKey
   case object CartTimerExpired
 
-  val checkoutTimer = 2
+  val checkoutTimer = 20
   case object CheckoutTimerKey
   case object CheckoutTimerExpired
 
-  val paymentTimer = 2
+  val paymentTimer = 20
 
   case object PaymentTimerKey
   case object PaymentTimerExpired

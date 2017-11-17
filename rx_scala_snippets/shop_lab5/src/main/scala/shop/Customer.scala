@@ -2,22 +2,24 @@ package shop
 
 import java.net.URI
 
-import akka.actor.{Actor, ActorRef, Props}
-import communication.{Answer, Item}
+import akka.actor.{Actor, ActorRef, ActorSelection, Props}
+import communication.{Answer, Item, Query}
+
 import scala.util.Random
 
 class Customer extends Actor{
 
   println("Customer actor created")
-  val cart: ActorRef = context actorOf(Props[CartManager], "cart")
-//  val paymentCatalogue
+  val cart: ActorRef = context actorOf(Props( new CartManager ("0")), "cart")
+  val paymentCatalogue: ActorSelection = context.actorSelection("akka.tcp://RemoteSystem@127.0.0.1:2552/user/PaymentCatalogue")
 
-//  cart ! AddItem(Item(new URI("food/1"), "cheese", 213, 6))
+  paymentCatalogue ! Query("Nurturme")
 
   private def handleAnswer(items: List[Item]): Unit = {
     for {item @ Item(uri, name, price, inStock) <- items; if inStock >= 1} {
-        val wantedItem = item.copy(count = (new Random().nextInt % inStock) + 1)
-        cart ! wantedItem
+        println("Customer processing: " + name)
+        val wantedItem = item.copy(count = ( math.abs(new Random().nextInt) % inStock) + 1)
+        cart ! AddItem(wantedItem)
     }
     cart ! StartCheckout()
   }

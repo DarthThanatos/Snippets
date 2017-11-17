@@ -32,7 +32,7 @@ object Main {
         "[Checkout-SelectingDelivery] Please type a delivery method or cancel to quit:",
         checkout,
         selectPayment,
-        (msg: String) => SelectDelivery(msg)
+        new CaseCreatable[SelectDelivery] {override def createCase(msg: String):SelectDelivery = SelectDelivery(msg)}
       )
   }
 
@@ -42,7 +42,7 @@ object Main {
       "[Checkout-SelectingPaymentMethod] Please type a payment method or cancel to quit:",
       checkout,
       processPayment,
-      (msg: String) => SelectPayment(msg)
+      new CaseCreatable[SelectPayment] {override def createCase(msg: String) = SelectPayment(msg)}
     )
   }
 
@@ -51,7 +51,7 @@ object Main {
       "[Checkout-ProcessingPayment] Please type payment amount you want to pay us or cancel to quit:",
       checkout,
       checkoutDone,
-      (msg: String) => ReceivePayment(msg)
+      new CaseCreatable[ReceivePayment] {override def createCase(msg: String) = ReceivePayment(msg)}
     )
   }
 
