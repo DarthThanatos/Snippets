@@ -1,6 +1,7 @@
 package shop
 
 import akka.actor.ActorRef
+import akka.http.scaladsl.model.HttpRequest
 import communication.Item
 
 case class GetState()
@@ -31,3 +32,4 @@ case class PaymentServiceStarted(paymentService: ActorRef) extends CustomerMessa
 
 sealed trait PaymentServiceMessage
 case object DoPayment extends PaymentServiceMessage
+case class PerformRequest(request: HttpRequest) extends PaymentServiceMessage

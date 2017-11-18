@@ -1,8 +1,9 @@
 package shop
 
-import akka.actor.{Actor, ActorRef, Props}
+import akka.actor.SupervisorStrategy.{Escalate, Restart, Stop}
+import akka.actor.{Actor, ActorRef, OneForOneStrategy, Props}
 import akka.persistence.fsm.PersistentFSM
-import communication.Item
+import communication.{HttpException, Item}
 import shop.TimerValues.{checkoutTimer, paymentTimer}
 
 import scala.concurrent.duration._
@@ -103,4 +104,17 @@ class Checkout(val cart: ActorRef, val id: String, items: List[Item])(implicit v
 
   override def persistenceId: String = "persistent-checkout-fsm-id-" + id
 
+
+  override val supervisorStrategy: OneForOneStrategy =
+    OneForOneStrategy() {
+      case httpExc : HttpException =>
+        println("Http exc: " + httpExc.getMessage)
+        Restart
+      case iae: IllegalArgumentException=>
+        println("Illegal Arg Exc: " + iae.getMessage)
+        Restart
+      case e: Exception =>
+        println("Escalating exception: " + e.getMessage)
+        Escalate
+    }
 }
