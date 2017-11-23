@@ -2,7 +2,7 @@ package remote
 
 import java.io.File
 
-import akka.actor.{Actor, ActorRef, ActorSystem, Props}
+import akka.actor.{Actor, ActorRef, ActorSystem, Props, Terminated}
 import com.github.tototoshi.csv._
 import communication.{Answer, Item, Query}
 
@@ -16,12 +16,12 @@ import com.typesafe.config.ConfigFactory
 
 import scala.concurrent.ExecutionContextExecutor
 import scala.concurrent.duration._
-
 import scala.io.StdIn
 import spray.json._
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import akka.http.scaladsl.server.Directives
 import akka.pattern.ask
+import akka.routing.{ActorRefRoutee, RoundRobinRoutingLogic, Router}
 
 class DB(pathToDB : String){
   private val DEFAULT_RESULT_SIZE = 10
@@ -87,6 +87,17 @@ case class SearchDone(items : List[Item], customer: ActorRef)
 class PaymentCatalogue(pathToDB : String) extends  Actor {
   private val db: DB = new DB(pathToDB)
   println("Started " + self.path.address + self.path.toSerializationFormat)
+
+  var router: Router = {
+    val routees = Vector.fill(5) {
+      val r = context.actorOf(Props[DBSearcher])
+      context watch r
+      ActorRefRoutee(r)
+    }
+    Router(RoundRobinRoutingLogic(), routees)
+  }
+
+
   override def receive :Receive ={
     case  Query(query: String) =>
       val searcher = context.actorOf(Props[DBSearcher])
@@ -94,7 +105,16 @@ class PaymentCatalogue(pathToDB : String) extends  Actor {
 
     case SearchDone(items, customer) =>
       customer ! Answer(items)
+
+    case Terminated(a) ⇒
+      router = router.removeRoutee(a)
+      val r = context.actorOf(Props[DBSearcher])
+      context watch r
+      router = router.addRoutee(r)
+
   }
+
+
 }
 
 object Main extends Directives with SprayJsonSupport with DefaultJsonProtocol   {
