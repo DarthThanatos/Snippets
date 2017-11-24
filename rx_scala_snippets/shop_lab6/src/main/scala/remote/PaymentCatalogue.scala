@@ -104,8 +104,8 @@ class PaymentCatalogue(pathToDB : String) extends  Actor {
 
   override def receive :Receive ={
     case  Query(query: String) =>
-        router.route(SearchDB(query, db), sender())
-        mediator ! Publish("QueryLogger", ReceivedQuery(query, PaymentCatalogueMain.ip))
+      router.route(SearchDB(query, db), sender())
+      mediator ! Publish("QueryLogger", ReceivedQuery(query, PaymentCatalogueMain.ip))
       mediator ! Publish("QueryCounter", ReceivedQuery(query, PaymentCatalogueMain.ip))
 
     case Terminated(a) ⇒

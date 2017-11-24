@@ -1,1 +1,1 @@
-ab -q -l -k -n 500 -c 150 http://192.168.0.107:80/items?query=Nurturme
+ab -q -l -k -n 500 -c 120 http://192.168.0.107:80/items?query=Nurturme
