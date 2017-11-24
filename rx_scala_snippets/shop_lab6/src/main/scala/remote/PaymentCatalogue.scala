@@ -108,8 +108,6 @@ class PaymentCatalogue(pathToDB : String) extends  Actor {
       router = router.addRoutee(r)
 
   }
-
-
 }
 
 object Main extends Directives with SprayJsonSupport with DefaultJsonProtocol   {

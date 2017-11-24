@@ -14,5 +14,6 @@ libraryDependencies ++= Seq(
   "org.fusesource.leveldbjni"   % "leveldbjni-all"   % "1.8",
   "com.github.tototoshi" %% "scala-csv" % "1.3.5",
   "com.typesafe.akka" %% "akka-http" % "10.0.10",
-  "com.typesafe.akka" %% "akka-http-spray-json" % "10.0.10"
+  "com.typesafe.akka" %% "akka-http-spray-json" % "10.0.10",
+
 )
