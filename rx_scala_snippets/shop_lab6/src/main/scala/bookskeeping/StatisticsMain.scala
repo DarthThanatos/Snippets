@@ -27,8 +27,8 @@ class QueriesCounter extends Actor with ActorLogging {
   mediator ! Subscribe("QueryCounter", self)
 
   private def statistic :String =
-    if (counter.nonEmpty) counter.map{ entry => entry._1 + "->" + entry._2}.reduce((acc, entry) => acc + entry + "\n")
-    else "No counter hostory"
+    if (counter.nonEmpty) "<h1>" + counter.map{ entry => entry._1 + " -> " + entry._2  + "<br>" }.reduce((acc, entry) => acc + entry ) + " </h1>"
+    else "No counter history"
 
   def receive: PartialFunction[Any, Unit] = {
     case ReceivedQuery(query: String, who: String) ⇒
@@ -73,7 +73,7 @@ object StatisticsMain {
       path("statistics") {
         get {
           onComplete(queriesCounter ? GetStatistic){
-            case Success(res: String) => complete(200 -> res)
+            case Success(res: String) => complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, res))
             case Failure(failure) => complete(HttpEntity(ContentTypes.`text/html(UTF-8)`, "<h1>Failure while accessing statistics</h1>"))
           }
 
