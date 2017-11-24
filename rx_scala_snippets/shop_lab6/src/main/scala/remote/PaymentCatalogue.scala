@@ -2,7 +2,7 @@ package remote
 
 import java.io.File
 
-import akka.actor.{Actor, ActorRef, ActorSystem, Props, Terminated}
+import akka.actor.{Actor, ActorSystem, Props, Terminated}
 import com.github.tototoshi.csv._
 import communication.{Answer, Item, Query}
 
@@ -74,22 +74,21 @@ class DB(pathToDB : String){
 class DBSearcher extends Actor{
 
   override def receive :Receive = {
-    case SearchDB(query, db, customer) =>
+    case SearchDB(query, db) =>
       val res = db.search(query)
-      sender() ! SearchDone(res, customer)
+      sender() ! Answer(res)
   }
 }
 
-
-case class SearchDB(query : String, db: DB, customer: ActorRef)
-case class SearchDone(items : List[Item], customer: ActorRef)
+case class SearchDB(query : String, db: DB)
 
 class PaymentCatalogue(pathToDB : String) extends  Actor {
   private val db: DB = new DB(pathToDB)
   println("Started " + self.path.address + self.path.toSerializationFormat)
+  val ACTOR_POOL_AMOUNT: Int = 5
 
   var router: Router = {
-    val routees = Vector.fill(5) {
+    val routees = Vector.fill(ACTOR_POOL_AMOUNT) {
       val r = context.actorOf(Props[DBSearcher])
       context watch r
       ActorRefRoutee(r)
@@ -100,11 +99,7 @@ class PaymentCatalogue(pathToDB : String) extends  Actor {
 
   override def receive :Receive ={
     case  Query(query: String) =>
-      val searcher = context.actorOf(Props[DBSearcher])
-      searcher ! SearchDB(query, db, sender())
-
-    case SearchDone(items, customer) =>
-      customer ! Answer(items)
+        router.route(SearchDB(query, db), sender())
 
     case Terminated(a) ⇒
       router = router.removeRoutee(a)
