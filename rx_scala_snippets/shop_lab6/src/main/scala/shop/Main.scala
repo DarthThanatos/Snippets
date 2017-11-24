@@ -1,18 +1,11 @@
 package shop
 
 import java.net.URI
-import java.util.concurrent.TimeUnit
 
-import akka.actor.{ActorRef, ActorSystem, Props}
-import akka.util.Timeout
+import akka.actor.{ ActorSystem, Props}
 import com.typesafe.config.ConfigFactory
 import communication.Item
 import remote.DB
-import sun.misc.ObjectInputFilter.Config
-
-import scala.concurrent.duration.FiniteDuration
-import scala.util.control.Breaks._
-import scala.util.{Failure, Success}
 
 object Main {
 

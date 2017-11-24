@@ -1,0 +1,1 @@
+nginx -c src\main\resources\balance.conf

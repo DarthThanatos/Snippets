@@ -2,13 +2,14 @@ package remote
 
 import java.io.File
 
-import akka.actor.{Actor, ActorSystem, Props, Terminated}
+import akka.actor.{Actor, ActorRef, ActorSystem, Props, Terminated}
 import com.github.tototoshi.csv._
-import communication.{Answer, Item, Query}
+import communication.{Answer, Item, Query, ReceivedQuery}
 
 import scala.util.{Failure, Random, Success}
 import java.net.URI
 
+import akka.cluster.pubsub.DistributedPubSub
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.{ContentTypes, HttpEntity}
 import akka.stream.ActorMaterializer
@@ -83,6 +84,10 @@ class DBSearcher extends Actor{
 case class SearchDB(query : String, db: DB)
 
 class PaymentCatalogue(pathToDB : String) extends  Actor {
+  import akka.cluster.pubsub.DistributedPubSubMediator.Publish
+  // activate the extension
+  val mediator: ActorRef = DistributedPubSub(context.system).mediator
+
   private val db: DB = new DB(pathToDB)
   println("Started " + self.path.address + self.path.toSerializationFormat)
   val ACTOR_POOL_AMOUNT: Int = 5
@@ -100,6 +105,8 @@ class PaymentCatalogue(pathToDB : String) extends  Actor {
   override def receive :Receive ={
     case  Query(query: String) =>
         router.route(SearchDB(query, db), sender())
+        mediator ! Publish("QueryLogger", ReceivedQuery(query, PaymentCatalogueMain.ip))
+      mediator ! Publish("QueryCounter", ReceivedQuery(query, PaymentCatalogueMain.ip))
 
     case Terminated(a) ⇒
       router = router.removeRoutee(a)
@@ -110,7 +117,9 @@ class PaymentCatalogue(pathToDB : String) extends  Actor {
   }
 }
 
-object Main extends Directives with SprayJsonSupport with DefaultJsonProtocol   {
+object PaymentCatalogueMain extends Directives with SprayJsonSupport with DefaultJsonProtocol   {
+  val ip = "192.168.0.107"
+
   def main(args: Array[String]): Unit ={
     val config = ConfigFactory.load()
     implicit val system: ActorSystem = ActorSystem("RemoteSystem", config.getConfig("serverapp").withFallback(config))
@@ -147,7 +156,6 @@ object Main extends Directives with SprayJsonSupport with DefaultJsonProtocol   
 
       }
 
-    val ip = "192.168.0.107"
     val bindingFuture = Http().bindAndHandle(route, ip, 8080)
 
     println(s"Payment Catalogue online at http://$ip:8080/\nPress RETURN to stop...")
