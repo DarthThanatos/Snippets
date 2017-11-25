@@ -27,7 +27,12 @@ class QueriesCounter extends Actor with ActorLogging {
   mediator ! Subscribe("QueryCounter", self)
 
   private def statistic :String =
-    if (counter.nonEmpty) "<h1>" + counter.map{ entry => entry._1 + " -> " + entry._2  + "<br>" }.reduce((acc, entry) => acc + entry ) + " </h1>"
+    if (counter.nonEmpty) 
+      "<h1>" + 
+        counter
+        .map{ entry => entry._1 + " -> " + entry._2  + "<br>" }
+        .reduce((acc, entry) => acc + entry ) 
+      + " </h1>"
     else "No counter history"
 
   def receive: PartialFunction[Any, Unit] = {

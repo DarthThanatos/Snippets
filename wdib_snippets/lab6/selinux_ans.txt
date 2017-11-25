@@ -1,0 +1,305 @@
+yum install setools-console policycoreutils-newrole
+
+Użytkownicy w polityce bezpieczeństwa systemu SELinux
+
+1. Dodaj w systemie konto admin (pamiętaj o zmianie hasła). 
+useradd admin
+passwd admin
+
+Następnie zmień użytkowników SELinux przypisanych do poszczególnych kont w systemie, tak by:
+
+a) konto admin było przypisane do użytkownika SELinux staff_u
+semanage login -a -s staff_u admin
+-a => add
+-m => modify 
+-s => seuser, selinux user name
+
+b) konto root było przypisane do użytkownika SELinux sysadm_u
+semanage login -a -s sysadm_u root
+
+c) konto student było przypisane do użytkownika SELinux user_u
+semanage login -a -s user_u student 
+
+listujemy: semanage login -l 
+
+Po zmianie użytkowników SELinux przypisanych do kont w systemie, 
+napraw etykiety plików w katalogach: /root, /home/admin i /home/student.
+a) 
+albo: restorecon -RFv /home/admin 
+albo: chcon -RFv --user=staff_u /home/admin 
+b) 
+albo: restorecon -RFv /root 
+albo: chcon -RFv --user=sysadm_u /root 
+c) 
+albo: restorecon -RFv /home/student 
+albo: chcon -RFv --user=user_u /home/student 
+
+
+2. Wyloguj się z systemu. Następnie zaloguj się jako admin i otwórz konsolę. 
+Żeby zmienić kolorki:
+setterm  -term linux -back black -fore white -clear all 
+
+Zweryfikuj aktualny kontekst bezpieczeństwa. 
+Czy możesz w tym kontekście zmienić użytkownika poleceniem su?
+
+[admin@wdib ~]$ id -Z
+staff_u:staff_r:staff_t:s0-s0:c0.c1023
+[admin@wdib ~]$ su
+Password: 
+su: Authentication failure
+
+Zmień rolę na unconfined_r.
+Jaki obecnie posiadasz kontekst bezpieczeństwa? 
+[admin@wdib ~]$ newrole -r unconfined_r
+Password: 
+[admin@wdib ~]$ id -Z
+staff_u:unconfined_r:unconfined_t:s0-s0:c0.c1023
+
+Używając polecenia su - zmień użytkownika na root
+[admin@wdib ~]$ su -
+Password: 
+Last login: sob lis 25 15:08:19 CET 2017 on pts/0
+[root@wdib ~]# id -Z
+staff_u:unconfined_r:unconfined_t:s0-s0:c0.c1023
+
+Czy kontekst bezpieczeństwa uległ zmianie? - nie, jest identyczny jak linijkę wyżej
+=========================================================================================
+Zmienne warunkowe w polityce bezpieczeństwa systemu SELinux
+
+Pracując jako root w roli unconfined_r, zmień odpowiednią zmienna warunkową SELinux, 
+tak by użytkownik user_u nie mógł wykonywać polecenia ping. 
+Zmieniając zmienną warunkową użyj odpowiedniej opcji,
+tak by zmiana nie została cofnięta po restarcie systemu operacyjnego.
+Wykonane polecenie zanotuj w odpowiedzi.
+setsebool -P selinuxuser_ping off
+ 
+
+2.Przełącz desktop na użytkownika student. Spróbuj wykonać polecenie:
+ping student.agh.edu.pl
+
+Rezultat polecenia zanotuj w odpowiedzi.
+[student@wdib ~]$ ping student.agh.edu.pl
+ping: socket: Permission denied
+=========================================================================================
+Porty sieciowe w systemie SELinux
+
+Zmień konfigurację demona ssh tak, by domyślnie nasłuchiwał na porcie 922. Wykonaj restart demona ssh i sprawdź, czy pracuje on poprawnie. Za pomocą polecenia aureport (z odpowiednią opcją) wykonaj raport naruszeń polityki bezpieczeństwa SELinux. Fragmenty raportu dotyczące demona ssh skopiuj do odpowiedzi.
+Zmieniamy konfigurację demona ssh w pliku /etc/ssh/sshd_config, odkomentowujemy PORT zmieniając 22 na 922. 
+Demona można zrestartować poleceniem (pracując jako root):
+systemctl restart sshd
+
+Status demona można sprawdzić poleceniem:
+[root@wdib ~]# systemctl status sshd
+ sshd.service - OpenSSH server daemon
+...
+wdib.iisg.agh.edu.pl systemd[1]: Starting OpenSSH server daemon...
+wdib.iisg.agh.edu.pl sshd[44449]: Server listening on 0.0.0.0 port 922.
+wdib.iisg.agh.edu.pl sshd[44449]: Server listening on :: port 922.
+wdib.iisg.agh.edu.pl systemd[1]: Started OpenSSH server daemon.
+
+Zmień konfigurację portów w SELinux, tak by port 922 miał taki sam typ jak port 22. 
+Wykonaj restart demona ssh i sprawdź czy obecnie demon pracuje poprawnie. 
+
+Zweryfikuj poprawność konfiguracji logując się przez ssh na konto student:
+root@wdib ~]# ssh -p 922 student@localhost
+The authenticity of host '[localhost]:922 ([::1]:922)' can't be established.
+ECDSA key fingerprint is SHA256:GibW+MjjSYIZ2KhkGvOLJIJsLsw1h89co3jislABKtI.
+ECDSA key fingerprint is MD5:b4:25:0a:ec:4d:35:76:16:f2:6b:76:b0:7a:34:03:fa.
+Are you sure you want to continue connecting (yes/no)? yes
+Warning: Permanently added '[localhost]:922' (ECDSA) to the list of known hosts.
+student@localhost's password: 
+Last login: Sat Nov 25 15:24:57 2017
+[student@wdib ~]$ 
+
+Skopiuj do odpowiedzi polecenie użyte do zmiany typu dla portu 922.
+semanage port -a -t ssh_port_t -p tcp 922
+============================================================================================
+Domyślne konteksty plików w systemie SELinux
+
+1. Zmień domyślnego użytkownika SELinux w systemie na user_u.
+semanage login -m -s user_u __default__
+
+Utwórz katalog /workers a następnie dodaj konto smith z katalogiem domowym /workers/smith 
+(opcja -d polecenia adduser). Zmień hasło dla smith i spróbuj przełączyć desktop na to konto. 
+mkdir /workers 
+useradd -d /workers/smith smith 
+passwd smith 
+
+Czy konto działa poprawnie? 
+bash: /workers/smith/.bashrc: Permission denied
+bash-4.2$ 
+
+Przełącz desktop z powrotem na konto admin. 
+Wykonaj raport naruszeń polityki bezpieczeństwa SELinux i skopiuj jego fragment do odpowiedzi.
+[root@wdib ~]# sealert -a /var/log/audit/audit.log > raport.txt
+SELinux is preventing /usr/libexec/gnome-session-binary from write access on the directory smith.
+
+*****  Plugin catchall_labels (83.8 confidence) suggests   *******************
+
+If you want to allow gnome-session-binary to have write access on the smith directory
+Then you need to change the label on smith
+Do
+# semanage fcontext -a -t FILE_TYPE 'smith'
+where FILE_TYPE is one of the following: abrt_var_cache_t, admin_home_t, alsa_home_t, antivirus_home_t, audio_home_t, auth_cache_t, auth_home_t, autofs_t, bluetooth_helper_tmp_t, bluetooth_helper_tmpfs_t, cache_home_t, chrome_sandbox_home_t, cifs_t, config_home_t, container_home_t, cvs_home_t, data_home_t, dbus_home_t, dosfs_t, ecryptfs_t, efivarfs_t, fetchmail_home_t, fusefs_t, games_data_t, gconf_home_t, gconf_tmp_t, git_user_content_t, gkeyringd_gnome_home_t, gkeyringd_tmp_t, gnome_home_t, gpg_agent_tmp_t, gpg_pinentry_tmp_t, gpg_pinentry_tmpfs_t, gpg_secret_t, gstreamer_home_t, home_bin_t, home_cert_t, httpd_user_content_t, httpd_user_ra_content_t, httpd_user_rw_content_t, httpd_user_script_exec_t, icc_data_home_t, iceauth_home_t, irc_home_t, irc_tmp_t, irssi_home_t, iso9660_t, kismet_home_t, krb5_home_t, local_login_home_t, mail_home_rw_t, mail_home_t, mail_spool_t, mandb_home_t, mozilla_home_t, mozilla_plugin_rw_t, mozilla_plugin_tmp_t, mozilla_plugin_tmpfs_t, mpd_home_t, mpd_tmpfs_t, mpd_user_data_t, mplayer_home_t, mplayer_tmpfs_t, mqueue_spool_t, mysqld_home_t, nfs_t, openshift_var_lib_t, polipo_cache_home_t, polipo_config_home_t, procmail_home_t, pulseaudio_home_t, pulseaudio_tmpfs_t, removable_t, rlogind_home_t, rssh_ro_t, rssh_rw_t, sandbox_file_t, screen_home_t, screen_var_run_t, sosreport_tmpfs_t, spamc_home_t, speech-dispatcher_home_t, ssh_home_t, svirt_home_t, svirt_sandbox_file_t, systemd_home_t, sysv_t, telepathy_cache_home_t, telepathy_data_home_t, telepathy_gabble_cache_home_t, telepathy_logger_cache_home_t, telepathy_logger_data_home_t, telepathy_mission_control_cache_home_t, telepathy_mission_control_data_home_t, telepathy_mission_control_home_t, telepathy_sunshine_home_t, texlive_home_t, thumb_home_t, tmp_t, tmpfs_t, tvtime_home_t, uml_ro_t, uml_rw_t, usbfs_t, user_fonts_cache_t, user_fonts_config_t, user_fonts_t, user_home_dir_t, user_home_t, user_tmp_t, var_lib_t, virt_content_t, virt_home_t, vmblock_t, vmware_conf_t, vmware_file_t, vxfs_t, wine_home_t, wireshark_home_t, xauth_home_t, xdm_home_t, xenfs_t.
+Then execute:
+restorecon -v 'smith'
+
+
+*****  Plugin catchall (17.1 confidence) suggests   **************************
+
+If you believe that gnome-session-binary should be allowed write access on the smith directory by default.
+Then you should report this as a bug.
+You can generate a local policy module to allow this access.
+Do
+allow this access for now by executing:
+# ausearch -c 'gnome-session-b' --raw | audit2allow -M my-gnomesessionb
+# semodule -i my-gnomesessionb.pp
+
+
+Additional Information:
+Source Context                user_u:user_r:user_t:s0
+Target Context                system_u:object_r:default_t:s0
+Target Objects                smith [ dir ]
+Source                        gnome-session-b
+Source Path                   /usr/libexec/gnome-session-binary
+Port                          <Unknown>
+Host                          <Unknown>
+Source RPM Packages           gnome-session-3.22.3-4.el7.x86_64
+Target RPM Packages           
+Policy RPM                    selinux-policy-3.13.1-166.el7_4.4.noarch
+Selinux Enabled               True
+Policy Type                   targeted
+Enforcing Mode                Enforcing
+Host Name                     wdib.iisg.agh.edu.pl
+...
+Raw Audit Messages
+type=AVC msg=audit(1511627898.424:827): avc:  denied  { write } for  pid=48059 comm="gnome-session-b" name="smith" dev="dm-0" ino=1157350 scontext=user_u:user_r:user_t:s0 tcontext=system_u:object_r:default_t:s0 tclass=dir
+type=SYSCALL msg=audit(1511627898.424:827): arch=x86_64 syscall=creat success=no exit=EACCES a0=7fff3ab24fe0 a1=1b6 a2=0 a3=8 items=0 ppid=48033 pid=48059 auid=1002 uid=1002 gid=1002 euid=1002 suid=1002 fsuid=1002 egid=1002 sgid=1002 fsgid=1002 tty=(none) ses=27 comm=gnome-session-b exe=/usr/libexec/gnome-session-binary subj=user_u:user_r:user_t:s0 key=(null)
+Hash: gnome-session-b,user_t,default_t,dir,write
+
+
+2. Zmień domyślne konteksty bezpieczeństwa dla drzewa katalogów /workers tak,
+by były kopią domyślnych kontekstów bezpieczeństwa dla drzewa katalogów /home. 
+Następnie napraw aktualne konteksty bezpieczeństwa w drzewie katalogów /workers. 
+semanage fcontext -m  -t home_root_t /workers 
+semanage fcontext -m  -t admin_home_t /workers 
+semanage fcontext -m  -t user_home_dir_t /workers/smith
+restorecon -vRF /workers
+
+Przełącz desktop na konto smith. Czy obecnie konto działa prawidłowo?
+============================================================================================
+Moduły polityki bezpieczeństwa SELinux
+
+Przełącz desktop na konto admin i wykonaj polecenie:
+seinfo -aunconfined_domain_type -x
+unconfined_domain_type
+      abrt_handle_event_t
+      anaconda_t
+      install_t
+      preupgrade_t
+      httpd_unconfined_script_t
+      authconfig_t
+      bacula_unconfined_script_t
+      kernel_t
+      boinc_project_t
+      bootloader_t
+      certmonger_unconfined_t
+      cinder_api_t
+      cinder_backup_t
+      cinder_scheduler_t
+      cinder_volume_t
+      cloud_init_t
+      condor_startd_t
+      conman_unconfined_script_t
+      container_runtime_t
+      spc_t
+      crond_t
+      system_cronjob_t
+      unconfined_cronjob_t
+      devicekit_t
+      devicekit_power_t
+      devicekit_disk_t
+      dirsrvadmin_unconfined_script_t
+      firstboot_t
+      fsadm_t
+      inetd_t
+      inetd_child_t
+      init_t
+      initrc_t
+      kdumpctl_t
+      keepalived_unconfined_script_t
+      livecd_t
+      clvmd_t
+      lvm_t
+      depmod_t
+      insmod_t
+      mount_t
+      unconfined_mount_t
+      unconfined_munin_plugin_t
+      nagios_unconfined_plugin_t
+      nagios_eventhandler_plugin_t
+      openshift_initrc_t
+      openvpn_unconfined_script_t
+      openwsman_t
+      pegasus_openlmi_logicalfile_t
+      pegasus_openlmi_unconfined_t
+      pki_tomcat_script_t
+      prelink_t
+      puppetagent_t
+      realmd_t
+      realmd_consolehelper_t
+      cluster_t
+      rpm_t
+      rpm_script_t
+      rtas_errd_t
+      samba_unconfined_script_t
+      samba_unconfined_net_t
+      semanage_t
+      setfiles_mac_t
+      unconfined_sendmail_t
+      sge_shepherd_t
+      sge_job_t
+      snapperd_t
+      sosreport_t
+      tuned_t
+      udev_t
+      unconfined_service_t
+      unconfined_t
+      unconfined_dbusd_t
+      virtd_t
+      virtd_lxc_t
+      virt_qemu_ga_unconfined_t
+      vmtools_t
+      vmtools_helper_t
+      vmware_host_t
+      watchdog_unconfined_t
+      wine_t
+      xserver_t
+      xdm_unconfined_t
+      zabbix_script_t
+	  
+Zanotuj również ile takich domen jest w systemie 	  
+seinfo -aunconfined_domain_type -x | wc -l 
+85
+
+2. Wyłącz moduł unconfined polityki bezpieczeństwa SELinux. Ile domen bez ograniczeń jest obecnie w systemie? Skopiuj ich listę do odpowiedzi.
+[root@wdib ~]# semodule -d unconfined
+[root@wdib ~]# seinfo -aunconfined_domain_type -x | wc -l
+16
+[root@wdib ~]# seinfo -aunconfined_domain_type -x 
+   unconfined_domain_type
+      anaconda_t
+      install_t
+      preupgrade_t
+      authconfig_t
+      kernel_t
+      spc_t
+      firstboot_t
+      livecd_t
+      openshift_initrc_t
+      puppetagent_t
+      realmd_consolehelper_t
+      rpm_t
+      rpm_script_t
+      unconfined_t
+      unconfined_dbusd_t

@@ -118,7 +118,7 @@ class PaymentCatalogue(pathToDB : String) extends  Actor {
 }
 
 object PaymentCatalogueMain extends Directives with SprayJsonSupport with DefaultJsonProtocol   {
-  val ip = "192.168.0.107"
+  val ip = "192.168.0.101"
 
   def main(args: Array[String]): Unit ={
     val config = ConfigFactory.load()
