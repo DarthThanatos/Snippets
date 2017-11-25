@@ -186,6 +186,10 @@ semanage fcontext -m  -t admin_home_t /workers
 semanage fcontext -m  -t user_home_dir_t /workers/smith
 restorecon -vRF /workers
 
+
+semanage fcontext -a -e /home /workers
+restorecon -R -F -v /workers
+
 Przełącz desktop na konto smith. Czy obecnie konto działa prawidłowo?
 ============================================================================================
 Moduły polityki bezpieczeństwa SELinux
