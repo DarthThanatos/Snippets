@@ -131,6 +131,7 @@ bash-4.2$
 
 Przełącz desktop z powrotem na konto admin. 
 Wykonaj raport naruszeń polityki bezpieczeństwa SELinux i skopiuj jego fragment do odpowiedzi.
+aureport -a
 [root@wdib ~]# sealert -a /var/log/audit/audit.log > raport.txt
 SELinux is preventing /usr/libexec/gnome-session-binary from write access on the directory smith.
 
