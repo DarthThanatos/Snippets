@@ -1,0 +1,129 @@
+Robert Bielas
+
+UEFI Secure Boot i mechanizm MOK w Linuksie
+1. Uruchom maszynę mmalek_fedora27-wdib-uefi_tpm. Obserwuj uważnie moment, w którym rozpozczyna się faktyczne uruchamianie jądra systemu (kończy się odliczanie w bootloaderze). Czy zauważyłeś coś szczególnego?
+2. W uruchomionym systemie przejrzyj komunikaty jądra (dmesg) pod kątem informacji związanych z UEFI.
+	dmesg | grep 'EFI: Loaded cert'
+ Przy użyciu narzędzia mokutil wyświetl status mechanizmu UEFI Secure Boot,
+	mockutil --sb-state
+	
+ a także zawartość poszczególnych zbiorów kluczy i hashy.
+	mokutil --db
+	mokutil --dbx
+	mockutil --pk
+	mockutil --kek
+ W raporcie wyświetlone certyfikaty możesz okroić do fingerprintu i nazwy podmiotu.
+ 
+3.Spróbuj załadować moduł jądra znajdujący się w pliku /wdib/uefi_sb_1/flag.ko. 
+	modprobe -v /wdib/uefi_sb_1/flag.ko
+  Jaki błąd został zwrócony? 
+  
+  Czy komunikaty jądra podają bardziej precyzyjną przyczynę?
+	dmesg
+	
+4. Z wykorzystaniem skryptu /usr/src/kernels/$(uname -r)/scripts/sign-file 
+podpisz moduł /wdib/uefi_sb_1/flag.ko 
+kluczem /wdib/uefi_sb_1/mok.key 
+i certyfikatem /wdib/uefi_sb_1/mok.der, 
+zapisując jego podpisaną wersję w innym pliku (użyj algorytmu hashowania SHA256). 
+	/usr/src/kernels/$(uname -r)/scripts/sign-file sha256 /wdib/uefi_sb_1/mok.key /wdib/uefi_sb_1/mok.der /wdib/uefi_sb_1/flag.ko /wdib/uefi_sb_1/flag_signed.ko
+
+Porównaj różnice w wynikach komendy modinfo pomiędzy niepodpisaną i podpisaną wersją modułu.
+	modinfo /wdib/uefi_sb_1/flag.ko
+	modinfo /wdib/uefi_sb_1/flag_signed.ko
+	
+5. Spróbuj załadować podpisaną wersję modułu. Czy komunikty się zmieniły?
+	modprobe -v /wdib/uefi_sb_1/flag_signed.ko
+
+6. Komendą mokutil dodaj certyfikat /wdib/uefi_sb_1/mok.der do listy zaufanych. 
+Zrestartuj system w celu ukończenia importu certyfikatu i przeanalizuj jakie zmiany
+zaszły w informacjach pozyskanych w pkt. 2.
+	mokutil --import /wdib/uefi_sb_1/mok.der
+	reboot
+	mockutil --sb-state
+	mokutil --db
+	mokutil --dbx
+	mockutil --pk
+	mockutil --kek
+	
+7. Ponownie spróbuj załadować podpisaną wersję modułu. Czy tym razem się to powiodło?
+	modprobe -v /wdib/uefi_sb_1/flag_signed.ko
+W raporcie umieść flagę wypisaną przez moduł do komunikatów jądra.
+	dmesg
+	
+========================================================================================
+UEFI Secure Boot i użycie HSM do podpisywania aplikacji
+0. Zanim przystąpisz do tej części ćwiczenia, zapisz do pliku wyniki komendy tpm2_pcrlist. Będą potrzebne w zadaniach poświęconych TPM.
+1. Uruchom maszynę mmalek_fedora27-wdib-hsm.
+2. Z wykorzystaniem narzędzia p11tool wyświetl dostępne tokeny PKCS#11
+	p11tool --login --list-tokens
+	p11tool --login --list-all pkcs11:token=System%20Trust
+	
+i wygeneruj klucz prywatny RSA o długości 2048 bitów bezpośrednio w tokenie HSM. Przypisz mu etykietę Imie Nazwisko. 
+	p11tool --login --generate-rsa --bits=2048  --label "Robert Bielas" pkcs11:token=HSM
+	p11tool [--login] --generate-rsa --bits 2048 --label "Robert Bielas" [--outfile MyNewKey.pub] pkcs11:token=HSM
+ 
+Następnie wyświetl klucze prywatne znajdujące się w tokenie.
+	p11tool --login --list-all-privkeys pkcs11:token=HSM
+
+3. Wygeneruj z użyciem OpenSSL samopodpisany certyfikat, który wykorzystasz do podpisania aplikacji EFI.
+	openssl req -new -x509 -engine pkcs11 -keyform engine \
+		-key "pkcs11:token=HSM;object=Robert%20Bielas;type=private" \
+		-subj "/CN=Robert Bielas UEFI DB 2017" \
+		-out uefi_db.der -outform DER -text
+
+4. Zaimportuj wygenerowany certyfikat uefi_db.der do tokenu HSM przy użyciu narzędzia p11tool.
+	p11tool --login --load-certificate=uefi_db.der pkcs11:token=HSM;object=Robert%20Bielas
+	
+5. Komendą modutil dodaj do bazy /etc/pki/pesign nowy token p11-kit-proxy, 
+korzystający z biblioteki /usr/lib64/p11-kit-proxy.so. 
+	modutil -dbdir /etc/pki/pesign -add p11-kit-proxy -libfile /usr/lib64/p11-kit-proxy.so
+	
+Następnie komendą certutil wyświetl certyfikaty znajdujące się w tej bazie i tokenie. 
+W raporcie pomiń certyfikaty opisane jako Default Trust.
+	certutil -L -d /etc/pki/pesign
+	
+
+6. Podpisz aplikację EFI /wdib/uefi_sb_2/grubx64.efi z wykorzystaniem narzędzia pesign 
+i przygotowanego w pkt. 3 certyfikatu.
+Podpisaną aplikację umieść w katalogu /boot/efi/EFI/grub2-signed
+	pesign  -s -i /wdib/uefi_sb_2/grubx64.efi -c uefi_db.der -o /boot/efi/EFI/grub2-signed/grubx64_signed.efi
+
+7. Skopiuj certyfikat uefi_db.der do katalogu /boot/efi i wyłącz maszynę wirtualną,
+a następnie włącz ją ponownie. 
+W czasie wyświetlania logo VMware naciśnij dowolny klawisz, aby przejść do ustawień.
+Korzystając z menu UEFI, zaimportuj skopiowany właśnie certyfikat do bazy db. 
+Zatwierdź zmiany.
+
+8. Ponownie wyłącz maszynę wirtualną, włącz ją ponownie i przejdź do ustawień. 
+Z menu bootowania w UEFI wybierz wpis grub2-unsigned. 
+Czy operacja bootowania się powiodła? 
+A czy udało się to w przypadku aplikacji grub2-signed?
+
+========================================================================================
+Trusted Platform Module
+
+1. Podpisana w poprzednim ćwiczeniu wersja bootloadera GRUB2 zawiera pewne 
+dodatkowe łaty. Wykonaj raz jeszcze komendę tpm2_pcrlist i porównaj otrzymane wyniki. 
+Spróbuj znaleźć w zmodyfikowanych źródłach bootloadera (/wdib/tpm/grub2-coreos)
+uzasadnienie istnienia rozbieżności i co składa się na obliczone wartości PCR.
+
+2. Przy użyciu plików z /wdib/tpm/flag oraz komend tpm2_load i tpm2_unseal 
+spróbuj odczytać flagę i umieść w raporcie jej wartość.
+tpm2_load -c $file_primary_key_ctx  -u $file_unseal_key_pub  -r $file_unseal_key_priv -n $file_unseal_key_name -C $file_unseal_key_ctx
+tpm2_unseal -c $file_unseal_key_ctx -o $file_unseal_output_data
+cmp -s $file_unseal_output_data $file_input_data
+
+3.Komendą tpm2_hash utwórz hash SHA256 dowolnie wybranej zawartości. 
+tpm2_hash -I test -g 0x000B -o out -H o -t ticket
+
+Z wykorzystaniem polecenia tpm2_pcrextend zmodyfikuj zawartość PCR 8 
+dla algorytmu hashowania SHA256, dokonując jej rozszerzenia o wyliczoną wartość. 
+
+Czy jesteś w stanie uzasadnić jak powstała obecna wartość tego PCR? 
+(Możesz np. stworzyć prosty skrypt w języku Python korzystający z biblioteki hashlib.)
+
+
+4.Spróbuj ponownie odczytać wartość flagi. 
+Jaki błąd otrzymujesz? Do czego można wykorzystać mechanizm powiązywania sekretu 
+z konkretnymi wartościami PCR?
