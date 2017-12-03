@@ -1,55 +1,103 @@
 Robert Bielas
 
 UEFI Secure Boot i mechanizm MOK w Linuksie
-1. Uruchom maszynę mmalek_fedora27-wdib-uefi_tpm. Obserwuj uważnie moment, w którym rozpozczyna się faktyczne uruchamianie jądra systemu (kończy się odliczanie w bootloaderze). Czy zauważyłeś coś szczególnego?
+1. Uruchom maszynę mmalek_fedora27-wdib-uefi_tpm. Obserwuj uważnie moment, w którym rozpozczyna się faktyczne uruchamianie jądra systemu 
+(kończy się odliczanie w bootloaderze). Czy zauważyłeś coś szczególnego? - uefi!!
 2. W uruchomionym systemie przejrzyj komunikaty jądra (dmesg) pod kątem informacji związanych z UEFI.
-	dmesg | grep 'EFI: Loaded cert'
+	dmesg | grep 'EFI'
  Przy użyciu narzędzia mokutil wyświetl status mechanizmu UEFI Secure Boot,
-	mockutil --sb-state
-	
+	mokutil --sb-state
+	SecureBoot enabled
+
  a także zawartość poszczególnych zbiorów kluczy i hashy.
 	mokutil --db
-	mokutil --dbx
-	mockutil --pk
-	mockutil --kek
- W raporcie wyświetlone certyfikaty możesz okroić do fingerprintu i nazwy podmiotu.
+		SHA1 Fingerprint: 58:0a:6f:4c:c4:e4:b6:69:b9:eb:dc:1b:2b:3e:08:7b:80:d0:67:8d
+		Subject: C=US, ST=Washington, L=Redmond, O=Microsoft Corporation, CN=Microsoft Windows Production PCA 2011
+
+		SHA1 Fingerprint: 46:de:f6:3b:5c:e6:1c:f8:ba:0d:e2:e6:63:9c:10:19:d0:ed:14:f3
+		Subject: C=US, ST=Washington, L=Redmond, O=Microsoft Corporation, CN=Microsoft Corporation UEFI CA 2011
+
+		SHA1 Fingerprint: 13:7e:57:1f:0b:81:8a:0f:5c:32:3d:a2:7f:4a:ec:cf:95:98:0c:96
+		Subject: C=US, ST=California, L=Palo Alto, O=VMware, Inc.
+
+	mokutil --pk - pusty
+	mokutil --kek 
+		SHA1 Fingerprint: 31:59:0b:fd:89:c9:d7:4e:d0:87:df:ac:66:33:4b:39:31:25:4b:30
+        Subject: C=US, ST=Washington, L=Redmond, O=Microsoft Corporation, CN=Microsoft Corporation KEK CA 2011
+
+        Subject: CN=WdIB UEFI KEK 2017
+		SHA1 Fingerprint: 19:98:a1:9a:5a:b0:c4:2e:12:df:68:b9:a3:a0:88:bb:50:da:38:d5
+
  
 3.Spróbuj załadować moduł jądra znajdujący się w pliku /wdib/uefi_sb_1/flag.ko. 
-	modprobe -v /wdib/uefi_sb_1/flag.ko
+	sudo insmod /wdib/uefi_sb_1/flag.ko
   Jaki błąd został zwrócony? 
+  insmod: ERROR: could not insert module /wdib/uefi_sb_1/flag.ko: Required key not available
+
   
-  Czy komunikaty jądra podają bardziej precyzyjną przyczynę?
-	dmesg
+  Czy komunikaty jądra podają bardziej precyzyjną przyczynę? Nie
+	dmesg | grep flag -> komenda nic nie zwraca
 	
 4. Z wykorzystaniem skryptu /usr/src/kernels/$(uname -r)/scripts/sign-file 
 podpisz moduł /wdib/uefi_sb_1/flag.ko 
 kluczem /wdib/uefi_sb_1/mok.key 
 i certyfikatem /wdib/uefi_sb_1/mok.der, 
 zapisując jego podpisaną wersję w innym pliku (użyj algorytmu hashowania SHA256). 
-	/usr/src/kernels/$(uname -r)/scripts/sign-file sha256 /wdib/uefi_sb_1/mok.key /wdib/uefi_sb_1/mok.der /wdib/uefi_sb_1/flag.ko /wdib/uefi_sb_1/flag_signed.ko
+	sudo /usr/src/kernels/$(uname -r)/scripts/sign-file sha256 /wdib/uefi_sb_1/mok.key /wdib/uefi_sb_1/mok.der /wdib/uefi_sb_1/flag.ko /wdib/uefi_sb_1/flag_signed.ko
 
 Porównaj różnice w wynikach komendy modinfo pomiędzy niepodpisaną i podpisaną wersją modułu.
 	modinfo /wdib/uefi_sb_1/flag.ko
-	modinfo /wdib/uefi_sb_1/flag_signed.ko
+	[student:~] $ modinfo /wdib/uefi_sb_1/flag.ko
+	filename:       /wdib/uefi_sb_1/flag.ko
+	description:    WdIB task flag
+	author:         Mateusz Malek
+	license:        GPL
+	depends:        
+	name:           flag
+	vermagic:       4.13.16-300.fc27.x86_64 SMP mod_unload 
+
+	[student:~] $ modinfo /wdib/uefi_sb_1/flag_signed.ko
+	filename:       /wdib/uefi_sb_1/flag_signed.ko
+	description:    WdIB task flag
+	author:         Mateusz Malek
+	license:        GPL
+	depends:        
+	name:           flag
+	vermagic:       4.13.16-300.fc27.x86_64 SMP mod_unload 
+	signat:         PKCS#7
+	signer:         
+	sig_key:        
+	sig_hashalgo:   md4
 	
-5. Spróbuj załadować podpisaną wersję modułu. Czy komunikty się zmieniły?
-	modprobe -v /wdib/uefi_sb_1/flag_signed.ko
+5. Spróbuj załadować podpisaną wersję modułu. Czy komunikaty się zmieniły?
+	insmod /wdib/uefi_sb_1/flag_signed.ko
+	dmesg: PKCS#7 signature not signed with a trusted key
+
 
 6. Komendą mokutil dodaj certyfikat /wdib/uefi_sb_1/mok.der do listy zaufanych. 
 Zrestartuj system w celu ukończenia importu certyfikatu i przeanalizuj jakie zmiany
 zaszły w informacjach pozyskanych w pkt. 2.
-	mokutil --import /wdib/uefi_sb_1/mok.der
+	sudo mokutil --import /wdib/uefi_sb_1/mok.der
 	reboot
-	mockutil --sb-state
-	mokutil --db
-	mokutil --dbx
-	mockutil --pk
-	mockutil --kek
+	przed rebotem a po imporcie: mokutil --list-new
+	SHA1 Fingerprint: a6:3b:70:5d:00:49:37:ee:67:c2:ea:9d:60:c9:a4:77:ca:b0:ac:2f
+	Subject: CN=WdIB UEFI MOK 2017
 	
+	po reboocie:
+	mokutil --list-enrolled 
+	Subject: CN=WdIB UEFI MOK 2017
+	SHA1 Fingerprint: a6:3b:70:5d:00:49:37:ee:67:c2:ea:9d:60:c9:a4:77:ca:b0:ac:2f
+	
+	SHA1 Fingerprint: 7e:68:65:1d:52:68:5f:7b:f5:8e:a0:1d:78:4d:2f:90:d3:f4:0f:0a
+	Subject: CN=Fedora Secure Boot CA
+	
+	przed rebootem tylko fedora w list-enrolled.
+
 7. Ponownie spróbuj załadować podpisaną wersję modułu. Czy tym razem się to powiodło?
-	modprobe -v /wdib/uefi_sb_1/flag_signed.ko
+	insmod /wdib/uefi_sb_1/flag_signed.ko
+	
 W raporcie umieść flagę wypisaną przez moduł do komunikatów jądra.
-	dmesg
+	flag: Congratulations, your flag is WdIB{mO6TwpoZiPPx904Y}
 	
 ========================================================================================
 UEFI Secure Boot i użycie HSM do podpisywania aplikacji
@@ -71,9 +119,15 @@ Następnie wyświetl klucze prywatne znajdujące się w tokenie.
 		-key "pkcs11:token=HSM;object=Robert%20Bielas;type=private" \
 		-subj "/CN=Robert Bielas UEFI DB 2017" \
 		-out uefi_db.der -outform DER -text
+		
+	openssl req -new -x509 -engine pkcs11 -keyform engine \
+		-key "pkcs11:token=HSM;object=Robert%20Bielas;type=private" \
+		-subj "/CN=Robert Bielas UEFI DB 2017" \
+		-out uefi_db.pem -outform PEM -text
 
 4. Zaimportuj wygenerowany certyfikat uefi_db.der do tokenu HSM przy użyciu narzędzia p11tool.
 	p11tool --login --load-certificate=uefi_db.der pkcs11:token=HSM;object=Robert%20Bielas
+	p11tool --login --load-certificate uefi_db.pem --label "Robert Bielas" --write "pkcs11:token=HSM"
 	
 5. Komendą modutil dodaj do bazy /etc/pki/pesign nowy token p11-kit-proxy, 
 korzystający z biblioteki /usr/lib64/p11-kit-proxy.so. 
@@ -81,16 +135,20 @@ korzystający z biblioteki /usr/lib64/p11-kit-proxy.so.
 	
 Następnie komendą certutil wyświetl certyfikaty znajdujące się w tej bazie i tokenie. 
 W raporcie pomiń certyfikaty opisane jako Default Trust.
-	certutil -L -d /etc/pki/pesign
+	certutil -L -d /etc/pki/pesign -h p11-kit-proxy
 	
 
 6. Podpisz aplikację EFI /wdib/uefi_sb_2/grubx64.efi z wykorzystaniem narzędzia pesign 
 i przygotowanego w pkt. 3 certyfikatu.
 Podpisaną aplikację umieść w katalogu /boot/efi/EFI/grub2-signed
 	pesign  -s -i /wdib/uefi_sb_2/grubx64.efi -c uefi_db.der -o /boot/efi/EFI/grub2-signed/grubx64_signed.efi
+	pesign  -s -i /wdib/uefi_sb_2/grubx64.efi -c uefi_db.pem -o /boot/efi/EFI/grub2-signed/grubx64_signed.efi
 
 7. Skopiuj certyfikat uefi_db.der do katalogu /boot/efi i wyłącz maszynę wirtualną,
 a następnie włącz ją ponownie. 
+	cp uefi_db.der /boot/efi
+	cp uefi_db.pem /boot/efi
+
 W czasie wyświetlania logo VMware naciśnij dowolny klawisz, aby przejść do ustawień.
 Korzystając z menu UEFI, zaimportuj skopiowany właśnie certyfikat do bazy db. 
 Zatwierdź zmiany.
