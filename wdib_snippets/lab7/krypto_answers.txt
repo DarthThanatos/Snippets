@@ -1,15 +1,26 @@
 Robert Bielas
 
+lab-manage vm-rollback mmalek_fedora27-wdib-uefi_tpm
+
 UEFI Secure Boot i mechanizm MOK w Linuksie
 1. Uruchom maszynę mmalek_fedora27-wdib-uefi_tpm. Obserwuj uważnie moment, w którym rozpozczyna się faktyczne uruchamianie jądra systemu 
 (kończy się odliczanie w bootloaderze). Czy zauważyłeś coś szczególnego? - uefi!!
 2. W uruchomionym systemie przejrzyj komunikaty jądra (dmesg) pod kątem informacji związanych z UEFI.
 	dmesg | grep 'EFI'
+[   2.186618] Loaded UEFI:db cert 'VMware, Inc.: 4ad8ba0472073d28127706ddc6ccb9050441bbc7' linked to secondary sys keyring
+[    2.186632] Loaded UEFI:db cert 'Microsoft Corporation UEFI CA 2011: 13adbf4309bd82709c8cd54f316ed522988a1bd4' linked to secondary sys keyring
+
  Przy użyciu narzędzia mokutil wyświetl status mechanizmu UEFI Secure Boot,
 	mokutil --sb-state
 	SecureBoot enabled
 
  a także zawartość poszczególnych zbiorów kluczy i hashy.
+	mokutil --list-enrolled
+
+		SHA1 Fingerprint: 7e:68:65:1d:52:68:5f:7b:f5:8e:a0:1d:78:4d:2f:90:d3:f4:0f:0a
+		Issuer: CN=Fedora Secure Boot CA
+
+
 	mokutil --db
 		SHA1 Fingerprint: 58:0a:6f:4c:c4:e4:b6:69:b9:eb:dc:1b:2b:3e:08:7b:80:d0:67:8d
 		Subject: C=US, ST=Washington, L=Redmond, O=Microsoft Corporation, CN=Microsoft Windows Production PCA 2011
@@ -35,8 +46,10 @@ UEFI Secure Boot i mechanizm MOK w Linuksie
   insmod: ERROR: could not insert module /wdib/uefi_sb_1/flag.ko: Required key not available
 
   
-  Czy komunikaty jądra podają bardziej precyzyjną przyczynę? Nie
+  Czy komunikaty jądra podają bardziej precyzyjną przyczynę? 
+  	Nie
 	dmesg | grep flag -> komenda nic nie zwraca
+	dmesg także nie ma ciekawych updatów
 	
 4. Z wykorzystaniem skryptu /usr/src/kernels/$(uname -r)/scripts/sign-file 
 podpisz moduł /wdib/uefi_sb_1/flag.ko 
@@ -97,7 +110,8 @@ zaszły w informacjach pozyskanych w pkt. 2.
 	insmod /wdib/uefi_sb_1/flag_signed.ko
 	
 W raporcie umieść flagę wypisaną przez moduł do komunikatów jądra.
-	flag: Congratulations, your flag is WdIB{mO6TwpoZiPPx904Y}
+	Congratulations, your flag is WdIB{mO6TwpsoKKKfhPNzBKI7xZ\x93'\xa5\xff\xff\xff\xff
+
 	
 ========================================================================================
 UEFI Secure Boot i użycie HSM do podpisywania aplikacji
@@ -105,29 +119,53 @@ UEFI Secure Boot i użycie HSM do podpisywania aplikacji
 1. Uruchom maszynę mmalek_fedora27-wdib-hsm.
 2. Z wykorzystaniem narzędzia p11tool wyświetl dostępne tokeny PKCS#11
 	p11tool --login --list-tokens
-	p11tool --login --list-all pkcs11:token=System%20Trust
+	[root:~] # p11tool --login --list-token-urls
+	pkcs11:model=p11-kit-trust;manufacturer=PKCS%2311%20Kit;serial=1;token=System%20Trust
+	pkcs11:model=p11-kit-trust;manufacturer=PKCS%2311%20Kit;serial=1;token=Default%20Trust
+	pkcs11:model=SoftHSM%20v2;manufacturer=SoftHSM%20project;serial=e9870dfcad32f750;token=HSM
 	
 i wygeneruj klucz prywatny RSA o długości 2048 bitów bezpośrednio w tokenie HSM. Przypisz mu etykietę Imie Nazwisko. 
-	p11tool --login --generate-rsa --bits=2048  --label "Robert Bielas" pkcs11:token=HSM
-	p11tool [--login] --generate-rsa --bits 2048 --label "Robert Bielas" [--outfile MyNewKey.pub] pkcs11:token=HSM
+[root:~] # p11tool --login --generate-rsa --bits=2048  --label "Robert Bielas" pkcs11:token=HSM
+warning: no --outfile was specified and the generated public key will be printed on screen.
+Generating an RSA key...
+Token 'HSM' with URL 'pkcs11:model=SoftHSM%20v2;manufacturer=SoftHSM%20project;serial=e9870dfcad32f750;token=HSM' requires user PIN
+Enter PIN: 
+-----BEGIN PUBLIC KEY-----
+MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEA4CzMgsc76aMdtTrcf3CG
+XiUrOIk/wFtUrN6IxQLgOUDG2Ll5Kf9HU1MwEDj4pdYruaH0FRFDZHkWtN0POjBz
+uFROT/D8VHqEJPAOjlyh7+rZR7kHaElOsI/+5ZAB4Yr1kjndEIEpV5i6z484qlC+
+hWkAWrdcu3xjOf5WniVVjNG7Jd27Bl7yNqfhxRUNO3QW5hh0f+Zldpr3uuBJ77Jl
+dT3v7avrzgdYVseIr4zXaUvIRTabS8yh7tcokxqrNSeTEUXl787YeltbytfGvp4+
+Bul4fRtTdyxImtYFR+kxB6+jhnzj9/qYLOg8m3a4p4TEqFl851QCCm5AdwyZXe3c
+6QIDAQAB
+-----END PUBLIC KEY-----
+
  
 Następnie wyświetl klucze prywatne znajdujące się w tokenie.
-	p11tool --login --list-all-privkeys pkcs11:token=HSM
+[root:~] 3s # p11tool --login --list-all-privkeys pkcs11:token=HSM
+Token 'HSM' with URL 'pkcs11:model=SoftHSM%20v2;manufacturer=SoftHSM%20project;serial=e9870dfcad32f750;token=HSM' requires user PIN
+Enter PIN: 
+Object 0:
+	URL: pkcs11:model=SoftHSM%20v2;manufacturer=SoftHSM%20project;serial=e9870dfcad32f750;token=HSM;id=%8d%f9%7b%a5%82%f4%8b%c9%ae%c4%84%fb%67%76%5d%eb%af%44%11%27;object=Robert%20Bielas;type=private
+	Type: Private key
+	Label: Robert Bielas
+	Flags: CKA_WRAP/UNWRAP; CKA_PRIVATE; CKA_NEVER_EXTRACTABLE; CKA_SENSITIVE; 
+	ID: 8d:f9:7b:a5:82:f4:8b:c9:ae:c4:84:fb:67:76:5d:eb:af:44:11:27
+
 
 3. Wygeneruj z użyciem OpenSSL samopodpisany certyfikat, który wykorzystasz do podpisania aplikacji EFI.
-	openssl req -new -x509 -engine pkcs11 -keyform engine \
-		-key "pkcs11:token=HSM;object=Robert%20Bielas;type=private" \
-		-subj "/CN=Robert Bielas UEFI DB 2017" \
-		-out uefi_db.der -outform DER -text
-		
-	openssl req -new -x509 -engine pkcs11 -keyform engine \
-		-key "pkcs11:token=HSM;object=Robert%20Bielas;type=private" \
-		-subj "/CN=Robert Bielas UEFI DB 2017" \
-		-out uefi_db.pem -outform PEM -text
 
-4. Zaimportuj wygenerowany certyfikat uefi_db.der do tokenu HSM przy użyciu narzędzia p11tool.
-	p11tool --login --load-certificate=uefi_db.der pkcs11:token=HSM;object=Robert%20Bielas
-	p11tool --login --load-certificate uefi_db.pem --label "Robert Bielas" --write "pkcs11:token=HSM"
+openssl req -new -x509 -engine pkcs11 -keyform engine \
+    -key "pkcs11:token=HSM;object=Robert%20Bielas;type=private" \
+    -subj "/CN=Robert Bielas UEFI DB 2017" \
+    -out db.crt -text
+openssl x509 -in db.crt -inform PEM -out db.der -outform DER		
+
+4. Zaimportuj wygenerowany certyfikat uefi_db.der do tokenu HSM przy użyciu narzędzia p11tool .
+p11tool --login --load-certificate=db.crt --label "Robert Bielas" --write "pkcs11:token=HSM"
+note: will re-use ID 8df97ba582f48bc9aec484fb67765debaf441127 from corresponding public key
+Token 'HSM' with URL 'pkcs11:model=SoftHSM%20v2;manufacturer=SoftHSM%20project;serial=e9870dfcad32f750;token=HSM' requires user PIN
+Enter PIN: 
 	
 5. Komendą modutil dodaj do bazy /etc/pki/pesign nowy token p11-kit-proxy, 
 korzystający z biblioteki /usr/lib64/p11-kit-proxy.so. 
@@ -136,52 +174,24 @@ korzystający z biblioteki /usr/lib64/p11-kit-proxy.so.
 Następnie komendą certutil wyświetl certyfikaty znajdujące się w tej bazie i tokenie. 
 W raporcie pomiń certyfikaty opisane jako Default Trust.
 	certutil -L -d /etc/pki/pesign -h p11-kit-proxy
-	
+	HSM:Robert Bielas                                            u,u,u
+
 
 6. Podpisz aplikację EFI /wdib/uefi_sb_2/grubx64.efi z wykorzystaniem narzędzia pesign 
 i przygotowanego w pkt. 3 certyfikatu.
 Podpisaną aplikację umieść w katalogu /boot/efi/EFI/grub2-signed
-	pesign  -s -i /wdib/uefi_sb_2/grubx64.efi -c uefi_db.der -o /boot/efi/EFI/grub2-signed/grubx64_signed.efi
-	pesign  -s -i /wdib/uefi_sb_2/grubx64.efi -c uefi_db.pem -o /boot/efi/EFI/grub2-signed/grubx64_signed.efi
+pesign  -s -i /wdib/uefi_sb_2/grubx64.efi -o /boot/efi/EFI/fedora-tpm-signed/grubx64.efi -t HSM -c 'Robert Bielas'
 
 7. Skopiuj certyfikat uefi_db.der do katalogu /boot/efi i wyłącz maszynę wirtualną,
 a następnie włącz ją ponownie. 
-	cp uefi_db.der /boot/efi
-	cp uefi_db.pem /boot/efi
+	cp db.der /boot/efi
 
 W czasie wyświetlania logo VMware naciśnij dowolny klawisz, aby przejść do ustawień.
 Korzystając z menu UEFI, zaimportuj skopiowany właśnie certyfikat do bazy db. 
 Zatwierdź zmiany.
 
-8. Ponownie wyłącz maszynę wirtualną, włącz ją ponownie i przejdź do ustawień. 
-Z menu bootowania w UEFI wybierz wpis grub2-unsigned. 
-Czy operacja bootowania się powiodła? 
-A czy udało się to w przypadku aplikacji grub2-signed?
-
-========================================================================================
-Trusted Platform Module
-
-1. Podpisana w poprzednim ćwiczeniu wersja bootloadera GRUB2 zawiera pewne 
-dodatkowe łaty. Wykonaj raz jeszcze komendę tpm2_pcrlist i porównaj otrzymane wyniki. 
-Spróbuj znaleźć w zmodyfikowanych źródłach bootloadera (/wdib/tpm/grub2-coreos)
-uzasadnienie istnienia rozbieżności i co składa się na obliczone wartości PCR.
-
-2. Przy użyciu plików z /wdib/tpm/flag oraz komend tpm2_load i tpm2_unseal 
-spróbuj odczytać flagę i umieść w raporcie jej wartość.
-tpm2_load -c $file_primary_key_ctx  -u $file_unseal_key_pub  -r $file_unseal_key_priv -n $file_unseal_key_name -C $file_unseal_key_ctx
-tpm2_unseal -c $file_unseal_key_ctx -o $file_unseal_output_data
-cmp -s $file_unseal_output_data $file_input_data
-
-3.Komendą tpm2_hash utwórz hash SHA256 dowolnie wybranej zawartości. 
-tpm2_hash -I test -g 0x000B -o out -H o -t ticket
-
-Z wykorzystaniem polecenia tpm2_pcrextend zmodyfikuj zawartość PCR 8 
-dla algorytmu hashowania SHA256, dokonując jej rozszerzenia o wyliczoną wartość. 
-
-Czy jesteś w stanie uzasadnić jak powstała obecna wartość tego PCR? 
-(Możesz np. stworzyć prosty skrypt w języku Python korzystający z biblioteki hashlib.)
+8. Z menu bootowania w UEFI wybierz wpis Fedora (TPM). Czy operacja bootowania się powiodła? A czy udało się to w przypadku wpisu Fedora (TPM, signed)?
+Powiodła się dla Fedora(TPM, Signed).
+Nie powiodło się dla Fedora(TPM)
 
 
-4.Spróbuj ponownie odczytać wartość flagi. 
-Jaki błąd otrzymujesz? Do czego można wykorzystać mechanizm powiązywania sekretu 
-z konkretnymi wartościami PCR?
